@@ -17,6 +17,9 @@ import com.pinguela.rentexpres.service.UsuarioService;
 import com.pinguela.rentexpres.service.impl.TipoUsuarioServiceImpl;
 import com.pinguela.rentexpres.service.impl.UsuarioServiceImpl;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 import net.miginfocom.swing.MigLayout;
 
 public class UsuarioDetailDialog extends JDialog {
@@ -82,7 +85,12 @@ public class UsuarioDetailDialog extends JDialog {
 		// Botón cerrar
 		btnCerrar = new JButton("Cerrar");
 		getContentPane().add(btnCerrar, "span, align center, gapy 15");
-		btnCerrar.addActionListener(e -> dispose());
+               btnCerrar.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               dispose();
+                       }
+               });
 	}
 
 	private void cargarUsuario(Integer id) {

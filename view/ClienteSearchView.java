@@ -45,7 +45,12 @@ public class ClienteSearchView extends JPanel {
 
 		// 3) Creamos la tabla de resultados (le pasamos el callback
 		// controller.buscar())
-		this.table = new ClienteTablePanel(clienteService, owner, () -> controller.buscar());
+               this.table = new ClienteTablePanel(clienteService, owner, new Runnable() {
+                       @Override
+                       public void run() {
+                               controller.buscar();
+                       }
+               });
 
 		// 4) Creamos el paginador
 		this.pager = new PaginationPanel();
@@ -68,7 +73,12 @@ public class ClienteSearchView extends JPanel {
 
 		// El botón “Seleccionar” del filtro: al pulsarlo, muestra/oculta la columna de
 		// checkboxes
-		filter.setToggleListener(() -> table.toggleSelectColumn());
+               filter.setToggleListener(new Runnable() {
+                       @Override
+                       public void run() {
+                               table.toggleSelectColumn();
+                       }
+               });
 		add(pager, BorderLayout.SOUTH); // PAGINADOR
 
 		// ——— Creamos y conectamos el controlador ———

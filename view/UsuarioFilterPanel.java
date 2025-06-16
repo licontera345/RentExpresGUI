@@ -3,6 +3,10 @@ package com.pinguela.rentexpres.desktop.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -65,12 +69,42 @@ public class UsuarioFilterPanel extends JPanel {
 		cargarTipos();
 
 		// Listeners para disparar evento de filtro en cada cambio
-		spnIdUsuario.addChangeListener(e -> fire());
-		txtNombre.getDocument().addDocumentListener((SimpleDocumentListener) e -> fire());
-		txtApellido1.getDocument().addDocumentListener((SimpleDocumentListener) e -> fire());
-		txtApellido2.getDocument().addDocumentListener((SimpleDocumentListener) e -> fire());
-		txtEmail.getDocument().addDocumentListener((SimpleDocumentListener) e -> fire());
-		txtUsuario.getDocument().addDocumentListener((SimpleDocumentListener) e -> fire());
+               spnIdUsuario.addChangeListener(new ChangeListener() {
+                       @Override
+                       public void stateChanged(ChangeEvent e) {
+                               fire();
+                       }
+               });
+               txtNombre.getDocument().addDocumentListener(new SimpleDocumentListener() {
+                       @Override
+                       public void update(DocumentEvent e) {
+                               fire();
+                       }
+               });
+               txtApellido1.getDocument().addDocumentListener(new SimpleDocumentListener() {
+                       @Override
+                       public void update(DocumentEvent e) {
+                               fire();
+                       }
+               });
+               txtApellido2.getDocument().addDocumentListener(new SimpleDocumentListener() {
+                       @Override
+                       public void update(DocumentEvent e) {
+                               fire();
+                       }
+               });
+               txtEmail.getDocument().addDocumentListener(new SimpleDocumentListener() {
+                       @Override
+                       public void update(DocumentEvent e) {
+                               fire();
+                       }
+               });
+               txtUsuario.getDocument().addDocumentListener(new SimpleDocumentListener() {
+                       @Override
+                       public void update(DocumentEvent e) {
+                               fire();
+                       }
+               });
 		cmbTipoUsuario.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

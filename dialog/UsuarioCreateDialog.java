@@ -105,7 +105,12 @@ public class UsuarioCreateDialog extends JDialog {
 				onGuardar();
 			}
 		});
-		btnCancelar.addActionListener(e -> dispose());
+               btnCancelar.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               dispose();
+                       }
+               });
 	}
 
 	private void cargarTiposUsuario() {

@@ -35,7 +35,12 @@ public class ReservaSearchView extends JPanel {
 		this.filter = new ReservaFilterPanel();
 		this.actions = new ReservaSearchActionsView();
 		this.pager = new PaginationPanel();
-		this.table = new ReservaTablePanel(rs, owner, () -> controller.buscar());
+               this.table = new ReservaTablePanel(rs, owner, new Runnable() {
+                       @Override
+                       public void run() {
+                               controller.buscar();
+                       }
+               });
 
 		// Barra de herramientas
 		JToolBar bar = new JToolBar();
@@ -57,14 +62,22 @@ public class ReservaSearchView extends JPanel {
 		controller = new ReservaSearchController(this, rs, es, vs, owner);
 
 		// Conectar botón "Limpiar"
-		actions.onLimpiar(() -> {
-			filter.clear();
-			table.hideSelectColumn();
-			controller.goFirstPage();
-		});
+               actions.onLimpiar(new Runnable() {
+                       @Override
+                       public void run() {
+                               filter.clear();
+                               table.hideSelectColumn();
+                               controller.goFirstPage();
+                       }
+               });
 
 		// Conectar botón "Seleccionar" del filtro
-		filter.setToggleListener(() -> table.toggleSelectColumn());
+               filter.setToggleListener(new Runnable() {
+                       @Override
+                       public void run() {
+                               table.toggleSelectColumn();
+                       }
+               });
 	}
 
 	public ReservaFilterPanel getFilter() {

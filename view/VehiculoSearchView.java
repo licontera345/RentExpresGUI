@@ -74,28 +74,47 @@ public class VehiculoSearchView extends JPanel {
 		table.setSearchAction(controller.getSearchAction());
 
 		// Conectar botón "Limpiar filtros" de actions
-		actions.onLimpiar(() -> {
-			filter.clear();
-			table.hideSelectColumn();
-			controller.goFirstPage();
-		});
+               actions.onLimpiar(new Runnable() {
+                       @Override
+                       public void run() {
+                               filter.clear();
+                               table.hideSelectColumn();
+                               controller.goFirstPage();
+                       }
+               });
 
 		// Conectar botón "Eliminar seleccionados" de actions
-		actions.onBorrarSeleccionados(() -> {
-			controller.onEliminarSeleccionados();
-		});
+               actions.onBorrarSeleccionados(new Runnable() {
+                       @Override
+                       public void run() {
+                               controller.onEliminarSeleccionados();
+                       }
+               });
 
 		// Conectar botón "Nuevo" de actions
-		actions.onNuevo(() -> {
-			controller.onNuevoVehiculo();
-		});
+               actions.onNuevo(new Runnable() {
+                       @Override
+                       public void run() {
+                               controller.onNuevoVehiculo();
+                       }
+               });
 
 		// Los filtros invocan búsqueda automáticamente (por eso no hay botón "Buscar")
-		filter.setOnChange(() -> controller.goFirstPage());
+               filter.setOnChange(new Runnable() {
+                       @Override
+                       public void run() {
+                               controller.goFirstPage();
+                       }
+               });
 
 		// Conectar botón "Seleccionar" del filtro para mostrar/ocultar columna de
 		// selección
-		filter.setToggleListener(() -> table.toggleSelectColumn());
+               filter.setToggleListener(new Runnable() {
+                       @Override
+                       public void run() {
+                               table.toggleSelectColumn();
+                       }
+               });
 	}
 
 	/**

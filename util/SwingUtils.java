@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -95,9 +97,14 @@ public final class SwingUtils {
 	}
 
 	public static JButton button(String text, Runnable action) {
-		JButton b = new JButton(text);
-		b.addActionListener(e -> action.run());
-		return b;
+               JButton b = new JButton(text);
+               b.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               action.run();
+                       }
+               });
+               return b;
 	}
 
 	private SwingUtils() {

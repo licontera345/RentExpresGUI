@@ -75,14 +75,17 @@ public class VehiculoTablePanel extends JPanel {
 	 * método para forzar el ancho de la columna “Acciones”.
 	 */
 	private void ajustarColumnasAcciones() {
-		SwingUtilities.invokeLater(() -> {
-			if (tableVehiculo.getColumnCount() == 0)
-				return;
-			int last = tableVehiculo.getColumnCount() - 1;
-			tableVehiculo.getColumnModel().getColumn(last).setPreferredWidth(100);
-			tableVehiculo.getColumnModel().getColumn(last).setMinWidth(80);
-			tableVehiculo.getColumnModel().getColumn(last).setMaxWidth(120);
-		});
+               SwingUtilities.invokeLater(new Runnable() {
+                       @Override
+                       public void run() {
+                               if (tableVehiculo.getColumnCount() == 0)
+                                       return;
+                               int last = tableVehiculo.getColumnCount() - 1;
+                               tableVehiculo.getColumnModel().getColumn(last).setPreferredWidth(100);
+                               tableVehiculo.getColumnModel().getColumn(last).setMinWidth(80);
+                               tableVehiculo.getColumnModel().getColumn(last).setMaxWidth(120);
+                       }
+               });
 	}
 
 	private boolean hasSelectColumn() {

@@ -45,15 +45,25 @@ public class SplashScreen extends JDialog {
 		btnContinue.setForeground(Color.WHITE);
 		btnContinue.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnContinue.setPreferredSize(new Dimension(140, 40));
-		btnContinue.addActionListener(e -> dispose());
+               btnContinue.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               dispose();
+                       }
+               });
 
 		JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		btnPanel.setBackground(Color.WHITE);
 		btnPanel.add(btnContinue);
 		container.add(btnPanel, BorderLayout.SOUTH);
 
-		getRootPane().registerKeyboardAction(e -> dispose(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-				JComponent.WHEN_IN_FOCUSED_WINDOW);
+               getRootPane().registerKeyboardAction(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               dispose();
+                       }
+               }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                               JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {

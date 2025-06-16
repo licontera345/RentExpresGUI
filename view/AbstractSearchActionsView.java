@@ -2,6 +2,8 @@ package com.pinguela.rentexpres.desktop.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 import static com.pinguela.rentexpres.desktop.util.AppIcons.*;
@@ -42,17 +44,32 @@ public abstract class AbstractSearchActionsView extends JPanel {
 	}
 
 	// Métodos públicos lambda-style (para controladores)
-	public void onNuevo(Runnable r) {
-		btnNuevo.addActionListener(e -> Objects.requireNonNull(r).run());
-	}
+       public void onNuevo(Runnable r) {
+               btnNuevo.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               Objects.requireNonNull(r).run();
+                       }
+               });
+       }
 
-	public void onLimpiar(Runnable r) {
-		btnLimpiarFiltros.addActionListener(e -> Objects.requireNonNull(r).run());
-	}
+       public void onLimpiar(Runnable r) {
+               btnLimpiarFiltros.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               Objects.requireNonNull(r).run();
+                       }
+               });
+       }
 
-	public void onBorrarSeleccionados(Runnable r) {
-		btnEliminar.addActionListener(e -> Objects.requireNonNull(r).run());
-	}
+       public void onBorrarSeleccionados(Runnable r) {
+               btnEliminar.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               Objects.requireNonNull(r).run();
+                       }
+               });
+       }
 
 	public JButton getBtnNuevo() {
 		return btnNuevo;

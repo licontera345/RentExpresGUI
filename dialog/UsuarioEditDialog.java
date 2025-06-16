@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.model.TipoUsuarioDTO;
@@ -101,8 +103,18 @@ public class UsuarioEditDialog extends JDialog {
 		getContentPane().add(pnlBotones, "span, align center, gapy 15");
 
 		// Acciones
-		btnGuardar.addActionListener(e -> onGuardar());
-		btnCancelar.addActionListener(e -> dispose());
+               btnGuardar.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               onGuardar();
+                       }
+               });
+               btnCancelar.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               dispose();
+                       }
+               });
 		
 	}
 
