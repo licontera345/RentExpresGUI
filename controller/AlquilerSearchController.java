@@ -23,8 +23,8 @@ import com.pinguela.rentexpres.service.AlquilerService;
 import com.pinguela.rentexpres.service.EstadoAlquilerService;
 
 /**
- * Controlador de la búsqueda de alquileres. Sin lambdas, sin Stream API, sin
- * {@code Runnable}. 100 % Java 8 clásico.
+ * Controlador de la búsqueda de alquileres. Sin lambdas ni Stream API.
+ * 100 % Java 8 clásico.
  */
 public class AlquilerSearchController {
 

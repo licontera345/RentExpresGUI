@@ -27,8 +27,7 @@ import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.service.AlquilerService;
 
 /**
- * Editor con botones Ver / Editar / Borrar. 100 % Java 8 clásico – sin lambdas,
- * sin Runnable.
+ * Editor con botones Ver / Editar / Borrar. 100 % Java 8 clásico – sin lambdas.
  */
 public class AlquilerActionsCellEditor extends AbstractCellEditor implements TableCellEditor {
 	private static final long serialVersionUID = 1L;

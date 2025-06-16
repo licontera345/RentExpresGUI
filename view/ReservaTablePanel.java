@@ -111,8 +111,8 @@ public class ReservaTablePanel extends JPanel {
 		return table;
 	}
 
-	// Interfaz funcional para reemplazar Runnable
-	public interface ReloadCallback {
-		void reload();
-	}
+        // Interfaz funcional para recargar la tabla
+        public interface ReloadCallback {
+                void reload();
+        }
 }

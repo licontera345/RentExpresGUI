@@ -38,15 +38,10 @@ public final class SwingUtils {
                 dialog.setLocationRelativeTo(parent);
         }
 
-        /** Wrapper for SwingUtilities.invokeLater without exposing Runnable */
+        /** Wrapper for SwingUtilities.invokeLater using ActionCallback */
         public static void invokeLater(ActionCallback action) {
                 Objects.requireNonNull(action);
-                SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                                action.execute();
-                        }
-                });
+                SwingUtilities.invokeLater(new ActionCallbackThread(action));
         }
 
 	/** Centra el diálogo en la pantalla */
