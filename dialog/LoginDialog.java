@@ -107,21 +107,17 @@ public class LoginDialog extends JDialog {
                        }
                });
 
-		// botón Ingresar
-		btnIngresar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				onIngresar(e);
-			}
-		});
 
-		btnCancelar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				authenticatedUser = null;
-				dispose();
-			}
-		});
+               // botón Ingresar
+               btnIngresar.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               onIngresar(e);
+                       }
+               });
+
+               btnPanel.add(btnIngresar);
+               btnPanel.add(btnCancelar);
 
 		container.add(btnPanel, BorderLayout.SOUTH);
 
