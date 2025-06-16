@@ -1,6 +1,6 @@
 package com.pinguela.rentexpres.desktop.util;
 
-/** Simple callback interface to replace Runnable for Java 8 compatibility. */
+/** Simple callback interface for asynchronous actions. */
 public interface ActionCallback {
     void execute();
 }

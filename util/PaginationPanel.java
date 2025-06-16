@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 /**
  * Panel de paginación – 100 % Java 8 clásico. Define su propia interfaz
- * {@code OnPagerListener} en lugar de usar Runnable.
+ * {@code OnPagerListener} para callbacks de botones.
  */
 public class PaginationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

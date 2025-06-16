@@ -4,7 +4,6 @@ import java.awt.Frame;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.desktop.util.ActionCallbackThread;
 import java.awt.event.ActionEvent;
