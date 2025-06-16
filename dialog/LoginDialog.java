@@ -144,7 +144,7 @@ public class LoginDialog extends JDialog {
 		String username = formPanel.getUsername();
 		String password = formPanel.getPassword();
 
-		if (username.isBlank() || password.isBlank()) {
+		if (username.trim().isEmpty() || password.trim().isEmpty()) {
 			SwingUtils.showWarning(this, "Debe ingresar usuario y contraseña.");
 			return;
 		}

@@ -127,8 +127,8 @@ public class UsuarioCreateDialog extends JDialog {
 
 	private void onGuardar() {
 		// Validaciones básicas
-		if (txtNombre.getText().isBlank() || txtApellidos.getText().isBlank() || txtEmail.getText().isBlank()
-				|| txtUsuario.getText().isBlank() || txtContrasena.getPassword().length == 0
+		if (txtNombre.getText().trim().isEmpty() || txtApellidos.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty()
+				|| txtUsuario.getText().trim().isEmpty() || txtContrasena.getPassword().length == 0
 				|| cmbTipoUsuario.getSelectedItem() == null) {
 			SwingUtils.showWarning(this, "Todos los campos obligatorios deben estar completos.");
 			return;

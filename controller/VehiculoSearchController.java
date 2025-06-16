@@ -221,10 +221,10 @@ public class VehiculoSearchController {
                 VehiculoFilterPanel f = view.getFilter();
 		VehiculoCriteria c = new VehiculoCriteria();
 
-		if (f.getMarca() != null && !f.getMarca().isBlank()) {
+		if (f.getMarca() != null && !f.getMarca().trim().isEmpty()) {
 			c.setMarca(f.getMarca());
 		}
-		if (f.getModelo() != null && !f.getModelo().isBlank()) {
+		if (f.getModelo() != null && !f.getModelo().trim().isEmpty()) {
 			c.setModelo(f.getModelo());
 		}
 		if (f.getAnioDesde() != null) {

@@ -37,7 +37,7 @@ public abstract class AbstractSearchActionsView extends JPanel {
 			b.setBorderPainted(false);
 			b.setFocusPainted(false);
 			b.setContentAreaFilled(false);
-			if (b.getToolTipText() == null || b.getToolTipText().isBlank()) {
+			if (b.getToolTipText() == null || b.getToolTipText().trim().isEmpty()) {
 				b.setToolTipText(b.getText());
 			}
 		}
