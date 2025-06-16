@@ -15,20 +15,21 @@ import com.pinguela.rentexpres.desktop.renderer.ClienteTableCellRenderer;
 import com.pinguela.rentexpres.desktop.util.SelectionRenderer;
 import com.pinguela.rentexpres.desktop.util.SelectionEditor;
 import java.util.function.Supplier;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.model.ClienteDTO;
 import com.pinguela.rentexpres.service.ClienteService;
 
 public class ClienteTablePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private final JTable table = new JTable();
-	private final ClienteService service;
-	private final Frame owner;
-	private final Runnable reload;
+        private final JTable table = new JTable();
+        private final ClienteService service;
+        private final Frame owner;
+        private final ActionCallback reload;
 
 	private boolean selectVisible = false;
 
-	public ClienteTablePanel(ClienteService svc, Frame owner, Runnable reload) {
+        public ClienteTablePanel(ClienteService svc, Frame owner, ActionCallback reload) {
 		this.service = svc;
 		this.owner = owner;
 		this.reload = reload;

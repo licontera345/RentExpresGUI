@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Supplier;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 import javax.swing.JOptionPane;
 
@@ -21,10 +22,10 @@ public class DeleteClienteAction implements ActionListener {
     private final Supplier<ClienteDTO> current;
     private final Component parent;
     private final ClienteService service;
-    private final Runnable onRefresh;
+    private final ActionCallback onRefresh;
 
     public DeleteClienteAction(Supplier<ClienteDTO> current, Component parent,
-                               ClienteService service, Runnable onRefresh) {
+                               ClienteService service, ActionCallback onRefresh) {
         this.current   = current;
         this.parent    = parent;
         this.service   = service;
@@ -46,7 +47,7 @@ public class DeleteClienteAction implements ActionListener {
         try {
             if (service.delete(id)) {
                 SwingUtils.showInfo(parent,"Cliente eliminado correctamente.");
-                if (onRefresh!=null) onRefresh.run();
+                if (onRefresh!=null) onRefresh.execute();
             } else {
                 SwingUtils.showError(parent,"No se pudo eliminar el cliente.");
             }

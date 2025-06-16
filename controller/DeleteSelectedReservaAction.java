@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -24,11 +25,11 @@ public class DeleteSelectedReservaAction implements ActionListener {
 
 	private final Supplier<List<Integer>> idsSupplier;
 	private final Component parent;
-	private final ReservaService service;
-	private final Runnable onRefresh;
+        private final ReservaService service;
+        private final ActionCallback onRefresh;
 
-	public DeleteSelectedReservaAction(Supplier<List<Integer>> idsSupplier, Component parent, ReservaService service,
-			Runnable onRefresh) {
+        public DeleteSelectedReservaAction(Supplier<List<Integer>> idsSupplier, Component parent, ReservaService service,
+                        ActionCallback onRefresh) {
 		this.idsSupplier = Objects.requireNonNull(idsSupplier, "El proveedor de IDs no puede ser nulo");
 		this.parent = Objects.requireNonNull(parent, "El componente padre no puede ser nulo");
 		this.service = Objects.requireNonNull(service, "El servicio no puede ser nulo");
@@ -60,9 +61,9 @@ public class DeleteSelectedReservaAction implements ActionListener {
 		try {
 			DeleteResult result = deleteReservas(ids);
 
-			if (onRefresh != null) {
-				onRefresh.run();
-			}
+                        if (onRefresh != null) {
+                                onRefresh.execute();
+                        }
 
 			showResultMessage(result);
 		} catch (RentexpresException ex) {

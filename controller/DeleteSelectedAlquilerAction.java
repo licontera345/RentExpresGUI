@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
@@ -24,11 +25,11 @@ public class DeleteSelectedAlquilerAction extends AbstractAction {
 
 	private final Supplier<List<Integer>> idSupplier;
 	private final Component parent;
-	private final AlquilerService alquilerService;
-	private final Runnable onSuccess;
+        private final AlquilerService alquilerService;
+        private final ActionCallback onSuccess;
 
-	public DeleteSelectedAlquilerAction(Supplier<List<Integer>> idSupplier, Component parent,
-			AlquilerService alquilerService, Runnable onSuccess) {
+        public DeleteSelectedAlquilerAction(Supplier<List<Integer>> idSupplier, Component parent,
+                        AlquilerService alquilerService, ActionCallback onSuccess) {
 		this.idSupplier = Objects.requireNonNull(idSupplier, "El proveedor de IDs no puede ser nulo");
 		this.parent = Objects.requireNonNull(parent, "El componente padre no puede ser nulo");
 		this.alquilerService = Objects.requireNonNull(alquilerService, "El servicio no puede ser nulo");
@@ -61,7 +62,7 @@ public class DeleteSelectedAlquilerAction extends AbstractAction {
 			DeletionResult result = deleteAlquileres(ids);
 
 			if (result.successCount > 0) {
-				onSuccess.run();
+                                onSuccess.execute();
 			}
 
 			showResultMessage(result);

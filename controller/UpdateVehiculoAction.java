@@ -4,6 +4,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Supplier;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 import javax.swing.JOptionPane;
 
@@ -16,10 +17,10 @@ public class UpdateVehiculoAction implements ActionListener {
 	private final Frame frame;
 	private final VehiculoService vehiculoService;
 	private final Supplier<VehiculoDTO> dtoSupplier;
-	private final Runnable onRefresh; 
+        private final ActionCallback onRefresh;
 
-	public UpdateVehiculoAction(Frame frame, VehiculoService vehiculoService, Supplier<VehiculoDTO> dtoSupplier,
-			Runnable onRefresh) {
+        public UpdateVehiculoAction(Frame frame, VehiculoService vehiculoService, Supplier<VehiculoDTO> dtoSupplier,
+                        ActionCallback onRefresh) {
 		this.frame = frame;
 		this.vehiculoService = vehiculoService;
 		this.dtoSupplier = dtoSupplier;
@@ -38,9 +39,9 @@ public class UpdateVehiculoAction implements ActionListener {
 			} else {
 				vehiculoService.update(dto, null);
 			}
-			if (onRefresh != null) {
-				onRefresh.run();
-			}
+                        if (onRefresh != null) {
+                                onRefresh.execute();
+                        }
 		} catch (RentexpresException ex) {
 			JOptionPane.showMessageDialog(frame, "Error guardando vehículo: " + ex.getMessage(), "Error",
 					JOptionPane.ERROR_MESSAGE);

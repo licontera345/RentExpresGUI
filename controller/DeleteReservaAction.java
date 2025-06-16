@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Supplier;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 import javax.swing.JOptionPane;
 
@@ -19,11 +20,11 @@ public class DeleteReservaAction implements ActionListener {
 
 	private final Supplier<ReservaDTO> reservaSupplier;
 	private final Component parent;
-	private final ReservaService reservaService;
-	private final Runnable onRefresh;
+        private final ReservaService reservaService;
+        private final ActionCallback onRefresh;
 
-	public DeleteReservaAction(Supplier<ReservaDTO> reservaSupplier, Component parent, ReservaService reservaService,
-			Runnable onRefresh) {
+        public DeleteReservaAction(Supplier<ReservaDTO> reservaSupplier, Component parent, ReservaService reservaService,
+                        ActionCallback onRefresh) {
 		this.reservaSupplier = reservaSupplier;
 		this.parent = parent;
 		this.reservaService = reservaService;
@@ -49,8 +50,8 @@ public class DeleteReservaAction implements ActionListener {
 			boolean ok = reservaService.delete(id);
 			if (ok) {
 				SwingUtils.showInfo(parent, "Reserva eliminada correctamente.");
-				if (onRefresh != null)
-					onRefresh.run();
+                                if (onRefresh != null)
+                                        onRefresh.execute();
 			} else {
 				SwingUtils.showError(parent, "No se pudo eliminar la reserva.");
 			}

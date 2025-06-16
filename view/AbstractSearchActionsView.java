@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 import static com.pinguela.rentexpres.desktop.util.AppIcons.*;
 
@@ -44,29 +45,29 @@ public abstract class AbstractSearchActionsView extends JPanel {
 	}
 
 	// Métodos públicos lambda-style (para controladores)
-       public void onNuevo(Runnable r) {
+       public void onNuevo(ActionCallback r) {
                btnNuevo.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
-                               Objects.requireNonNull(r).run();
+                               Objects.requireNonNull(r).execute();
                        }
                });
        }
 
-       public void onLimpiar(Runnable r) {
+       public void onLimpiar(ActionCallback r) {
                btnLimpiarFiltros.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
-                               Objects.requireNonNull(r).run();
+                               Objects.requireNonNull(r).execute();
                        }
                });
        }
 
-       public void onBorrarSeleccionados(Runnable r) {
+       public void onBorrarSeleccionados(ActionCallback r) {
                btnEliminar.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
-                               Objects.requireNonNull(r).run();
+                               Objects.requireNonNull(r).execute();
                        }
                });
        }

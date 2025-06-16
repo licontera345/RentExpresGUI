@@ -3,6 +3,7 @@ package com.pinguela.rentexpres.desktop.controller;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.function.Supplier;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
@@ -23,10 +24,10 @@ public class DeleteAlquilerAction extends AbstractAction {
 	private final Supplier<AlquilerDTO> alquilerSupplier;
 	private final Component parent;
 	private final AlquilerService alquilerService;
-	private final Runnable onRefresh;
+        private final ActionCallback onRefresh;
 
-	public DeleteAlquilerAction(Supplier<AlquilerDTO> alquilerSupplier, Component parent,
-			AlquilerService alquilerService, Runnable onRefresh) {
+        public DeleteAlquilerAction(Supplier<AlquilerDTO> alquilerSupplier, Component parent,
+                        AlquilerService alquilerService, ActionCallback onRefresh) {
 		this.alquilerSupplier = alquilerSupplier;
 		this.parent = parent;
 		this.alquilerService = alquilerService;
@@ -52,8 +53,8 @@ public class DeleteAlquilerAction extends AbstractAction {
 			boolean ok = alquilerService.delete(id);
 			if (ok) {
 				SwingUtils.showInfo(parent, "alquiler eliminada correctamente.");
-				if (onRefresh != null)
-					onRefresh.run();
+                                if (onRefresh != null)
+                                        onRefresh.execute();
 			} else {
 				SwingUtils.showError(parent, "No se pudo eliminar la alquiler.");
 			}

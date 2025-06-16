@@ -10,6 +10,7 @@ import com.pinguela.rentexpres.desktop.model.ReservaSearchTableModel;
 import com.pinguela.rentexpres.model.ReservaDTO;
 import com.pinguela.rentexpres.service.ReservaService;
 import com.pinguela.rentexpres.exception.RentexpresException;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 public class SearchReservaAction {
 	private final Frame frame;
@@ -32,7 +33,7 @@ public class SearchReservaAction {
 			new ReservaDetailDialog(frame, dto).setVisible(true);
 	}
 
-	public void showEdit(ReservaDTO dto, Runnable reload) {
+        public void showEdit(ReservaDTO dto, ActionCallback reload) {
 		if (dto == null)
 			return;
                 ReservaEditDialog dlg = new ReservaEditDialog(frame, dto);
@@ -42,8 +43,8 @@ public class SearchReservaAction {
 				service.update(dlg.getReserva());
 			} catch (RentexpresException ignored) {
 			}
-			if (reload != null)
-				reload.run();
+                        if (reload != null)
+                                reload.execute();
 		}
 	}
 }

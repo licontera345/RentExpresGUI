@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
+
 import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.service.UsuarioService;
 
@@ -34,10 +36,10 @@ public class UsuarioActionsCellEditor extends AbstractCellEditor implements Tabl
 
 	private final Frame owner;
 	private final UsuarioService usuarioService;
-	private final Runnable reload;
+        private final ActionCallback reload;
 	private final Supplier<UsuarioDTO> rowSupplier;
 
-	public UsuarioActionsCellEditor(Frame owner, UsuarioService usuarioService, Runnable reload,
+        public UsuarioActionsCellEditor(Frame owner, UsuarioService usuarioService, ActionCallback reload,
 			Supplier<UsuarioDTO> rowSupplier) {
 		this.owner = owner;
 		this.usuarioService = usuarioService;
@@ -93,7 +95,7 @@ public class UsuarioActionsCellEditor extends AbstractCellEditor implements Tabl
                                if (resp == JOptionPane.YES_OPTION) {
                                        try {
                                                usuarioService.delete(u, u.getId());
-                                               reload.run();
+                                               reload.execute();
                                        } catch (Exception ex) {
                                                JOptionPane.showMessageDialog(owner, "Error al eliminar usuario:\n" + ex.getMessage(), "Error",
                                                                JOptionPane.ERROR_MESSAGE);
@@ -124,9 +126,9 @@ public class UsuarioActionsCellEditor extends AbstractCellEditor implements Tabl
 		return rowSupplier;
 	}
 
-	public Runnable getReload() {
-		return reload;
-	}
+        public ActionCallback getReload() {
+                return reload;
+        }
 
 	public UsuarioService getUsuarioService() {
 		return usuarioService;

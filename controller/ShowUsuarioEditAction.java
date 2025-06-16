@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 import com.pinguela.rentexpres.desktop.dialog.UsuarioEditDialog;
 import com.pinguela.rentexpres.desktop.model.UsuarioSearchTableModel;
@@ -14,9 +15,9 @@ public class ShowUsuarioEditAction extends AbstractAction {
     private static final long serialVersionUID = 1L;
     private final Frame parent;
     private final JTable table;
-    private final Runnable afterEdit;
+    private final ActionCallback afterEdit;
 
-    public ShowUsuarioEditAction(Frame parent, JTable table, Runnable afterEdit) {
+    public ShowUsuarioEditAction(Frame parent, JTable table, ActionCallback afterEdit) {
         super("Editar");
         this.parent = parent;
         this.table = table;
@@ -38,7 +39,7 @@ public class ShowUsuarioEditAction extends AbstractAction {
         if (dto != null) {
             UsuarioEditDialog dlg = new UsuarioEditDialog(parent, dto.getId());
             dlg.setVisible(true);
-            afterEdit.run();
+            afterEdit.execute();
         }
     }
 }

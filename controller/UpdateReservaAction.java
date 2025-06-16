@@ -4,6 +4,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Supplier;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 import javax.swing.JOptionPane;
 
@@ -17,10 +18,10 @@ public class UpdateReservaAction implements ActionListener {
 	private final Frame frame;
 	private final Supplier<ReservaDTO> currentSupplier;
 	private final ReservaService service;
-	private final Runnable onRefresh;
+        private final ActionCallback onRefresh;
 
-	public UpdateReservaAction(Frame frame, Supplier<ReservaDTO> currentSupplier, ReservaService service,
-			Runnable onRefresh) {
+        public UpdateReservaAction(Frame frame, Supplier<ReservaDTO> currentSupplier, ReservaService service,
+                        ActionCallback onRefresh) {
 		this.frame = frame;
 		this.currentSupplier = currentSupplier;
 		this.service = service;
@@ -42,8 +43,8 @@ public class UpdateReservaAction implements ActionListener {
 
 		try {
 			service.update(dlg.getReserva());
-			if (onRefresh != null)
-				onRefresh.run();
+                        if (onRefresh != null)
+                                onRefresh.execute();
 		} catch (RentexpresException ex) {
 			JOptionPane.showMessageDialog(frame, "Error actualizando la reserva: " + ex.getMessage(), "Error",
 					JOptionPane.ERROR_MESSAGE);
