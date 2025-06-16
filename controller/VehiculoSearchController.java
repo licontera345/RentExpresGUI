@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
+import javax.swing.JComboBox;
 
 import com.pinguela.rentexpres.desktop.dialog.VehiculoCreateDialog;
 import com.pinguela.rentexpres.desktop.model.VehiculoSearchTableModel;
@@ -68,7 +69,7 @@ public class VehiculoSearchController {
 
 	private void cargarEstados() {
 		try {
-			var cmb = view.getFilter().getCbEstado();
+                        JComboBox<EstadoVehiculoDTO> cmb = view.getFilter().getCbEstado();
 			cmb.removeAllItems();
 			EstadoVehiculoDTO todos = new EstadoVehiculoDTO();
 			todos.setId(null);
@@ -85,7 +86,7 @@ public class VehiculoSearchController {
 
 	private void cargarCategorias() {
 		try {
-			var cmb = view.getFilter().getCbCategoria();
+                        JComboBox<CategoriaVehiculoDTO> cmb = view.getFilter().getCbCategoria();
 			cmb.removeAllItems();
 			CategoriaVehiculoDTO todas = new CategoriaVehiculoDTO();
 			todas.setId(null);
@@ -184,7 +185,7 @@ public class VehiculoSearchController {
 	}
 
 	private VehiculoCriteria buildCriteria() {
-		var f = view.getFilter();
+                VehiculoFilterPanel f = view.getFilter();
 		VehiculoCriteria c = new VehiculoCriteria();
 
 		if (f.getMarca() != null && !f.getMarca().isBlank()) {

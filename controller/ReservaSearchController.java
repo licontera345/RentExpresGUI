@@ -17,7 +17,9 @@ import com.pinguela.rentexpres.desktop.model.ReservaSearchTableModel;
 import com.pinguela.rentexpres.desktop.util.CatalogCache;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.desktop.view.ReservaFilterPanel;
+import com.pinguela.rentexpres.desktop.view.ReservaSearchActionsView;
 import com.pinguela.rentexpres.desktop.view.ReservaSearchView;
+import com.pinguela.rentexpres.desktop.view.ReservaTablePanel;
 import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.EstadoReservaDTO;
 import com.pinguela.rentexpres.model.ReservaCriteria;
@@ -77,8 +79,8 @@ public class ReservaSearchController {
 
 	private void wireListeners() {
 		ReservaFilterPanel filter = view.getFilter();
-		var actions = view.getActions();
-		var tablePanel = view.getTable();
+                ReservaSearchActionsView actions = view.getActions();
+                ReservaTablePanel tablePanel = view.getTable();
 
 		filter.setOnChange(() -> {
 			if (!initializing && !loading) {

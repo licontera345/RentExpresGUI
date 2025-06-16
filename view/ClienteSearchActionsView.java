@@ -8,8 +8,8 @@ public class ClienteSearchActionsView extends AbstractSearchActionsView {
 		makeFlat(getBtnLimpiarFiltros());
 	}
 
-	private void makeFlat(javax.swing.JButton... bs) {
-		for (var b : bs) {
+        private void makeFlat(javax.swing.JButton... bs) {
+                for (javax.swing.JButton b : bs) {
 			b.setBorderPainted(false);
 			b.setFocusPainted(false);
 			b.setContentAreaFilled(false);

@@ -22,7 +22,7 @@ public class ShowAlquilerDetailAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		var dlg = new AlquilerDetailDialog(parent, alquiler);
+                AlquilerDetailDialog dlg = new AlquilerDetailDialog(parent, alquiler);
 		dlg.setVisible(true);
 	}
 }

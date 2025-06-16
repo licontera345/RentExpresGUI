@@ -19,6 +19,7 @@ import com.pinguela.rentexpres.model.VehiculoDTO;
 import com.pinguela.rentexpres.service.CategoriaVehiculoService;
 import com.pinguela.rentexpres.service.EstadoVehiculoService;
 import com.pinguela.rentexpres.service.VehiculoService;
+import java.util.List;
 
 
 public class VehiculoController {
@@ -281,8 +282,8 @@ public class VehiculoController {
 	}
 
 	private void eliminarMultiples() {
-		VehiculoSearchTableModel model = (VehiculoSearchTableModel) tableVehiculo.getModel();
-		var seleccionados = model.getSelectedItems();
+                VehiculoSearchTableModel model = (VehiculoSearchTableModel) tableVehiculo.getModel();
+                List<VehiculoDTO> seleccionados = model.getSelectedItems();
 		if (seleccionados.isEmpty()) {
 			SwingUtils.showWarning(frame, "No hay vehículos seleccionados.");
 			return;

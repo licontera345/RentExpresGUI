@@ -35,7 +35,7 @@ public class UpdateReservaAction implements ActionListener {
 			return;
 		}
 
-		var dlg = new ReservaEditDialog(frame, dto);
+                ReservaEditDialog dlg = new ReservaEditDialog(frame, dto);
 		dlg.setVisible(true);
 		if (!dlg.isConfirmed())
 			return;

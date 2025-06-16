@@ -35,7 +35,7 @@ public class SearchReservaAction {
 	public void showEdit(ReservaDTO dto, Runnable reload) {
 		if (dto == null)
 			return;
-		var dlg = new ReservaEditDialog(frame, dto);
+                ReservaEditDialog dlg = new ReservaEditDialog(frame, dto);
 		dlg.setVisible(true);
 		if (dlg.isConfirmed()) {
 			try {

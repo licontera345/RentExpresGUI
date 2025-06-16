@@ -77,7 +77,7 @@ public class SearchClienteAction {
 			return;
 		}
 
-		var dlg = new ClienteEditDialog(frame, sel);
+                ClienteEditDialog dlg = new ClienteEditDialog(frame, sel);
 		dlg.setVisible(true);
 
 		if (dlg.isConfirmed()) {
