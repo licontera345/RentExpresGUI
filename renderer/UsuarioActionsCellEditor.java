@@ -9,6 +9,8 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.util.EventObject;
 import java.util.function.Supplier;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
@@ -49,49 +51,58 @@ public class UsuarioActionsCellEditor extends AbstractCellEditor implements Tabl
 			panel.add(b);
 		}
 
-		btnView.addActionListener(e -> {
-			UsuarioDTO u = rowSupplier.get();
-			if (u != null) {
-				StringBuilder info = new StringBuilder();
-				info.append("ID: ").append(u.getId()).append("\n");
-				info.append("Nombre: ").append(u.getNombre()).append(" ").append(u.getApellido1()).append(" ")
-						.append(u.getApellido2()).append("\n");
-				info.append("Email: ").append(u.getEmail()).append("\n");
-				info.append("Usuario: ").append(u.getNombreUsuario()).append("\n");
-				info.append("Tipo Usuario (ID): ").append(u.getIdTipoUsuario()).append("\n");
-				JOptionPane.showMessageDialog(owner, info.toString(), "Ver Usuario", JOptionPane.INFORMATION_MESSAGE);
-			}
-			fireEditingStopped();
-		});
+               btnView.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                       UsuarioDTO u = rowSupplier.get();
+                       if (u != null) {
+                               StringBuilder info = new StringBuilder();
+                               info.append("ID: ").append(u.getId()).append("\n");
+                               info.append("Nombre: ").append(u.getNombre()).append(" ").append(u.getApellido1()).append(" ")
+                                               .append(u.getApellido2()).append("\n");
+                               info.append("Email: ").append(u.getEmail()).append("\n");
+                               info.append("Usuario: ").append(u.getNombreUsuario()).append("\n");
+                               info.append("Tipo Usuario (ID): ").append(u.getIdTipoUsuario()).append("\n");
+                               JOptionPane.showMessageDialog(owner, info.toString(), "Ver Usuario", JOptionPane.INFORMATION_MESSAGE);
+                       }
+                       fireEditingStopped();
+                       }
+               });
 
-		btnEdit.addActionListener(e -> {
-			UsuarioDTO u = rowSupplier.get();
-			if (u != null) {
+               btnEdit.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                       UsuarioDTO u = rowSupplier.get();
+                       if (u != null) {
 
-				JOptionPane.showMessageDialog(owner, "Abre diálogo de edición para ID=" + u.getId(), "Editar Usuario",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-			fireEditingStopped();
-		});
+                               JOptionPane.showMessageDialog(owner, "Abre diálogo de edición para ID=" + u.getId(), "Editar Usuario",
+                                               JOptionPane.INFORMATION_MESSAGE);
+                       }
+                       fireEditingStopped();
+                       }
+               });
 
-		btnDelete.addActionListener(e -> {
-			UsuarioDTO u = rowSupplier.get();
-			if (u != null) {
-				int resp = JOptionPane.showConfirmDialog(owner,
-						"¿Seguro que deseas eliminar al usuario “" + u.getNombre() + "”?", "Eliminar Usuario",
-						JOptionPane.YES_NO_OPTION);
-				if (resp == JOptionPane.YES_OPTION) {
-					try {
-						usuarioService.delete(u, u.getId());
-						reload.run();
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(owner, "Error al eliminar usuario:\n" + ex.getMessage(), "Error",
-								JOptionPane.ERROR_MESSAGE);
-					}
-				}
-			}
-			fireEditingStopped();
-		});
+               btnDelete.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                       UsuarioDTO u = rowSupplier.get();
+                       if (u != null) {
+                               int resp = JOptionPane.showConfirmDialog(owner,
+                                               "¿Seguro que deseas eliminar al usuario “" + u.getNombre() + "”?", "Eliminar Usuario",
+                                               JOptionPane.YES_NO_OPTION);
+                               if (resp == JOptionPane.YES_OPTION) {
+                                       try {
+                                               usuarioService.delete(u, u.getId());
+                                               reload.run();
+                                       } catch (Exception ex) {
+                                               JOptionPane.showMessageDialog(owner, "Error al eliminar usuario:\n" + ex.getMessage(), "Error",
+                                                               JOptionPane.ERROR_MESSAGE);
+                                       }
+                               }
+                       }
+                       fireEditingStopped();
+                       }
+               });
 	}
 
 	@Override

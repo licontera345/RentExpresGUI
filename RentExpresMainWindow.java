@@ -22,6 +22,8 @@ import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.pinguela.rentexpres.desktop.controller.LogoutAction;
@@ -123,24 +125,32 @@ public class RentExpresMainWindow extends JFrame {
 		btnProfile.setFocusPainted(false);
 		btnProfile.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnProfile.setToolTipText("Ver perfil");
-		btnProfile.addActionListener(e -> new ProfileView(this).setVisible(true));
+               btnProfile.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               new ProfileView(RentExpresMainWindow.this).setVisible(true);
+                       }
+               });
 
 		btnLogout.setFocusPainted(false);
 		btnLogout.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnLogout.setToolTipText("Cerrar sesión");
-		btnLogout.addActionListener(e -> {
-			new LogoutAction(this).actionPerformed(null);
-			UsuarioDTO newUser = showLoginDialog();
-			if (newUser != null) {
-				AppContext.setCurrentUser(newUser);
-				topBar.removeAll();
-				initTopBar();
-				revalidate();
-				repaint();
-			} else {
-				dispose();
-			}
-		});
+               btnLogout.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               new LogoutAction(RentExpresMainWindow.this).actionPerformed(null);
+                               UsuarioDTO newUser = showLoginDialog();
+                               if (newUser != null) {
+                                       AppContext.setCurrentUser(newUser);
+                                       topBar.removeAll();
+                                       initTopBar();
+                                       revalidate();
+                                       repaint();
+                               } else {
+                                       dispose();
+                               }
+                       }
+               });
 
 		topBar.add(Box.createHorizontalGlue());
 		topBar.add(lblUser);
@@ -202,9 +212,14 @@ public class RentExpresMainWindow extends JFrame {
 		});
 
 		CardLayout cl = (CardLayout) contentPanel.getLayout();
-		btn.addActionListener(e -> cl.show(contentPanel, text));
-		return btn;
-	}
+               btn.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               cl.show(contentPanel, text);
+                       }
+               });
+               return btn;
+       }
 
 	private void initContent() throws Exception {
 		JPanel inicioPanel = new JPanel(new BorderLayout());
@@ -257,12 +272,15 @@ public class RentExpresMainWindow extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> {
-			try {
-				new RentExpresMainWindow();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-	}
+               SwingUtilities.invokeLater(new Runnable() {
+                       @Override
+                       public void run() {
+                               try {
+                                       new RentExpresMainWindow();
+                               } catch (Exception e) {
+                                       e.printStackTrace();
+                               }
+                       }
+               });
+       }
 }
