@@ -23,10 +23,8 @@ import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.model.ClienteDTO;
 import com.pinguela.rentexpres.model.LocalidadDTO;
 import com.pinguela.rentexpres.model.ProvinciaDTO;
-import com.pinguela.rentexpres.service.ClienteService;
 import com.pinguela.rentexpres.service.LocalidadService;
 import com.pinguela.rentexpres.service.ProvinciaService;
-import com.pinguela.rentexpres.service.impl.ClienteServiceImpl;
 import com.pinguela.rentexpres.service.impl.LocalidadServiceImpl;
 import com.pinguela.rentexpres.service.impl.ProvinciaServiceImpl;
 import com.toedter.calendar.JDateChooser;
@@ -52,9 +50,8 @@ public class ClienteCreateDialog extends JDialog {
 	protected final JButton btnGuardar = new JButton("Crear");
 	private final JButton btnCancelar = new JButton("Cancelar");
 
-	private final ProvinciaService provinciaSvc = new ProvinciaServiceImpl();
-	public final LocalidadService localidadSvc = new LocalidadServiceImpl();
-	private final ClienteService clienteSvc = new ClienteServiceImpl();
+        private final ProvinciaService provinciaSvc = new ProvinciaServiceImpl();
+        public final LocalidadService localidadSvc = new LocalidadServiceImpl();
 
 	private boolean confirmed = false;
 	private ClienteDTO nuevo;
@@ -169,14 +166,9 @@ public class ClienteCreateDialog extends JDialog {
 			return;
 
 		ClienteDTO dto = buildFromForm();
-		try {
-			clienteSvc.create(dto);
-			nuevo = dto;
-			confirmed = true;
-			dispose();
-		} catch (Exception ex) {
-			SwingUtils.showError(this, "No se pudo crear: " + ex.getMessage());
-		}
+                nuevo = dto;
+                confirmed = true;
+                dispose();
 	}
 
 	protected ClienteDTO buildFromForm() {

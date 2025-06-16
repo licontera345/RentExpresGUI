@@ -40,8 +40,10 @@ public class UsuarioEditDialog extends JDialog {
 	private JButton btnGuardar;
 	private JButton btnCancelar;
 
-	private UsuarioService usuarioService = new UsuarioServiceImpl();
-	private TipoUsuarioService tipoUsuarioService = new TipoUsuarioServiceImpl();
+        private UsuarioService usuarioService = new UsuarioServiceImpl();
+        private TipoUsuarioService tipoUsuarioService = new TipoUsuarioServiceImpl();
+        private boolean confirmed = false;
+        private UsuarioDTO usuario;
 
 	private Integer idUsuario;
 
@@ -164,33 +166,28 @@ public class UsuarioEditDialog extends JDialog {
 			return;
 		}
 
-		try {
-			UsuarioDTO dto = new UsuarioDTO();
-			dto.setId(idUsuario);
-			dto.setNombre(txtNombre.getText().trim());
-			dto.setApellido1(txtApellidos.getText().trim());
-			dto.setApellido2(txtApellidos.getText().trim());
-			dto.setEmail(txtEmail.getText().trim());
-			if (txtContrasena.getPassword().length > 0) {
-				dto.setContrasena(new String(txtContrasena.getPassword()));
-			}
+                UsuarioDTO dto = new UsuarioDTO();
+                dto.setId(idUsuario);
+                dto.setNombre(txtNombre.getText().trim());
+                dto.setApellido1(txtApellidos.getText().trim());
+                dto.setApellido2(txtApellidos.getText().trim());
+                dto.setEmail(txtEmail.getText().trim());
+                if (txtContrasena.getPassword().length > 0) {
+                        dto.setContrasena(new String(txtContrasena.getPassword()));
+                }
 
-			dto.setIdTipoUsuario(((TipoUsuarioDTO) cmbTipoUsuario.getSelectedItem()).getId());
+                dto.setIdTipoUsuario(((TipoUsuarioDTO) cmbTipoUsuario.getSelectedItem()).getId());
 
-			boolean modificado = usuarioService.update(dto);
-			if (modificado) {
-				SwingUtils.showInfo(this, "Usuario actualizado correctamente.");
-				dispose();
-			} else {
-				SwingUtils.showError(this, "No se pudo actualizar el Usuario.");
-			}
-		} catch (Exception ex) {
-			SwingUtils.showError(this, "Error al actualizar Usuario: " + ex.getMessage());
-		}
-	}
+                usuario = dto;
+                confirmed = true;
+                dispose();
+        }
 
-	public UsuarioDTO getUsuario() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        public UsuarioDTO getUsuario() {
+                return usuario;
+        }
+
+        public boolean isConfirmed() {
+                return confirmed;
+        }
 }

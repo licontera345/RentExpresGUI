@@ -19,9 +19,7 @@ import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.model.TipoUsuarioDTO;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.service.TipoUsuarioService;
-import com.pinguela.rentexpres.service.UsuarioService;
 import com.pinguela.rentexpres.service.impl.TipoUsuarioServiceImpl;
-import com.pinguela.rentexpres.service.impl.UsuarioServiceImpl;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -41,8 +39,9 @@ public class UsuarioCreateDialog extends JDialog {
 	private JButton btnGuardar;
 	private JButton btnCancelar;
 
-	private UsuarioService usuarioService = new UsuarioServiceImpl();
-	private TipoUsuarioService tipoUsuarioService = new TipoUsuarioServiceImpl();
+        private TipoUsuarioService tipoUsuarioService = new TipoUsuarioServiceImpl();
+        private boolean confirmed = false;
+        private UsuarioDTO usuario;
 
 	public UsuarioCreateDialog(Frame parent) {
 		super(parent, "Crear Usuario", true);
@@ -134,25 +133,25 @@ public class UsuarioCreateDialog extends JDialog {
 			return;
 		}
 
-		try {
-			UsuarioDTO dto = new UsuarioDTO();
-			dto.setNombre(txtNombre.getText().trim());
-			dto.setApellido1(txtApellidos.getText().trim());
-			dto.setApellido2(txtApellidos.getText().trim());
-			dto.setEmail(txtEmail.getText().trim());
-			dto.setNombreUsuario(txtUsuario.getText().trim());
-			dto.setContrasena(new String(txtContrasena.getPassword()));
-			dto.setIdTipoUsuario(((TipoUsuarioDTO) cmbTipoUsuario.getSelectedItem()).getId());
+                UsuarioDTO dto = new UsuarioDTO();
+                dto.setNombre(txtNombre.getText().trim());
+                dto.setApellido1(txtApellidos.getText().trim());
+                dto.setApellido2(txtApellidos.getText().trim());
+                dto.setEmail(txtEmail.getText().trim());
+                dto.setNombreUsuario(txtUsuario.getText().trim());
+                dto.setContrasena(new String(txtContrasena.getPassword()));
+                dto.setIdTipoUsuario(((TipoUsuarioDTO) cmbTipoUsuario.getSelectedItem()).getId());
 
-			boolean creado = usuarioService.create(dto);
-			if (creado) {
-				SwingUtils.showInfo(this, "Usuario creado exitosamente.");
-				dispose();
-			} else {
-				SwingUtils.showError(this, "No se pudo crear el Usuario.");
-			}
-		} catch (Exception ex) {
-			SwingUtils.showError(this, "Error al crear Usuario: " + ex.getMessage());
-		}
-	}
+                usuario = dto;
+                confirmed = true;
+                dispose();
+        }
+
+        public boolean isConfirmed() {
+                return confirmed;
+        }
+
+        public UsuarioDTO getUsuario() {
+                return usuario;
+        }
 }
