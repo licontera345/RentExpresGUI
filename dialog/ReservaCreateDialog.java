@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.pinguela.rentexpres.desktop.util.SessionManager;
+import com.pinguela.rentexpres.desktop.util.AppContext;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.model.EstadoReservaDTO;
 import com.pinguela.rentexpres.model.ReservaDTO;
@@ -160,12 +160,14 @@ public class ReservaCreateDialog extends JDialog {
 		}
 	}
 
-	private ReservaDTO buildFromForm1() {
-		ReservaDTO dto = new ReservaDTO();
-		// … resto de campos …
-		dto.setIdUsuario(SessionManager.getCurrentUserId());
-		return dto;
-	}
+        private ReservaDTO buildFromForm1() {
+                ReservaDTO dto = new ReservaDTO();
+                // … resto de campos …
+                if (AppContext.getCurrentUser() != null) {
+                        dto.setIdUsuario(AppContext.getCurrentUser().getId());
+                }
+                return dto;
+        }
 
 	protected void onCrear() {
 

@@ -17,7 +17,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
-import com.pinguela.rentexpres.desktop.util.SessionManager;
+import com.pinguela.rentexpres.desktop.util.AppContext;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.model.EstadoAlquilerDTO;
@@ -170,9 +170,11 @@ public class AlquilerCreateDialog extends JDialog {
 		dto.setKmFinal(!txtKmFin.getText().isEmpty() ? Integer.parseInt(txtKmFin.getText().trim()) : 0);
 		dto.setCostetotal(!txtCosteTotal.getText().isEmpty() ? Integer.parseInt(txtCosteTotal.getText().trim()) : 0);
 		dto.setIdEstadoAlquiler(((EstadoAlquilerDTO) cmbEstado.getSelectedItem()).getId());
-		dto.setIdUsuario(SessionManager.getCurrentUserId());
-		return dto;
-	}
+                if (AppContext.getCurrentUser() != null) {
+                        dto.setIdUsuario(AppContext.getCurrentUser().getId());
+                }
+                return dto;
+        }
 
 	public void setIdUsuario(Integer id) {
 	}
