@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -70,18 +70,24 @@ public class DeleteSelectedReservaAction implements ActionListener {
 		}
 	}
 
-	private DeleteResult deleteReservas(List<Integer> ids) throws RentexpresException {
-		List<Boolean> results = ids.stream().map(id -> {
-			try {
-				return service.delete(id);
-			} catch (RentexpresException e) {
-				return false;
-			}
-		}).collect(Collectors.toList());
+        private DeleteResult deleteReservas(List<Integer> ids) throws RentexpresException {
+                List<Boolean> results = new ArrayList<>();
+                for (Integer id : ids) {
+                        try {
+                                results.add(service.delete(id));
+                        } catch (RentexpresException e) {
+                                results.add(false);
+                        }
+                }
 
-		long successfulDeletes = results.stream().filter(Boolean::booleanValue).count();
-		return new DeleteResult(successfulDeletes, results.size());
-	}
+                long successfulDeletes = 0;
+                for (Boolean b : results) {
+                        if (b.booleanValue()) {
+                                successfulDeletes++;
+                        }
+                }
+                return new DeleteResult(successfulDeletes, results.size());
+        }
 
 	private void showResultMessage(DeleteResult result) {
 		if (result.totalCount == result.successCount) {

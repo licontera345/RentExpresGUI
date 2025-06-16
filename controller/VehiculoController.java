@@ -228,18 +228,21 @@ public class VehiculoController {
 	}
 
 	private void mostrarCrear() {
-		try {
-			searchAction.showCreate(() -> {
-				try {
-					searchAction.load();
-				} catch (Exception ex) {
-					SwingUtils.showError(frame, "Error recargando lista: " + ex.getMessage());
-				}
-			});
-		} catch (Exception ex) {
-			SwingUtils.showError(frame, "Error al abrir formulario: " + ex.getMessage());
-		}
-	}
+                try {
+                        searchAction.showCreate(new Runnable() {
+                                @Override
+                                public void run() {
+                                        try {
+                                                searchAction.load();
+                                        } catch (Exception ex) {
+                                                SwingUtils.showError(frame, "Error recargando lista: " + ex.getMessage());
+                                        }
+                                }
+                        });
+                } catch (Exception ex) {
+                        SwingUtils.showError(frame, "Error al abrir formulario: " + ex.getMessage());
+                }
+        }
 
 	private void mostrarDetalle() {
 		VehiculoDTO dto = getSelectedVehiculo();
@@ -252,17 +255,20 @@ public class VehiculoController {
 		VehiculoDTO dto = getSelectedVehiculo();
 		if (dto != null) {
 			try {
-				searchAction.showEdit(dto, () -> {
-					try {
-						searchAction.load();
-					} catch (Exception ex) {
-						SwingUtils.showError(frame, "Error recargando lista: " + ex.getMessage());
-					}
-				});
-			} catch (Exception ex) {
-				SwingUtils.showError(frame, "Error al abrir edición: " + ex.getMessage());
-			}
-		}
+                                searchAction.showEdit(dto, new Runnable() {
+                                        @Override
+                                        public void run() {
+                                                try {
+                                                        searchAction.load();
+                                                } catch (Exception ex) {
+                                                        SwingUtils.showError(frame, "Error recargando lista: " + ex.getMessage());
+                                                }
+                                        }
+                                });
+                        } catch (Exception ex) {
+                                SwingUtils.showError(frame, "Error al abrir edición: " + ex.getMessage());
+                        }
+                }
 	}
 
 	private void eliminarSeleccionado() {
