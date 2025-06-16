@@ -98,53 +98,53 @@ public class ReservaController {
     }
     
     private void loadDataAsync() {
-        new Thread(new Runnable() {
+        new Thread() {
             @Override
             public void run() {
                 try {
                     final List<ReservaDTO> reservas = service.findAll();
 
-                    SwingUtilities.invokeLater(new Runnable() {
+                    com.pinguela.rentexpres.desktop.util.SwingUtils.invokeLater(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                             table.setModel(new ReservaSearchTableModel(reservas, null));
                         }
                     });
                 } catch (RentexpresException ex) {
-                    SwingUtilities.invokeLater(new Runnable() {
+                    com.pinguela.rentexpres.desktop.util.SwingUtils.invokeLater(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                             SwingUtils.showError(frame, ERROR_CARGANDO + ex.getMessage());
                         }
                     });
                 }
             }
-        }).start();
+        }.start();
     }
     
     private void updateReservaAsync(ReservaDTO reserva) {
-        new Thread(new Runnable() {
+        new Thread() {
             @Override
             public void run() {
                 try {
                     service.update(reserva);
 
-                    SwingUtilities.invokeLater(new Runnable() {
+                    com.pinguela.rentexpres.desktop.util.SwingUtils.invokeLater(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                             loadDataAsync();
                         }
                     });
                 } catch (RentexpresException ex) {
-                    SwingUtilities.invokeLater(new Runnable() {
+                    com.pinguela.rentexpres.desktop.util.SwingUtils.invokeLater(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                             SwingUtils.showError(frame, ERROR_ACTUALIZANDO + ex.getMessage());
                         }
                     });
                 }
             }
-        }).start();
+        }.start();
     }
     
     public void refreshData() {

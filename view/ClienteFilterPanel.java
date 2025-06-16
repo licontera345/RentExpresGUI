@@ -15,6 +15,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 /**
  * Panel que permite filtrar Clientes por: - ID - Nombre / Apellido1 / Apellido2
@@ -44,8 +45,8 @@ public class ClienteFilterPanel extends JPanel {
 	private final JButton btnToggle = new JButton("Seleccionar");
 
 	// Callbacks
-	private Runnable onChange = null;
-	private Runnable toggleListener = null;
+        private ActionCallback onChange = null;
+        private ActionCallback toggleListener = null;
 	private java.util.function.Consumer<String> onProvinciaChange = null;
 
 	public ClienteFilterPanel() {
@@ -185,15 +186,15 @@ public class ClienteFilterPanel extends JPanel {
                        @Override
                        public void actionPerformed(ActionEvent e) {
                                if (toggleListener != null)
-                                       toggleListener.run();
+                                       toggleListener.execute();
                        }
                });
 	}
 
-	private void fireChange() {
-		if (onChange != null)
-			onChange.run();
-	}
+        private void fireChange() {
+                if (onChange != null)
+                        onChange.execute();
+        }
 
 	public Integer getId() {
 		int val = (Integer) spnId.getValue();
@@ -262,13 +263,13 @@ public class ClienteFilterPanel extends JPanel {
 	}
 
 	// Set callbacks
-	public void setOnChange(Runnable r) {
-		onChange = r;
-	}
+        public void setOnChange(ActionCallback r) {
+                onChange = r;
+       }
 
-	public void setToggleListener(Runnable r) {
-		toggleListener = r;
-	}
+        public void setToggleListener(ActionCallback r) {
+                toggleListener = r;
+       }
 
 	public void setOnProvinciaChange(java.util.function.Consumer<String> c) {
 		onProvinciaChange = c;

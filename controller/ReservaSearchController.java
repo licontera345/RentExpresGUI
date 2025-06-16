@@ -15,6 +15,7 @@ import com.pinguela.rentexpres.desktop.dialog.ReservaCreateDialog;
 import com.pinguela.rentexpres.desktop.model.ReservaSearchTableModel;
 import com.pinguela.rentexpres.desktop.util.CatalogCache;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.desktop.view.ReservaFilterPanel;
 import com.pinguela.rentexpres.desktop.view.ReservaSearchActionsView;
 import com.pinguela.rentexpres.desktop.view.ReservaSearchView;
@@ -83,18 +84,18 @@ public class ReservaSearchController {
                 ReservaSearchActionsView actions = view.getActions();
                 ReservaTablePanel tablePanel = view.getTable();
 
-               filter.setOnChange(new Runnable() {
+               filter.setOnChange(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                if (!initializing && !loading) {
                                        goFirstPage();
                                }
                        }
                });
 
-               filter.setToggleListener(new Runnable() {
+               filter.setToggleListener(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                tablePanel.toggleSelectColumn();
                        }
                });
@@ -114,35 +115,35 @@ public class ReservaSearchController {
                        }
                });
 
-               view.getPager().onPrev(new Runnable() {
+               view.getPager().onPrev(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                if (!loading && currentPage > 1) {
                                        currentPage--;
                                        buscar();
                                }
                        }
                });
-               view.getPager().onNext(new Runnable() {
+               view.getPager().onNext(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                if (!loading && currentPage < totalPages) {
                                        currentPage++;
                                        buscar();
                                }
                        }
                });
-               view.getPager().onFirst(new Runnable() {
+               view.getPager().onFirst(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                if (!loading) {
                                        goFirstPage();
                                }
                        }
                });
-               view.getPager().onLast(new Runnable() {
+               view.getPager().onLast(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                if (!loading && currentPage < totalPages) {
                                        currentPage = totalPages;
                                        buscar();
@@ -150,9 +151,9 @@ public class ReservaSearchController {
                        }
                });
 
-               actions.onNuevo(new Runnable() {
+               actions.onNuevo(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                ReservaCreateDialog dlg = new ReservaCreateDialog(frame);
                                dlg.setVisible(true);
                                if (dlg.isConfirmed()) {
@@ -166,18 +167,18 @@ public class ReservaSearchController {
                        }
                });
 
-               actions.onLimpiar(new Runnable() {
+               actions.onLimpiar(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                filter.clear();
                                view.getTable().hideSelectColumn();
                                goFirstPage();
                        }
                });
 
-               actions.onBorrarSeleccionados(new Runnable() {
+               actions.onBorrarSeleccionados(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                ReservaSearchTableModel m = (ReservaSearchTableModel) view.getTable().getTable().getModel();
                                List<ReservaDTO> seleccionados = m.getSelectedItems();
                                if (seleccionados.isEmpty())

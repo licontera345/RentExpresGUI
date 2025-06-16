@@ -13,6 +13,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 import com.pinguela.rentexpres.model.CategoriaVehiculoDTO;
 import com.pinguela.rentexpres.model.EstadoVehiculoDTO;
@@ -32,8 +33,8 @@ public class VehiculoFilterPanel extends JPanel {
 	public final JComboBox<EstadoVehiculoDTO> cmbEstado = new JComboBox<>();
 	public final JComboBox<CategoriaVehiculoDTO> cmbCategoria = new JComboBox<>();
 
-	private Runnable onChange;
-	private Runnable toggleListener;
+        private ActionCallback onChange;
+        private ActionCallback toggleListener;
 
 	public VehiculoFilterPanel() {
 		setBorder(new TitledBorder("Filtros de Vehículo"));
@@ -168,23 +169,23 @@ public class VehiculoFilterPanel extends JPanel {
 		fire();
 	}
 
-	public void setOnChange(Runnable r) {
-		this.onChange = r;
-	}
+        public void setOnChange(ActionCallback r) {
+                this.onChange = r;
+       }
 
-	public void setToggleListener(Runnable r) {
-		this.toggleListener = r;
-	}
+        public void setToggleListener(ActionCallback r) {
+                this.toggleListener = r;
+       }
 
-	private void fire() {
-		if (onChange != null)
-			onChange.run();
-	}
+        private void fire() {
+                if (onChange != null)
+                        onChange.execute();
+        }
 
-	private void fireToggleSelect() {
-		if (toggleListener != null)
-			toggleListener.run();
-	}
+        private void fireToggleSelect() {
+                if (toggleListener != null)
+                        toggleListener.execute();
+        }
 
 	private class SimpleDocumentListener implements DocumentListener {
 		@Override

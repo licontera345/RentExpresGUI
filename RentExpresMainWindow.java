@@ -272,9 +272,9 @@ public class RentExpresMainWindow extends JFrame {
 	}
 
 	public static void main(String[] args) {
-               SwingUtilities.invokeLater(new Runnable() {
+               com.pinguela.rentexpres.desktop.util.SwingUtils.invokeLater(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                try {
                                        new RentExpresMainWindow();
                                } catch (Exception e) {
