@@ -13,6 +13,7 @@ import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.ClienteDTO;
 import com.pinguela.rentexpres.service.ClienteService;
+import java.util.List;
 
 public class ClienteController {
 
@@ -68,7 +69,7 @@ public class ClienteController {
 			return;
 		}
 
-		var dlg = new ClienteEditDialog(frame, dto);
+                ClienteEditDialog dlg = new ClienteEditDialog(frame, dto);
 		dlg.setVisible(true);
 
 		if (dlg.isConfirmed())
@@ -78,7 +79,7 @@ public class ClienteController {
 	private void loadDataAsync() {
 		new Thread(() -> {
 			try {
-				var clientes = service.findAll(); 
+                                List<ClienteDTO> clientes = service.findAll();
 				SwingUtilities.invokeLater(() -> table.setModel(
 						new ClienteSearchTableModel(clientes, ClienteSearchTableModel.buildLocalidadMap(clientes),
 								ClienteSearchTableModel.buildProvinciaMap(clientes))));

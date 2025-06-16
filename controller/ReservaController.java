@@ -12,6 +12,7 @@ import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.ReservaDTO;
 import com.pinguela.rentexpres.service.ReservaService;
+import java.util.List;
 
 public class ReservaController {
 
@@ -87,7 +88,7 @@ public class ReservaController {
     private void loadDataAsync() {
         new Thread(() -> {
             try {
-                final var reservas = service.findAll();
+                final List<ReservaDTO> reservas = service.findAll();
                 
                 SwingUtilities.invokeLater(() -> {
                     table.setModel(new ReservaSearchTableModel(reservas, null));

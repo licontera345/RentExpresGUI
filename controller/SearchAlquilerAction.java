@@ -36,7 +36,7 @@ public class SearchAlquilerAction {
 	public void showEdit(AlquilerDTO dto, Runnable reload) {
 		if (dto == null)
 			return;
-		var dlg = new AlquilerEditDialog(frame, dto);
+                AlquilerEditDialog dlg = new AlquilerEditDialog(frame, dto);
 		dlg.setVisible(true);
 		if (dlg.isConfirmed()) {
 			try {

@@ -18,6 +18,8 @@ import com.pinguela.rentexpres.desktop.model.ClienteSearchTableModel;
 import com.pinguela.rentexpres.desktop.util.CatalogCache;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.desktop.view.ClienteFilterPanel;
+import com.pinguela.rentexpres.desktop.view.ClienteSearchActionsView;
+import com.pinguela.rentexpres.desktop.view.ClienteTablePanel;
 import com.pinguela.rentexpres.desktop.view.ClienteSearchView;
 import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.ClienteCriteria;
@@ -94,8 +96,8 @@ public class ClienteSearchController {
 
 	private void wireListeners() {
 		ClienteFilterPanel filter = view.getFilter();
-		var actions = view.getActions();
-		var tablePanel = view.getTable();
+                ClienteSearchActionsView actions = view.getActions();
+                ClienteTablePanel tablePanel = view.getTable();
 
 		filter.setOnChange(() -> {
 			if (!initializing && !loading) {

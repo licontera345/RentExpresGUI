@@ -23,7 +23,7 @@ public class UpdateAlquilerAction {
     }
 
     public void actionPerformed(Void v) {
-        var dlg = new AlquilerEditDialog(owner, alquiler);
+        AlquilerEditDialog dlg = new AlquilerEditDialog(owner, alquiler);
         dlg.setVisible(true);
 
         if (!dlg.isConfirmed()) return;

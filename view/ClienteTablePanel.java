@@ -85,7 +85,7 @@ public class ClienteTablePanel extends JPanel {
 		if (!hasSelectColumn())
 			return;
 		selectVisible = !selectVisible;
-		var col = table.getColumn("Seleccionar");
+                javax.swing.table.TableColumn col = table.getColumn("Seleccionar");
 		col.setMinWidth(selectVisible ? 80 : 0);
 		col.setMaxWidth(selectVisible ? 80 : 0);
 		col.setPreferredWidth(selectVisible ? 80 : 0);
@@ -96,7 +96,7 @@ public class ClienteTablePanel extends JPanel {
 		if (!hasSelectColumn())
 			return;
 		selectVisible = false;
-		var col = table.getColumn("Seleccionar");
+                javax.swing.table.TableColumn col = table.getColumn("Seleccionar");
 		col.setMinWidth(0);
 		col.setMaxWidth(0);
 		col.setPreferredWidth(0);

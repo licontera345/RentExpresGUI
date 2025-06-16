@@ -101,8 +101,8 @@ public class VehiculoTablePanel extends JPanel {
 	}
 
 	private void setSelectColumnVisible(boolean visible) {
-		selectVisible = visible;
-		var col = tableVehiculo.getColumn("Seleccionar");
+                selectVisible = visible;
+                javax.swing.table.TableColumn col = tableVehiculo.getColumn("Seleccionar");
 		int width = visible ? 80 : 0;
 		col.setMinWidth(width);
 		col.setMaxWidth(width);
