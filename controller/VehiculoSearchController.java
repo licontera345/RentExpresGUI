@@ -193,7 +193,10 @@ public class VehiculoSearchController {
 	}
 
 	public void onEliminarSeleccionados() {
-		List<Integer> ids = model.getSelectedItems().stream().map(VehiculoDTO::getId).collect(Collectors.toList());
+                java.util.List<Integer> ids = new java.util.ArrayList<Integer>();
+                for (VehiculoDTO v : model.getSelectedItems()) {
+                        ids.add(v.getId());
+                }
 		if (ids.isEmpty()) {
 			SwingUtils.showWarning(view, "No hay vehículos seleccionados.");
 			return;

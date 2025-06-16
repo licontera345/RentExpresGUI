@@ -3,7 +3,6 @@ package com.pinguela.rentexpres.desktop.controller;
 import java.awt.Frame;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
@@ -123,13 +122,21 @@ public class SearchClienteAction {
                }).start();
 	}
 
-	private Map<String, String> buildLocMap() throws RentexpresException {
-		return localidadService.findAll().stream()
-				.collect(Collectors.toMap(LocalidadDTO::getNombre, LocalidadDTO::getNombre));
-	}
+        private Map<String, String> buildLocMap() throws RentexpresException {
+                java.util.Map<String, String> map = new java.util.LinkedHashMap<String, String>();
+                java.util.List<LocalidadDTO> list = localidadService.findAll();
+                for (LocalidadDTO l : list) {
+                        map.put(l.getNombre(), l.getNombre());
+                }
+                return map;
+        }
 
-	private Map<String, String> buildProvMap() throws RentexpresException {
-		return provinciaService.findAll().stream()
-				.collect(Collectors.toMap(ProvinciaDTO::getNombre, ProvinciaDTO::getNombre));
-	}
+        private Map<String, String> buildProvMap() throws RentexpresException {
+                java.util.Map<String, String> map = new java.util.LinkedHashMap<String, String>();
+                java.util.List<ProvinciaDTO> list = provinciaService.findAll();
+                for (ProvinciaDTO p : list) {
+                        map.put(p.getNombre(), p.getNombre());
+                }
+                return map;
+        }
 }

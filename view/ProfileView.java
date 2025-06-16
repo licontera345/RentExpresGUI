@@ -104,9 +104,14 @@ public class ProfileView extends JDialog {
 		btnClose.setFocusPainted(false);
 		btnClose.setBackground(new Color(200, 200, 200));
 		btnClose.setForeground(Color.DARK_GRAY);
-		btnClose.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnClose.setToolTipText("Cerrar este diálogo");
-		btnClose.addActionListener(this::onClose);
+                btnClose.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                btnClose.setToolTipText("Cerrar este diálogo");
+                btnClose.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                                onClose(e);
+                        }
+                });
 
 		btnPanel.add(btnClose);
 		container.add(btnPanel, BorderLayout.SOUTH);

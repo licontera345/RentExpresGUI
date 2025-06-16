@@ -90,9 +90,8 @@ public class LoginDialog extends JDialog {
 		btnIngresar.setFont(btnIngresar.getFont().deriveFont(Font.PLAIN, 14f));
 		btnIngresar.setFocusPainted(false);
 		btnIngresar.setBackground(new Color(33, 150, 243));
-		btnIngresar.setForeground(Color.WHITE);
-		btnIngresar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnIngresar.addActionListener(this::onIngresar);
+                btnIngresar.setForeground(Color.WHITE);
+                btnIngresar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		btnCancelar.setPreferredSize(new Dimension(120, 40));
 		btnCancelar.setFont(btnCancelar.getFont().deriveFont(Font.PLAIN, 14f));

@@ -105,12 +105,22 @@ public class ReservaFilterPanel extends JPanel {
 		// Séptima línea: Teléfono y botón Seleccionar
 		add(new JLabel("Teléfono:"), "cell 0 " + r);
 		add(txtTelefono, "cell 1 " + r);
-		JButton btnSel = SwingUtils.button("Seleccionar", this::fireToggleSelect);
+                JButton btnSel = SwingUtils.button("Seleccionar", new Runnable() {
+                        @Override
+                        public void run() {
+                                fireToggleSelect();
+                        }
+                });
 		add(btnSel, "cell 3 " + r + ",alignx right");
 
 		/* ───── listeners genéricos ───── */
 		// Cada vez que un JTextField cambie, invocamos fire()
-		SwingUtils.addDocumentListener(this::fire, txtNombre, txtApellido1, txtTelefono);
+                SwingUtils.addDocumentListener(new Runnable() {
+                        @Override
+                        public void run() {
+                                fire();
+                        }
+                }, txtNombre, txtApellido1, txtTelefono);
 
 		// Agregamos componentes de la columna derecha
 		add(spnIdVehiculo, "cell 4 0");
