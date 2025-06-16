@@ -23,7 +23,6 @@ import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.model.EstadoAlquilerDTO;
 import com.pinguela.rentexpres.model.ReservaDTO;
 import com.pinguela.rentexpres.service.EstadoAlquilerService;
-import com.pinguela.rentexpres.service.impl.AlquilerServiceImpl;
 import com.pinguela.rentexpres.service.impl.EstadoAlquilerServiceImpl;
 import com.toedter.calendar.JDateChooser;
 
@@ -141,22 +140,9 @@ public class AlquilerCreateDialog extends JDialog {
 		if (!validar())
 			return;
 
-		int idReserva = (Integer) spnIdReserva.getValue();
-		try {
-			boolean yaExiste = new AlquilerServiceImpl().existsByReserva(idReserva);
-			if (yaExiste) {
-				JOptionPane.showMessageDialog(this, "Esta reserva ya tiene un alquiler asignado.", "Error",
-						JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-		} catch (Exception e) {
-			SwingUtils.showError(this, "Error verificando reserva: " + e.getMessage());
-			return;
-		}
-
-		confirmed = true;
-		dispose();
-	}
+                confirmed = true;
+                dispose();
+        }
 
 	private void abrirNuevaReserva() {
 		ReservaCreateDialog dlg = new ReservaCreateDialog((Frame) getOwner());
