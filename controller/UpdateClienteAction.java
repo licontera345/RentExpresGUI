@@ -4,6 +4,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Supplier;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 import javax.swing.JOptionPane;
 
@@ -16,11 +17,11 @@ public class UpdateClienteAction implements ActionListener {
 
 	private final Frame frame;
 	private final Supplier<ClienteDTO> currentSupplier;
-	private final ClienteService service;
-	private final Runnable onRefresh;
+        private final ClienteService service;
+        private final ActionCallback onRefresh;
 
-	public UpdateClienteAction(Frame frame, Supplier<ClienteDTO> currentSupplier, ClienteService service,
-			Runnable onRefresh) {
+        public UpdateClienteAction(Frame frame, Supplier<ClienteDTO> currentSupplier, ClienteService service,
+                        ActionCallback onRefresh) {
 		this.frame = frame;
 		this.currentSupplier = currentSupplier;
 		this.service = service;
@@ -41,8 +42,8 @@ public class UpdateClienteAction implements ActionListener {
 
 		try {
 			service.update(dlg.getCliente());
-			if (onRefresh != null)
-				onRefresh.run();
+                        if (onRefresh != null)
+                                onRefresh.execute();
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(frame, "Error actualizando el cliente: " + ex.getMessage(), "Error",
 					JOptionPane.ERROR_MESSAGE);

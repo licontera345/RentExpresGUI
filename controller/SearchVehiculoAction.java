@@ -2,6 +2,7 @@ package com.pinguela.rentexpres.desktop.controller;
 
 import java.awt.Frame;
 import java.util.List;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 import javax.swing.JTable;
 
@@ -39,7 +40,7 @@ public class SearchVehiculoAction {
 		table.setModel(new VehiculoSearchTableModel(list));
 	}
 
-	public void showCreate(Runnable onReload) throws RentexpresException {
+        public void showCreate(ActionCallback onReload) throws RentexpresException {
 		VehiculoCreateDialog dlg = new VehiculoCreateDialog(frame, categoriaService.findAll(), estadoService.findAll());
 		dlg.setVisible(true);
 		if (!dlg.isConfirmed()) {
@@ -48,9 +49,9 @@ public class SearchVehiculoAction {
 		try {
 			VehiculoDTO dto = dlg.getVehiculo();
 			vehiculoService.create(dto, null);
-			if (onReload != null) {
-				onReload.run();
-			}
+                        if (onReload != null) {
+                                onReload.execute();
+                        }
 		} catch (Exception ex) {
 			SwingUtils.showError(frame, "Error al crear vehículo: " + ex.getMessage());
 		}
@@ -64,7 +65,7 @@ public class SearchVehiculoAction {
 		dlg.setVisible(true);
 	}
 
-	public void showEdit(VehiculoDTO dto, Runnable onReload) throws RentexpresException {
+        public void showEdit(VehiculoDTO dto, ActionCallback onReload) throws RentexpresException {
 		if (dto == null) {
 			return;
 		}
@@ -76,9 +77,9 @@ public class SearchVehiculoAction {
 		}
 		try {
 			vehiculoService.update(dlg.getVehiculo(), null);
-			if (onReload != null) {
-				onReload.run();
-			}
+                        if (onReload != null) {
+                                onReload.execute();
+                        }
 		} catch (Exception ex) {
 			SwingUtils.showError(frame, "Error al actualizar vehículo: " + ex.getMessage());
 		}

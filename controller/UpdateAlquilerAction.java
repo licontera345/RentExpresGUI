@@ -4,6 +4,7 @@ import java.awt.Frame;
 
 import com.pinguela.rentexpres.desktop.dialog.AlquilerEditDialog;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.service.AlquilerService;
@@ -13,9 +14,9 @@ public class UpdateAlquilerAction {
     private final Frame owner;
     private final AlquilerService alquilerService;
     private final AlquilerDTO alquiler;
-    private final Runnable onUpdated;
+    private final ActionCallback onUpdated;
 
-    public UpdateAlquilerAction(Frame owner, AlquilerService alquilerService, AlquilerDTO alquiler, Runnable onUpdated) {
+    public UpdateAlquilerAction(Frame owner, AlquilerService alquilerService, AlquilerDTO alquiler, ActionCallback onUpdated) {
         this.owner = owner;
         this.alquilerService = alquilerService;
         this.alquiler = alquiler;
@@ -30,7 +31,7 @@ public class UpdateAlquilerAction {
 
         try {
             alquilerService.update(dlg.getAlquiler());
-            if (onUpdated != null) onUpdated.run();
+            if (onUpdated != null) onUpdated.execute();
         } catch (RentexpresException ex) {
             SwingUtils.showError(owner, "Error actualizando el alquiler:\n" + ex.getMessage());
         }

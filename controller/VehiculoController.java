@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 
 import com.pinguela.rentexpres.desktop.model.VehiculoSearchTableModel;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.model.CategoriaVehiculoDTO;
 import com.pinguela.rentexpres.model.EstadoVehiculoDTO;
 import com.pinguela.rentexpres.model.VehiculoCriteria;
@@ -229,9 +230,9 @@ public class VehiculoController {
 
 	private void mostrarCrear() {
                 try {
-                        searchAction.showCreate(new Runnable() {
+                        searchAction.showCreate(new ActionCallback() {
                                 @Override
-                                public void run() {
+                                public void execute() {
                                         try {
                                                 searchAction.load();
                                         } catch (Exception ex) {
@@ -255,9 +256,9 @@ public class VehiculoController {
 		VehiculoDTO dto = getSelectedVehiculo();
 		if (dto != null) {
 			try {
-                                searchAction.showEdit(dto, new Runnable() {
+                                searchAction.showEdit(dto, new ActionCallback() {
                                         @Override
-                                        public void run() {
+                                        public void execute() {
                                                 try {
                                                         searchAction.load();
                                                 } catch (Exception ex) {

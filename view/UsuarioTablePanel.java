@@ -3,6 +3,7 @@ package com.pinguela.rentexpres.desktop.view;
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.util.function.Supplier;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,9 +21,9 @@ public class UsuarioTablePanel extends JPanel {
     private final JTable table = new JTable();
     private final UsuarioService service;
     private final Frame owner;
-    private final Runnable reload;
+    private final ActionCallback reload;
 
-    public UsuarioTablePanel(UsuarioService service, Frame owner, Runnable reload) {
+    public UsuarioTablePanel(UsuarioService service, Frame owner, ActionCallback reload) {
         this.service = service;
         this.owner = owner;
         this.reload = reload;

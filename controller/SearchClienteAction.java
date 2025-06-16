@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
+import com.pinguela.rentexpres.desktop.util.ActionCallbackThread;
 
 import com.pinguela.rentexpres.desktop.dialog.ClienteDetailDialog;
 import com.pinguela.rentexpres.desktop.dialog.ClienteEditDialog;
@@ -44,9 +46,9 @@ public class SearchClienteAction {
 
 
 	public void loadAsync() {
-               new Thread(new Runnable() {
+       new ActionCallbackThread(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                try {
                                        List<ClienteDTO> clientes = clienteService.findAll();
                                        Map<String, String> locMap = buildLocMap();
@@ -54,17 +56,17 @@ public class SearchClienteAction {
 
                                        model = new ClienteSearchTableModel(clientes, locMap, provMap);
 
-                                       SwingUtilities.invokeLater(new Runnable() {
+                                       SwingUtils.invokeLater(new ActionCallback() {
                                                @Override
-                                               public void run() {
+                                               public void execute() {
                                                        table.setModel(model);
                                                }
                                        });
 
                                } catch (RentexpresException ex) {
-                                       SwingUtilities.invokeLater(new Runnable() {
+                                       SwingUtils.invokeLater(new ActionCallback() {
                                                @Override
-                                               public void run() {
+                                               public void execute() {
                                                        SwingUtils.showError(frame, ERROR_CARGANDO + ex.getMessage());
                                                }
                                        });
@@ -104,16 +106,16 @@ public class SearchClienteAction {
 	}
 
 	private void updateAsync(ClienteDTO cliente) {
-               new Thread(new Runnable() {
+       new ActionCallbackThread(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                try {
                                        clienteService.update(cliente);
                                        loadAsync();
                                } catch (RentexpresException ex) {
-                                       SwingUtilities.invokeLater(new Runnable() {
+                                       SwingUtils.invokeLater(new ActionCallback() {
                                                @Override
-                                               public void run() {
+                                               public void execute() {
                                                        SwingUtils.showError(frame, ERROR_ACTUALIZANDO + ex.getMessage());
                                                }
                                        });

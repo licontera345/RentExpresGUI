@@ -9,6 +9,7 @@ import com.pinguela.rentexpres.desktop.dialog.AlquilerDetailDialog;
 import com.pinguela.rentexpres.desktop.dialog.AlquilerEditDialog;
 import com.pinguela.rentexpres.desktop.model.AlquilerSearchTableModel;
 import com.pinguela.rentexpres.exception.RentexpresException;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.service.AlquilerService;
 
@@ -33,7 +34,7 @@ public class SearchAlquilerAction {
 			new AlquilerDetailDialog(frame, dto).setVisible(true);
 	}
 
-	public void showEdit(AlquilerDTO dto, Runnable reload) {
+        public void showEdit(AlquilerDTO dto, ActionCallback reload) {
 		if (dto == null)
 			return;
                 AlquilerEditDialog dlg = new AlquilerEditDialog(frame, dto);
@@ -43,8 +44,8 @@ public class SearchAlquilerAction {
 				service.update(dlg.getAlquiler());
 			} catch (RentexpresException ignored) {
 			}
-			if (reload != null)
-				reload.run();
+                        if (reload != null)
+                                reload.execute();
 		}
 	}
 }

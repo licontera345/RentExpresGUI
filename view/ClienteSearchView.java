@@ -7,6 +7,7 @@ import javax.swing.JScrollPane;
 
 import com.pinguela.rentexpres.desktop.controller.ClienteSearchController;
 import com.pinguela.rentexpres.desktop.util.PaginationPanel;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.service.ClienteService;
 import com.pinguela.rentexpres.service.LocalidadService;
 import com.pinguela.rentexpres.service.ProvinciaService;
@@ -45,9 +46,9 @@ public class ClienteSearchView extends JPanel {
 
 		// 3) Creamos la tabla de resultados (le pasamos el callback
 		// controller.buscar())
-               this.table = new ClienteTablePanel(clienteService, owner, new Runnable() {
+               this.table = new ClienteTablePanel(clienteService, owner, new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                controller.buscar();
                        }
                });
@@ -73,9 +74,9 @@ public class ClienteSearchView extends JPanel {
 
 		// El botón “Seleccionar” del filtro: al pulsarlo, muestra/oculta la columna de
 		// checkboxes
-               filter.setToggleListener(new Runnable() {
+               filter.setToggleListener(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                table.toggleSelectColumn();
                        }
                });

@@ -8,6 +8,7 @@ import javax.swing.JToolBar;
 
 import com.pinguela.rentexpres.desktop.controller.ReservaSearchController;
 import com.pinguela.rentexpres.desktop.util.PaginationPanel;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.service.EstadoReservaService;
 import com.pinguela.rentexpres.service.ReservaService;
@@ -35,9 +36,9 @@ public class ReservaSearchView extends JPanel {
 		this.filter = new ReservaFilterPanel();
 		this.actions = new ReservaSearchActionsView();
 		this.pager = new PaginationPanel();
-               this.table = new ReservaTablePanel(rs, owner, new Runnable() {
+               this.table = new ReservaTablePanel(rs, owner, new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                controller.buscar();
                        }
                });
@@ -62,9 +63,9 @@ public class ReservaSearchView extends JPanel {
 		controller = new ReservaSearchController(this, rs, es, vs, owner);
 
 		// Conectar botón "Limpiar"
-               actions.onLimpiar(new Runnable() {
+               actions.onLimpiar(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                filter.clear();
                                table.hideSelectColumn();
                                controller.goFirstPage();
@@ -72,9 +73,9 @@ public class ReservaSearchView extends JPanel {
                });
 
 		// Conectar botón "Seleccionar" del filtro
-               filter.setToggleListener(new Runnable() {
+               filter.setToggleListener(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                table.toggleSelectColumn();
                        }
                });

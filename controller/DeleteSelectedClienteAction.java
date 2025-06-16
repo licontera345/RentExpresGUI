@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -17,11 +18,11 @@ public class DeleteSelectedClienteAction implements ActionListener {
 
 	private final Supplier<List<Integer>> idsSupplier;
 	private final Component parent;
-	private final ClienteService service;
-	private final Runnable onRefresh;
+        private final ClienteService service;
+        private final ActionCallback onRefresh;
 
-	public DeleteSelectedClienteAction(Supplier<List<Integer>> idsSupplier, Component parent, ClienteService service,
-			Runnable onRefresh) {
+        public DeleteSelectedClienteAction(Supplier<List<Integer>> idsSupplier, Component parent, ClienteService service,
+                        ActionCallback onRefresh) {
 		this.idsSupplier = Objects.requireNonNull(idsSupplier);
 		this.parent = Objects.requireNonNull(parent);
 		this.service = Objects.requireNonNull(service);
@@ -52,8 +53,8 @@ public class DeleteSelectedClienteAction implements ActionListener {
                         }
                 }
 
-		if (onRefresh != null)
-			onRefresh.run();
+                if (onRefresh != null)
+                        onRefresh.execute();
 
 		if (noBorrados.isEmpty())
 			SwingUtils.showInfo(parent, "Clientes eliminados correctamente.");
