@@ -10,6 +10,8 @@ import java.awt.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
+
 /**
  * Utilidades Swing reutilizables en toda la aplicación.
  */
@@ -32,9 +34,20 @@ public final class SwingUtils {
 	}
 
 	/** Centra el diálogo respecto a un componente padre */
-	public static void center(Window dialog, Component parent) {
-		dialog.setLocationRelativeTo(parent);
-	}
+        public static void center(Window dialog, Component parent) {
+                dialog.setLocationRelativeTo(parent);
+        }
+
+        /** Wrapper for SwingUtilities.invokeLater without exposing Runnable */
+        public static void invokeLater(ActionCallback action) {
+                Objects.requireNonNull(action);
+                SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                                action.execute();
+                        }
+                });
+        }
 
 	/** Centra el diálogo en la pantalla */
 	public static void center(Window dialog) {
@@ -47,12 +60,12 @@ public final class SwingUtils {
 	 * @param fire   acción a ejecutar en cada cambio
 	 * @param fields campos de texto (JTextField/JTextArea…) a escuchar
 	 */
-	public static void addDocumentListener(Runnable fire, JTextComponent... fields) {
-		Objects.requireNonNull(fire);
-		DocumentListener dl = new DocumentListener() {
-			private void changed() {
-				fire.run();
-			}
+        public static void addDocumentListener(ActionCallback fire, JTextComponent... fields) {
+                Objects.requireNonNull(fire);
+                DocumentListener dl = new DocumentListener() {
+                        private void changed() {
+                                fire.execute();
+                        }
 
 			public void insertUpdate(DocumentEvent e) {
 				changed();
@@ -96,16 +109,16 @@ public final class SwingUtils {
 		}
 	}
 
-	public static JButton button(String text, Runnable action) {
+        public static JButton button(String text, ActionCallback action) {
                JButton b = new JButton(text);
                b.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
-                               action.run();
+                               action.execute();
                        }
                });
                return b;
-	}
+       }
 
 	private SwingUtils() {
 	}

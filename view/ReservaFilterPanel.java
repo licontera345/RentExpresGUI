@@ -44,8 +44,8 @@ public class ReservaFilterPanel extends JPanel {
 	private final JTextField txtTelefono = new JTextField();
 
 	/* callbacks */
-	private Runnable onChange;
-	private Runnable toggleListener;
+        private com.pinguela.rentexpres.desktop.util.ActionCallback onChange;
+        private com.pinguela.rentexpres.desktop.util.ActionCallback toggleListener;
 	private Consumer<String> onMarcaChange;
 
 	/** Nueva bandera para suprimir eventos mientras se limpia el panel */
@@ -105,9 +105,9 @@ public class ReservaFilterPanel extends JPanel {
 		// Séptima línea: Teléfono y botón Seleccionar
 		add(new JLabel("Teléfono:"), "cell 0 " + r);
 		add(txtTelefono, "cell 1 " + r);
-                JButton btnSel = SwingUtils.button("Seleccionar", new Runnable() {
+                JButton btnSel = SwingUtils.button("Seleccionar", new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                                 fireToggleSelect();
                         }
                 });
@@ -115,9 +115,9 @@ public class ReservaFilterPanel extends JPanel {
 
 		/* ───── listeners genéricos ───── */
 		// Cada vez que un JTextField cambie, invocamos fire()
-                SwingUtils.addDocumentListener(new Runnable() {
+                SwingUtils.addDocumentListener(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                                 fire();
                         }
                 }, txtNombre, txtApellido1, txtTelefono);
@@ -241,13 +241,13 @@ public class ReservaFilterPanel extends JPanel {
 	}
 
 	/* ───── control externo (el controlador conecta aquí) ───── */
-	public void setOnChange(Runnable r) {
-		this.onChange = r;
-	}
+        public void setOnChange(com.pinguela.rentexpres.desktop.util.ActionCallback r) {
+                this.onChange = r;
+       }
 
-	public void setToggleListener(Runnable r) {
-		this.toggleListener = r;
-	}
+        public void setToggleListener(com.pinguela.rentexpres.desktop.util.ActionCallback r) {
+                this.toggleListener = r;
+       }
 
 	public void setOnMarcaChange(Consumer<String> r) {
 		this.onMarcaChange = r;
@@ -298,16 +298,16 @@ public class ReservaFilterPanel extends JPanel {
 		if (suppressEvents) {
 			return;
 		}
-		if (onChange != null) {
-			onChange.run();
-		}
-	}
+                if (onChange != null) {
+                        onChange.execute();
+                }
+        }
 
-	private void fireToggleSelect() {
-		if (toggleListener != null) {
-			toggleListener.run();
-		}
-	}
+        private void fireToggleSelect() {
+                if (toggleListener != null) {
+                        toggleListener.execute();
+                }
+        }
 
 	private static Integer zeroToNull(JSpinner sp) {
 		int v = (int) sp.getValue();

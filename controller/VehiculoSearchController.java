@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import com.pinguela.rentexpres.desktop.dialog.VehiculoCreateDialog;
 import com.pinguela.rentexpres.desktop.model.VehiculoSearchTableModel;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.desktop.view.VehiculoFilterPanel;
 import com.pinguela.rentexpres.desktop.view.VehiculoSearchActionsView;
 import com.pinguela.rentexpres.desktop.view.VehiculoSearchView;
@@ -103,49 +104,49 @@ public class VehiculoSearchController {
 
 	private void wireListeners() {
                 VehiculoFilterPanel filtro = view.getFilter();
-                filtro.setOnChange(new Runnable() {
+                filtro.setOnChange(new ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                                 if (!initializing && !loading) {
                                         goFirstPage();
                                 }
                         }
                 });
-                filtro.setToggleListener(new Runnable() {
+                filtro.setToggleListener(new ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                                 view.getTable().toggleSelectColumn();
                         }
                 });
 
-                view.getPager().onFirst(new Runnable() {
+                view.getPager().onFirst(new ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                                 if (!loading)
                                         goFirstPage();
                         }
                 });
-                view.getPager().onPrev(new Runnable() {
+                view.getPager().onPrev(new ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                                 if (!loading && currentPage > 1) {
                                         currentPage--;
                                         buscar();
                                 }
                         }
                 });
-                view.getPager().onNext(new Runnable() {
+                view.getPager().onNext(new ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                                 if (!loading && currentPage < totalPages) {
                                         currentPage++;
                                         buscar();
                                 }
                         }
                 });
-                view.getPager().onLast(new Runnable() {
+                view.getPager().onLast(new ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                                 if (!loading && currentPage < totalPages) {
                                         currentPage = totalPages;
                                         buscar();
@@ -153,24 +154,24 @@ public class VehiculoSearchController {
                         }
                 });
 
-		VehiculoSearchActionsView acciones = view.getActions();
-                acciones.onNuevo(new Runnable() {
+                VehiculoSearchActionsView acciones = view.getActions();
+                acciones.onNuevo(new ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                                 onNuevoVehiculo();
                         }
                 });
-                acciones.onLimpiar(new Runnable() {
+                acciones.onLimpiar(new ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                                 view.getFilter().clear();
                                 view.getTable().hideSelectColumn();
                                 goFirstPage();
                         }
                 });
-                acciones.onBorrarSeleccionados(new Runnable() {
+                acciones.onBorrarSeleccionados(new ActionCallback() {
                         @Override
-                        public void run() {
+                        public void execute() {
                                 onEliminarSeleccionados();
                         }
                 });

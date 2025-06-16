@@ -75,9 +75,9 @@ public class VehiculoTablePanel extends JPanel {
 	 * método para forzar el ancho de la columna “Acciones”.
 	 */
 	private void ajustarColumnasAcciones() {
-               SwingUtilities.invokeLater(new Runnable() {
+               com.pinguela.rentexpres.desktop.util.SwingUtils.invokeLater(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                if (tableVehiculo.getColumnCount() == 0)
                                        return;
                                int last = tableVehiculo.getColumnCount() - 1;
@@ -86,7 +86,7 @@ public class VehiculoTablePanel extends JPanel {
                                tableVehiculo.getColumnModel().getColumn(last).setMaxWidth(120);
                        }
                });
-	}
+       }
 
 	private boolean hasSelectColumn() {
 		try {

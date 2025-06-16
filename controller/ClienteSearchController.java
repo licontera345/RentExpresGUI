@@ -16,6 +16,7 @@ import com.pinguela.rentexpres.desktop.dialog.ClienteDetailDialog;
 import com.pinguela.rentexpres.desktop.model.ClienteSearchTableModel;
 import com.pinguela.rentexpres.desktop.util.CatalogCache;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.desktop.view.ClienteFilterPanel;
 import com.pinguela.rentexpres.desktop.view.ClienteSearchActionsView;
 import com.pinguela.rentexpres.desktop.view.ClienteTablePanel;
@@ -108,18 +109,18 @@ public class ClienteSearchController {
                 ClienteSearchActionsView actions = view.getActions();
                 ClienteTablePanel tablePanel = view.getTable();
 
-               filter.setOnChange(new Runnable() {
+               filter.setOnChange(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                if (!initializing && !loading) {
                                        goFirstPage();
                                }
                        }
                });
 
-               filter.setToggleListener(new Runnable() {
+               filter.setToggleListener(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                tablePanel.toggleSelectColumn();
                        }
                });
@@ -139,35 +140,35 @@ public class ClienteSearchController {
                        }
                });
 
-               view.getPager().onPrev(new Runnable() {
+               view.getPager().onPrev(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                if (!loading && currentPage > 1) {
                                        currentPage--;
                                        buscar();
                                }
                        }
                });
-               view.getPager().onNext(new Runnable() {
+               view.getPager().onNext(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                if (!loading && currentPage < totalPages) {
                                        currentPage++;
                                        buscar();
                                }
                        }
                });
-               view.getPager().onFirst(new Runnable() {
+               view.getPager().onFirst(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                if (!loading) {
                                        goFirstPage();
                                }
                        }
                });
-               view.getPager().onLast(new Runnable() {
+               view.getPager().onLast(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                if (!loading && currentPage < totalPages) {
                                        currentPage = totalPages;
                                        buscar();
@@ -175,9 +176,9 @@ public class ClienteSearchController {
                        }
                });
 
-               actions.onNuevo(new Runnable() {
+               actions.onNuevo(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                ClienteCreateDialog dlg = new ClienteCreateDialog(frame);
                                dlg.setVisible(true);
                                if (dlg.isConfirmed()) {
@@ -191,18 +192,18 @@ public class ClienteSearchController {
                        }
                });
 
-               actions.onLimpiar(new Runnable() {
+               actions.onLimpiar(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                filter.clear();
                                view.getTable().hideSelectColumn();
                                goFirstPage();
                        }
                });
 
-               actions.onBorrarSeleccionados(new Runnable() {
+               actions.onBorrarSeleccionados(new ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
 
                                ClienteSearchTableModel m = (ClienteSearchTableModel) view.getTable().getTable().getModel();
                                List<ClienteDTO> seleccionados = m.getSelectedItems();

@@ -74,9 +74,9 @@ public class VehiculoSearchView extends JPanel {
 		table.setSearchAction(controller.getSearchAction());
 
 		// Conectar botón "Limpiar filtros" de actions
-               actions.onLimpiar(new Runnable() {
+               actions.onLimpiar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                filter.clear();
                                table.hideSelectColumn();
                                controller.goFirstPage();
@@ -84,34 +84,34 @@ public class VehiculoSearchView extends JPanel {
                });
 
 		// Conectar botón "Eliminar seleccionados" de actions
-               actions.onBorrarSeleccionados(new Runnable() {
+               actions.onBorrarSeleccionados(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                controller.onEliminarSeleccionados();
                        }
                });
 
 		// Conectar botón "Nuevo" de actions
-               actions.onNuevo(new Runnable() {
+               actions.onNuevo(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                controller.onNuevoVehiculo();
                        }
                });
 
 		// Los filtros invocan búsqueda automáticamente (por eso no hay botón "Buscar")
-               filter.setOnChange(new Runnable() {
+               filter.setOnChange(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                controller.goFirstPage();
                        }
                });
 
 		// Conectar botón "Seleccionar" del filtro para mostrar/ocultar columna de
 		// selección
-               filter.setToggleListener(new Runnable() {
+               filter.setToggleListener(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                        @Override
-                       public void run() {
+                       public void execute() {
                                table.toggleSelectColumn();
                        }
                });
