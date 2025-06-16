@@ -14,6 +14,7 @@ import com.pinguela.rentexpres.desktop.renderer.ClienteActionsCellRenderer;
 import com.pinguela.rentexpres.desktop.renderer.ClienteTableCellRenderer;
 import com.pinguela.rentexpres.desktop.util.SelectionRenderer;
 import com.pinguela.rentexpres.desktop.util.SelectionEditor;
+import java.util.function.Supplier;
 import com.pinguela.rentexpres.model.ClienteDTO;
 import com.pinguela.rentexpres.service.ClienteService;
 
@@ -49,8 +50,14 @@ public class ClienteTablePanel extends JPanel {
 
 		// Columna “Acciones”
 		table.getColumn("Acciones").setCellRenderer(new ClienteActionsCellRenderer());
-		table.getColumn("Acciones")
-				.setCellEditor(new ClienteActionsCellEditor(owner, service, reload, this::getSelected));
+                table.getColumn("Acciones")
+                                .setCellEditor(new ClienteActionsCellEditor(owner, service, reload,
+                                                new Supplier<ClienteDTO>() {
+                                                        @Override
+                                                        public ClienteDTO get() {
+                                                                return getSelected();
+                                                        }
+                                                }));
 
 		// Columna “Seleccionar”
 		if (hasSelectColumn()) {

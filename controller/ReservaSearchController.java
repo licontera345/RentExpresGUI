@@ -4,7 +4,6 @@ import java.awt.Frame;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
@@ -56,8 +55,10 @@ public class ReservaSearchController {
 		this.vehiculoService = Objects.requireNonNull(vehiculoService);
 		this.frame = Objects.requireNonNull(owner);
 
-		Map<Integer, String> estadoMap = CatalogCache.getEstadosReserva(estadoService).stream()
-				.collect(Collectors.toMap(EstadoReservaDTO::getId, EstadoReservaDTO::getNombreEstado));
+                Map<Integer, String> estadoMap = new java.util.LinkedHashMap<Integer, String>();
+                for (EstadoReservaDTO est : CatalogCache.getEstadosReserva(estadoService)) {
+                        estadoMap.put(est.getId(), est.getNombreEstado());
+                }
 
 		this.model = new ReservaSearchTableModel(estadoMap);
 		view.getTable().setModel(model);
@@ -223,7 +224,9 @@ public class ReservaSearchController {
 		todosEstado.setId(null);
 		todosEstado.setNombreEstado("Todos");
 		cmbEstado.addItem(todosEstado);
-		CatalogCache.getEstadosReserva(estadoService).forEach(cmbEstado::addItem);
+                for (EstadoReservaDTO e : CatalogCache.getEstadosReserva(estadoService)) {
+                        cmbEstado.addItem(e);
+                }
 		cmbEstado.setRenderer(new DefaultListCellRenderer());
 		cmbEstado.setSelectedIndex(0);
 
