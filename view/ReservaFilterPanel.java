@@ -5,6 +5,10 @@ import java.math.BigDecimal;
 import java.util.function.Consumer;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.model.EstadoReservaDTO;
 import com.toedter.calendar.JDateChooser;
@@ -116,20 +120,63 @@ public class ReservaFilterPanel extends JPanel {
 		add(cmbModelo, "cell 4 3");
 
 		// Listeners que deben disparar fire() si no estamos en modo clear()
-		cmbModelo.addActionListener(e -> fire());
-		cmbEstado.addActionListener(e -> fire());
-		dcInicio.getDateEditor().addPropertyChangeListener("date", e -> fire());
-		spnIdVehiculo.addChangeListener(e -> fire());
-		sldPrecioDia.addChangeListener(e -> fire());
-		spnIdReserva.addChangeListener(e -> fire());
-		spnIdCliente.addChangeListener(e -> fire());
-		cmbMarca.addActionListener(e -> {
-			fire();
-			if (onMarcaChange != null) {
-				onMarcaChange.accept(getMarca());
-			}
-		});
-		dcFin.getDateEditor().addPropertyChangeListener("date", e -> fire());
+               cmbModelo.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               fire();
+                       }
+               });
+               cmbEstado.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               fire();
+                       }
+               });
+               dcInicio.getDateEditor().addPropertyChangeListener("date", new java.beans.PropertyChangeListener() {
+                       @Override
+                       public void propertyChange(java.beans.PropertyChangeEvent e) {
+                               fire();
+                       }
+               });
+               spnIdVehiculo.addChangeListener(new ChangeListener() {
+                       @Override
+                       public void stateChanged(ChangeEvent e) {
+                               fire();
+                       }
+               });
+               sldPrecioDia.addChangeListener(new ChangeListener() {
+                       @Override
+                       public void stateChanged(ChangeEvent e) {
+                               fire();
+                       }
+               });
+               spnIdReserva.addChangeListener(new ChangeListener() {
+                       @Override
+                       public void stateChanged(ChangeEvent e) {
+                               fire();
+                       }
+               });
+               spnIdCliente.addChangeListener(new ChangeListener() {
+                       @Override
+                       public void stateChanged(ChangeEvent e) {
+                               fire();
+                       }
+               });
+               cmbMarca.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               fire();
+                               if (onMarcaChange != null) {
+                                       onMarcaChange.accept(getMarca());
+                               }
+                       }
+               });
+               dcFin.getDateEditor().addPropertyChangeListener("date", new java.beans.PropertyChangeListener() {
+                       @Override
+                       public void propertyChange(java.beans.PropertyChangeEvent e) {
+                               fire();
+                       }
+               });
 	}
 
 	/*

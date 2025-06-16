@@ -45,20 +45,33 @@ public class SearchClienteAction {
 
 
 	public void loadAsync() {
-		new Thread(() -> {
-			try {
-				List<ClienteDTO> clientes = clienteService.findAll();
-				Map<String, String> locMap = buildLocMap();
-				Map<String, String> provMap = buildProvMap();
+               new Thread(new Runnable() {
+                       @Override
+                       public void run() {
+                               try {
+                                       List<ClienteDTO> clientes = clienteService.findAll();
+                                       Map<String, String> locMap = buildLocMap();
+                                       Map<String, String> provMap = buildProvMap();
 
-				model = new ClienteSearchTableModel(clientes, locMap, provMap);
+                                       model = new ClienteSearchTableModel(clientes, locMap, provMap);
 
-				SwingUtilities.invokeLater(() -> table.setModel(model));
+                                       SwingUtilities.invokeLater(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                       table.setModel(model);
+                                               }
+                                       });
 
-			} catch (RentexpresException ex) {
-				SwingUtilities.invokeLater(() -> SwingUtils.showError(frame, ERROR_CARGANDO + ex.getMessage()));
-			}
-		}).start();
+                               } catch (RentexpresException ex) {
+                                       SwingUtilities.invokeLater(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                       SwingUtils.showError(frame, ERROR_CARGANDO + ex.getMessage());
+                                               }
+                                       });
+                               }
+                       }
+               }).start();
 	}
 
 
@@ -92,14 +105,22 @@ public class SearchClienteAction {
 	}
 
 	private void updateAsync(ClienteDTO cliente) {
-		new Thread(() -> {
-			try {
-				clienteService.update(cliente);
-				loadAsync(); 
-			} catch (RentexpresException ex) {
-				SwingUtilities.invokeLater(() -> SwingUtils.showError(frame, ERROR_ACTUALIZANDO + ex.getMessage()));
-			}
-		}).start();
+               new Thread(new Runnable() {
+                       @Override
+                       public void run() {
+                               try {
+                                       clienteService.update(cliente);
+                                       loadAsync();
+                               } catch (RentexpresException ex) {
+                                       SwingUtilities.invokeLater(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                       SwingUtils.showError(frame, ERROR_ACTUALIZANDO + ex.getMessage());
+                                               }
+                                       });
+                               }
+                       }
+               }).start();
 	}
 
 	private Map<String, String> buildLocMap() throws RentexpresException {

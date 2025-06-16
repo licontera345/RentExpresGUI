@@ -48,12 +48,15 @@ public class UsuarioTablePanel extends JPanel {
         try {
             table.getColumn("Acciones").setCellRenderer(new UsuarioActionsCellRenderer());
 
-            Supplier<UsuarioDTO> supplier = () -> {
-                int row = table.getEditingRow();
-                if (row < 0) {
-                    return null;
+            Supplier<UsuarioDTO> supplier = new Supplier<UsuarioDTO>() {
+                @Override
+                public UsuarioDTO get() {
+                    int row = table.getEditingRow();
+                    if (row < 0) {
+                        return null;
+                    }
+                    return ((UsuarioSearchTableModel) table.getModel()).getUsuarioAt(row);
                 }
-                return ((UsuarioSearchTableModel) table.getModel()).getUsuarioAt(row);
             };
 
             table.getColumn("Acciones")

@@ -100,10 +100,13 @@ public class LoginDialog extends JDialog {
 		btnCancelar.setBackground(new Color(238, 238, 238));
 		btnCancelar.setForeground(new Color(55, 71, 79));
 		btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnCancelar.addActionListener(e -> {
-			authenticatedUser = null;
-			dispose();
-		});
+               btnCancelar.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               authenticatedUser = null;
+                               dispose();
+                       }
+               });
 
 		// botón Ingresar
 		btnIngresar.addActionListener(new ActionListener() {

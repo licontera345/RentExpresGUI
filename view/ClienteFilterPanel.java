@@ -13,6 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**
  * Panel que permite filtrar Clientes por: - ID - Nombre / Apellido1 / Apellido2
@@ -129,7 +131,12 @@ public class ClienteFilterPanel extends JPanel {
 
 	private void initListeners() {
 		// ID spinner
-		spnId.addChangeListener(e -> fireChange());
+               spnId.addChangeListener(new javax.swing.event.ChangeListener() {
+                       @Override
+                       public void stateChanged(javax.swing.event.ChangeEvent e) {
+                               fireChange();
+                       }
+               });
 
 		// TextFields
 		DocumentListener docListener = new DocumentListener() {
@@ -156,20 +163,31 @@ public class ClienteFilterPanel extends JPanel {
 		txtCalle.getDocument().addDocumentListener(docListener);
 		txtNumero.getDocument().addDocumentListener(docListener);
 
-		cmbProvincia.addActionListener(e -> {
-			fireChange();
-			if (onProvinciaChange != null) {
-				String prov = (String) cmbProvincia.getSelectedItem();
-				onProvinciaChange.accept(prov);
-			}
-		});
+               cmbProvincia.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               fireChange();
+                               if (onProvinciaChange != null) {
+                                       String prov = (String) cmbProvincia.getSelectedItem();
+                                       onProvinciaChange.accept(prov);
+                               }
+                       }
+               });
 
-		cmbLocalidad.addActionListener(e -> fireChange());
+               cmbLocalidad.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               fireChange();
+                       }
+               });
 
-		btnToggle.addActionListener(e -> {
-			if (toggleListener != null)
-				toggleListener.run();
-		});
+               btnToggle.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               if (toggleListener != null)
+                                       toggleListener.run();
+                       }
+               });
 	}
 
 	private void fireChange() {

@@ -3,6 +3,7 @@ package com.pinguela.rentexpres.desktop.view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.net.URL;
 
 import javax.swing.*;
@@ -48,16 +49,22 @@ public abstract class SearchView<T> extends JPanel {
 		paginador.add(btnSiguiente);
 		add(paginador, BorderLayout.SOUTH);
 
-		btnAnterior.addActionListener(e -> {
-			if (paginaActual > 1) {
-				paginaActual--;
-				buscar();
-			}
-		});
-		btnSiguiente.addActionListener(e -> {
-			paginaActual++;
-			buscar();
-		});
+               btnAnterior.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               if (paginaActual > 1) {
+                                       paginaActual--;
+                                       buscar();
+                               }
+                       }
+               });
+               btnSiguiente.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               paginaActual++;
+                               buscar();
+                       }
+               });
 	}
 
 	/** Agrega un botón con icono al toolbar. */

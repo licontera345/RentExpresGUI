@@ -11,6 +11,8 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import com.pinguela.rentexpres.model.CategoriaVehiculoDTO;
 import com.pinguela.rentexpres.model.EstadoVehiculoDTO;
@@ -67,9 +69,14 @@ public class VehiculoFilterPanel extends JPanel {
 		add(cmbCategoria, "cell 1 3, growx");
 
 		// Fila 4: Botón "Seleccionar"
-		JButton btnToggleSel = new JButton("Seleccionar");
-		btnToggleSel.addActionListener(e -> fireToggleSelect());
-		add(btnToggleSel, "cell 0 4 2 1, alignx right");
+               JButton btnToggleSel = new JButton("Seleccionar");
+               btnToggleSel.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               fireToggleSelect();
+                       }
+               });
+               add(btnToggleSel, "cell 0 4 2 1, alignx right");
 
 		// DocumentListeners para notificar cambios
 		txtMarca.getDocument().addDocumentListener(new SimpleDocumentListener());
@@ -77,8 +84,18 @@ public class VehiculoFilterPanel extends JPanel {
 		ftfAnioDesde.getDocument().addDocumentListener(new SimpleDocumentListener());
 		ftfAnioHasta.getDocument().addDocumentListener(new SimpleDocumentListener());
 		ftfPrecioMax.getDocument().addDocumentListener(new SimpleDocumentListener());
-		cmbEstado.addActionListener(e -> fire());
-		cmbCategoria.addActionListener(e -> fire());
+               cmbEstado.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               fire();
+                       }
+               });
+               cmbCategoria.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               fire();
+                       }
+               });
 	}
 
 	/**
