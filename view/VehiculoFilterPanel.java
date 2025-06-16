@@ -1,0 +1,188 @@
+package com.pinguela.rentexpres.desktop.view;
+
+import java.text.NumberFormat;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import com.pinguela.rentexpres.model.CategoriaVehiculoDTO;
+import com.pinguela.rentexpres.model.EstadoVehiculoDTO;
+
+import net.miginfocom.swing.MigLayout;
+
+public class VehiculoFilterPanel extends JPanel {
+	private static final long serialVersionUID = 1L;
+
+	private final JTextField txtMarca = new JTextField();
+	private final JTextField txtModelo = new JTextField();
+	private final JFormattedTextField ftfAnioDesde;
+	private final JFormattedTextField ftfAnioHasta;
+	private final JFormattedTextField ftfPrecioMax;
+
+	
+	public final JComboBox<EstadoVehiculoDTO> cmbEstado = new JComboBox<>();
+	public final JComboBox<CategoriaVehiculoDTO> cmbCategoria = new JComboBox<>();
+
+	private Runnable onChange;
+	private Runnable toggleListener;
+
+	public VehiculoFilterPanel() {
+		setBorder(new TitledBorder("Filtros de Vehículo"));
+		setLayout(new MigLayout("wrap 4", "[right]10[150!]20[right]10[150!][][]", "[]8[]8[]8[]8[]"));
+
+		NumberFormat intFormat = NumberFormat.getIntegerInstance();
+		NumberFormat doubleFormat = NumberFormat.getNumberInstance();
+
+		ftfAnioDesde = new JFormattedTextField(intFormat);
+		ftfAnioHasta = new JFormattedTextField(intFormat);
+		ftfPrecioMax = new JFormattedTextField(doubleFormat);
+
+		// Fila 0: Marca | Modelo
+		add(new JLabel("Marca:"), "cell 0 0");
+		add(txtMarca, "cell 1 0, growx");
+		add(new JLabel("Modelo:"), "cell 2 0");
+		add(txtModelo, "cell 3 0, growx");
+
+		// Fila 1: Año Desde | Año Hasta
+		add(new JLabel("Año Desde:"), "cell 0 1");
+		add(ftfAnioDesde, "cell 1 1, growx");
+		add(new JLabel("Año Hasta:"), "cell 2 1");
+		add(ftfAnioHasta, "cell 3 1, growx");
+
+		// Fila 2: Precio Máximo | Estado
+		add(new JLabel("Precio Máximo:"), "cell 0 2");
+		add(ftfPrecioMax, "cell 1 2, growx");
+		add(new JLabel("Estado:"), "cell 2 2");
+		add(cmbEstado, "cell 3 2, growx");
+
+		// Fila 3: Categoría
+		add(new JLabel("Categoría:"), "cell 0 3");
+		add(cmbCategoria, "cell 1 3, growx");
+
+		// Fila 4: Botón "Seleccionar"
+		JButton btnToggleSel = new JButton("Seleccionar");
+		btnToggleSel.addActionListener(e -> fireToggleSelect());
+		add(btnToggleSel, "cell 0 4 2 1, alignx right");
+
+		// DocumentListeners para notificar cambios
+		txtMarca.getDocument().addDocumentListener(new SimpleDocumentListener());
+		txtModelo.getDocument().addDocumentListener(new SimpleDocumentListener());
+		ftfAnioDesde.getDocument().addDocumentListener(new SimpleDocumentListener());
+		ftfAnioHasta.getDocument().addDocumentListener(new SimpleDocumentListener());
+		ftfPrecioMax.getDocument().addDocumentListener(new SimpleDocumentListener());
+		cmbEstado.addActionListener(e -> fire());
+		cmbCategoria.addActionListener(e -> fire());
+	}
+
+	/**
+	 * Getter para que el controlador pueda hacer: getCbEstado().removeAllItems()
+	 */
+	public JComboBox<EstadoVehiculoDTO> getCbEstado() {
+		return cmbEstado;
+	}
+
+	/**
+	 * Getter para que el controlador pueda hacer: getCbCategoria().removeAllItems()
+	 */
+	public JComboBox<CategoriaVehiculoDTO> getCbCategoria() {
+		return cmbCategoria;
+	}
+
+	public String getMarca() {
+		String text = txtMarca.getText().trim();
+		return text.isEmpty() ? null : text;
+	}
+
+	public String getModelo() {
+		String text = txtModelo.getText().trim();
+		return text.isEmpty() ? null : text;
+	}
+
+	public Integer getAnioDesde() {
+		try {
+			Object value = ftfAnioDesde.getValue();
+			return (value == null) ? null : Integer.valueOf(value.toString());
+		} catch (NumberFormatException ex) {
+			return null;
+		}
+	}
+
+	public Integer getAnioHasta() {
+		try {
+			Object value = ftfAnioHasta.getValue();
+			return (value == null) ? null : Integer.valueOf(value.toString());
+		} catch (NumberFormatException ex) {
+			return null;
+		}
+	}
+
+	public Double getPrecioMax() {
+		try {
+			Object value = ftfPrecioMax.getValue();
+			return (value == null) ? null : Double.valueOf(value.toString());
+		} catch (NumberFormatException ex) {
+			return null;
+		}
+	}
+
+	public EstadoVehiculoDTO getEstadoSeleccionado() {
+		return (EstadoVehiculoDTO) cmbEstado.getSelectedItem();
+	}
+
+	public CategoriaVehiculoDTO getCategoriaSeleccionada() {
+		return (CategoriaVehiculoDTO) cmbCategoria.getSelectedItem();
+	}
+
+	public void clear() {
+		txtMarca.setText("");
+		txtModelo.setText("");
+		ftfAnioDesde.setValue(null);
+		ftfAnioHasta.setValue(null);
+		ftfPrecioMax.setValue(null);
+		cmbEstado.setSelectedIndex(-1);
+		cmbCategoria.setSelectedIndex(-1);
+		fire();
+	}
+
+	public void setOnChange(Runnable r) {
+		this.onChange = r;
+	}
+
+	public void setToggleListener(Runnable r) {
+		this.toggleListener = r;
+	}
+
+	private void fire() {
+		if (onChange != null)
+			onChange.run();
+	}
+
+	private void fireToggleSelect() {
+		if (toggleListener != null)
+			toggleListener.run();
+	}
+
+	private class SimpleDocumentListener implements DocumentListener {
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			fire();
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			fire();
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			fire();
+		}
+	}
+}
