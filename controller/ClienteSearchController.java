@@ -4,7 +4,6 @@ import java.awt.Frame;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
@@ -58,21 +57,31 @@ public class ClienteSearchController {
 		this.localidadService = Objects.requireNonNull(localidadService);
 		this.frame = Objects.requireNonNull(owner);
 
-		Map<String, String> locMap = CatalogCache.getLocalidades(localidadService).stream().map(LocalidadDTO::getNombre)
-				.distinct().collect(Collectors.toMap(nombre -> nombre, nombre -> {
-					if (nombre == null)
-						return "";
-					String lower = nombre.toLowerCase();
-					return Character.toUpperCase(lower.charAt(0)) + lower.substring(1);
-				}));
+               java.util.Map<String, String> locMap = new java.util.HashMap<String, String>();
+               for (LocalidadDTO dto : CatalogCache.getLocalidades(localidadService)) {
+                       String nombre = dto.getNombre();
+                       if (!locMap.containsKey(nombre)) {
+                               if (nombre == null)
+                                       locMap.put(nombre, "");
+                               else {
+                                       String lower = nombre.toLowerCase();
+                                       locMap.put(nombre, Character.toUpperCase(lower.charAt(0)) + lower.substring(1));
+                               }
+                       }
+               }
 
-		Map<String, String> provMap = CatalogCache.getProvincias(provinciaService).stream().map(ProvinciaDTO::getNombre)
-				.distinct().collect(Collectors.toMap(nombre -> nombre, nombre -> {
-					if (nombre == null)
-						return "";
-					String lower = nombre.toLowerCase();
-					return Character.toUpperCase(lower.charAt(0)) + lower.substring(1);
-				}));
+               java.util.Map<String, String> provMap = new java.util.HashMap<String, String>();
+               for (ProvinciaDTO dto : CatalogCache.getProvincias(provinciaService)) {
+                       String nombre = dto.getNombre();
+                       if (!provMap.containsKey(nombre)) {
+                               if (nombre == null)
+                                       provMap.put(nombre, "");
+                               else {
+                                       String lower = nombre.toLowerCase();
+                                       provMap.put(nombre, Character.toUpperCase(lower.charAt(0)) + lower.substring(1));
+                               }
+                       }
+               }
 
 		// Ahora sí coinciden las firmas con tu modelo:
 		this.model = new ClienteSearchTableModel(locMap, provMap, provinciaService, localidadService);
@@ -99,88 +108,120 @@ public class ClienteSearchController {
                 ClienteSearchActionsView actions = view.getActions();
                 ClienteTablePanel tablePanel = view.getTable();
 
-		filter.setOnChange(() -> {
-			if (!initializing && !loading) {
-				goFirstPage();
-			}
-		});
+               filter.setOnChange(new Runnable() {
+                       @Override
+                       public void run() {
+                               if (!initializing && !loading) {
+                                       goFirstPage();
+                               }
+                       }
+               });
 
-		filter.setToggleListener(() -> tablePanel.toggleSelectColumn());
+               filter.setToggleListener(new Runnable() {
+                       @Override
+                       public void run() {
+                               tablePanel.toggleSelectColumn();
+                       }
+               });
 
-		filter.getCmbProvincia().addActionListener(e -> {
-			if (!initializing && !loading) {
-				String provinciaSeleccionada = (String) filter.getCmbProvincia().getSelectedItem();
-				try {
-					cargarLocalidadesPorProvincia(provinciaSeleccionada);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				goFirstPage();
-			}
-		});
+               filter.getCmbProvincia().addActionListener(new java.awt.event.ActionListener() {
+                       @Override
+                       public void actionPerformed(java.awt.event.ActionEvent e) {
+                               if (!initializing && !loading) {
+                                       String provinciaSeleccionada = (String) filter.getCmbProvincia().getSelectedItem();
+                                       try {
+                                               cargarLocalidadesPorProvincia(provinciaSeleccionada);
+                                       } catch (Exception e1) {
+                                               e1.printStackTrace();
+                                       }
+                                       goFirstPage();
+                               }
+                       }
+               });
 
-		view.getPager().onPrev(() -> {
-			if (!loading && currentPage > 1) {
-				currentPage--;
-				buscar();
-			}
-		});
-		view.getPager().onNext(() -> {
-			if (!loading && currentPage < totalPages) {
-				currentPage++;
-				buscar();
-			}
-		});
-		view.getPager().onFirst(() -> {
-			if (!loading) {
-				goFirstPage();
-			}
-		});
-		view.getPager().onLast(() -> {
-			if (!loading && currentPage < totalPages) {
-				currentPage = totalPages;
-				buscar();
-			}
-		});
+               view.getPager().onPrev(new Runnable() {
+                       @Override
+                       public void run() {
+                               if (!loading && currentPage > 1) {
+                                       currentPage--;
+                                       buscar();
+                               }
+                       }
+               });
+               view.getPager().onNext(new Runnable() {
+                       @Override
+                       public void run() {
+                               if (!loading && currentPage < totalPages) {
+                                       currentPage++;
+                                       buscar();
+                               }
+                       }
+               });
+               view.getPager().onFirst(new Runnable() {
+                       @Override
+                       public void run() {
+                               if (!loading) {
+                                       goFirstPage();
+                               }
+                       }
+               });
+               view.getPager().onLast(new Runnable() {
+                       @Override
+                       public void run() {
+                               if (!loading && currentPage < totalPages) {
+                                       currentPage = totalPages;
+                                       buscar();
+                               }
+                       }
+               });
 
-		actions.onNuevo(() -> {
-			ClienteCreateDialog dlg = new ClienteCreateDialog(frame);
-			dlg.setVisible(true);
-			if (dlg.isConfirmed()) {
-				try {
-					clienteService.create(dlg.getCliente());
-					goFirstPage();
-				} catch (RentexpresException ex) {
-					SwingUtils.showError(view, "Error creando cliente: " + ex.getMessage());
-				}
-			}
-		});
+               actions.onNuevo(new Runnable() {
+                       @Override
+                       public void run() {
+                               ClienteCreateDialog dlg = new ClienteCreateDialog(frame);
+                               dlg.setVisible(true);
+                               if (dlg.isConfirmed()) {
+                                       try {
+                                               clienteService.create(dlg.getCliente());
+                                               goFirstPage();
+                                       } catch (RentexpresException ex) {
+                                               SwingUtils.showError(view, "Error creando cliente: " + ex.getMessage());
+                                       }
+                               }
+                       }
+               });
 
-		actions.onLimpiar(() -> {
-			filter.clear();
-			view.getTable().hideSelectColumn();
-			goFirstPage();
-		});
+               actions.onLimpiar(new Runnable() {
+                       @Override
+                       public void run() {
+                               filter.clear();
+                               view.getTable().hideSelectColumn();
+                               goFirstPage();
+                       }
+               });
 
-		actions.onBorrarSeleccionados(() -> {
-			
-			ClienteSearchTableModel m = (ClienteSearchTableModel) view.getTable().getTable().getModel();
-			List<ClienteDTO> seleccionados = m.getSelectedItems();
-			if (seleccionados.isEmpty())
-				return;
+               actions.onBorrarSeleccionados(new Runnable() {
+                       @Override
+                       public void run() {
 
-			int resp = SwingUtils.showConfirm(frame, "¿Eliminar los clientes seleccionados?", "Confirmar borrado");
-			if (resp == JOptionPane.YES_OPTION) {
-				try {
-					for (ClienteDTO c : seleccionados) {
-						clienteService.delete(c.getId()); 
-					}
-					goFirstPage();
-				} catch (RentexpresException ex) {
-					SwingUtils.showError(view, "Error al eliminar clientes: " + ex.getMessage());
-				}
-			}
-		});
+                               ClienteSearchTableModel m = (ClienteSearchTableModel) view.getTable().getTable().getModel();
+                               List<ClienteDTO> seleccionados = m.getSelectedItems();
+                               if (seleccionados.isEmpty())
+                                       return;
+
+                               int resp = SwingUtils.showConfirm(frame, "¿Eliminar los clientes seleccionados?", "Confirmar borrado");
+                               if (resp == JOptionPane.YES_OPTION) {
+                                       try {
+                                               for (ClienteDTO c : seleccionados) {
+                                                       clienteService.delete(c.getId());
+                                               }
+                                               goFirstPage();
+                                       } catch (RentexpresException ex) {
+                                               SwingUtils.showError(view, "Error al eliminar clientes: " + ex.getMessage());
+                                       }
+                               }
+                       }
+               });
 
 		view.getTable().getTable().addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
@@ -208,8 +249,14 @@ public class ClienteSearchController {
 		JComboBox<String> cmbProv = filter.getCmbProvincia();
 		cmbProv.removeAllItems();
 		cmbProv.addItem(TODAS_PROVINCIAS);
-		CatalogCache.getProvincias(provinciaService).stream().map(ProvinciaDTO::getNombre).sorted()
-				.forEach(cmbProv::addItem);
+               java.util.List<String> provs = new java.util.ArrayList<String>();
+               for (ProvinciaDTO p : CatalogCache.getProvincias(provinciaService)) {
+                       provs.add(p.getNombre());
+               }
+               java.util.Collections.sort(provs);
+               for (String p : provs) {
+                       cmbProv.addItem(p);
+               }
 		cmbProv.setSelectedIndex(0);
 		cmbProv.setRenderer(new DefaultListCellRenderer());
 
@@ -222,13 +269,23 @@ public class ClienteSearchController {
 		cmbLoc.removeAllItems();
 		cmbLoc.addItem(TODAS_LOCALIDADES);
 
-		if (provincia == null || TODAS_PROVINCIAS.equals(provincia)) {
-			CatalogCache.getLocalidades(localidadService).stream().map(LocalidadDTO::getNombre).distinct().sorted()
-					.forEach(cmbLoc::addItem);
-		} else {
-			CatalogCache.getLocalidades(localidadService).stream().filter(loc -> loc.getNombre().equals(provincia))
-					.map(LocalidadDTO::getNombre).distinct().sorted().forEach(cmbLoc::addItem);
-		}
+               java.util.Set<String> locs = new java.util.HashSet<String>();
+               if (provincia == null || TODAS_PROVINCIAS.equals(provincia)) {
+                       for (LocalidadDTO loc : CatalogCache.getLocalidades(localidadService)) {
+                               locs.add(loc.getNombre());
+                       }
+               } else {
+                       for (LocalidadDTO loc : CatalogCache.getLocalidades(localidadService)) {
+                               if (loc.getNombre().equals(provincia)) {
+                                       locs.add(loc.getNombre());
+                               }
+                       }
+               }
+               java.util.List<String> locList = new java.util.ArrayList<String>(locs);
+               java.util.Collections.sort(locList);
+               for (String l : locList) {
+                       cmbLoc.addItem(l);
+               }
 		cmbLoc.setSelectedIndex(0);
 		cmbLoc.setRenderer(new DefaultListCellRenderer());
 	}
@@ -240,25 +297,25 @@ public class ClienteSearchController {
 		if (f.getId() != null && f.getId() > 0) {
 			c.setId(f.getId());
 		}
-		if (f.getNombre() != null && !f.getNombre().isBlank()) {
+		if (f.getNombre() != null && !f.getNombre().trim().isEmpty()) {
 			c.setNombre(f.getNombre());
 		}
-		if (f.getApellido1() != null && !f.getApellido1().isBlank()) {
+		if (f.getApellido1() != null && !f.getApellido1().trim().isEmpty()) {
 			c.setApellido1(f.getApellido1());
 		}
-		if (f.getApellido2() != null && !f.getApellido2().isBlank()) {
+		if (f.getApellido2() != null && !f.getApellido2().trim().isEmpty()) {
 			c.setApellido2(f.getApellido2());
 		}
-		if (f.getEmail() != null && !f.getEmail().isBlank()) {
+		if (f.getEmail() != null && !f.getEmail().trim().isEmpty()) {
 			c.setEmail(f.getEmail());
 		}
-		if (f.getTelefono() != null && !f.getTelefono().isBlank()) {
+		if (f.getTelefono() != null && !f.getTelefono().trim().isEmpty()) {
 			c.setTelefono(f.getTelefono());
 		}
-		if (f.getCalle() != null && !f.getCalle().isBlank()) {
+		if (f.getCalle() != null && !f.getCalle().trim().isEmpty()) {
 			c.setCalle(f.getCalle());
 		}
-		if (f.getNumero() != null && !f.getNumero().isBlank()) {
+		if (f.getNumero() != null && !f.getNumero().trim().isEmpty()) {
 			c.setNumero(f.getNumero());
 		}
 		String provSel = f.getProvincia();

@@ -74,7 +74,7 @@ public final class SwingUtils {
 
 	public static Integer toInteger(String text) {
 		try {
-			return text == null || text.isBlank() ? null : Integer.valueOf(text.trim());
+			return text == null || text.trim().isEmpty() ? null : Integer.valueOf(text.trim());
 		} catch (NumberFormatException ex) {
 			return null;
 		}
@@ -82,7 +82,7 @@ public final class SwingUtils {
 
 	public static Double toDouble(String text) {
 		try {
-			return text == null || text.isBlank() ? null : Double.valueOf(text.trim());
+			return text == null || text.trim().isEmpty() ? null : Double.valueOf(text.trim());
 		} catch (NumberFormatException ex) {
 			return null;
 		}
@@ -90,7 +90,7 @@ public final class SwingUtils {
 
 	public static BigDecimal toBigDecimal(String text) {
 		try {
-			return text == null || text.isBlank() ? null : new BigDecimal(text.trim());
+			return text == null || text.trim().isEmpty() ? null : new BigDecimal(text.trim());
 		} catch (NumberFormatException ex) {
 			return null;
 		}

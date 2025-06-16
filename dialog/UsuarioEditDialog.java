@@ -158,7 +158,7 @@ public class UsuarioEditDialog extends JDialog {
 
 	private void onGuardar() {
 		// Validaciones mínimas (except usuario, que no cambia)
-		if (txtNombre.getText().isBlank() || txtApellidos.getText().isBlank() || txtEmail.getText().isBlank()
+		if (txtNombre.getText().trim().isEmpty() || txtApellidos.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty()
 				|| cmbTipoUsuario.getSelectedItem() == null) {
 			SwingUtils.showWarning(this, "Nombre, Apellidos, Email y Tipo Usuario son obligatorios.");
 			return;

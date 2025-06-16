@@ -82,87 +82,119 @@ public class ReservaSearchController {
                 ReservaSearchActionsView actions = view.getActions();
                 ReservaTablePanel tablePanel = view.getTable();
 
-		filter.setOnChange(() -> {
-			if (!initializing && !loading) {
-				goFirstPage();
-			}
-		});
+               filter.setOnChange(new Runnable() {
+                       @Override
+                       public void run() {
+                               if (!initializing && !loading) {
+                                       goFirstPage();
+                               }
+                       }
+               });
 
-		filter.setToggleListener(() -> tablePanel.toggleSelectColumn());
+               filter.setToggleListener(new Runnable() {
+                       @Override
+                       public void run() {
+                               tablePanel.toggleSelectColumn();
+                       }
+               });
 
-		filter.getCmbMarca().addActionListener(e -> {
-			if (!initializing && !loading) {
-				String marca = (String) filter.getCmbMarca().getSelectedItem();
-				try {
-					cargarModelosPorMarca(marca);
-				} catch (RentexpresException ex) {
-					SwingUtils.showError(view, "Error al cargar modelos: " + ex.getMessage());
-				}
-				goFirstPage();
-			}
-		});
+               filter.getCmbMarca().addActionListener(new java.awt.event.ActionListener() {
+                       @Override
+                       public void actionPerformed(java.awt.event.ActionEvent e) {
+                               if (!initializing && !loading) {
+                                       String marca = (String) filter.getCmbMarca().getSelectedItem();
+                                       try {
+                                               cargarModelosPorMarca(marca);
+                                       } catch (RentexpresException ex) {
+                                               SwingUtils.showError(view, "Error al cargar modelos: " + ex.getMessage());
+                                       }
+                                       goFirstPage();
+                               }
+                       }
+               });
 
-		view.getPager().onPrev(() -> {
-			if (!loading && currentPage > 1) {
-				currentPage--;
-				buscar();
-			}
-		});
-		view.getPager().onNext(() -> {
-			if (!loading && currentPage < totalPages) {
-				currentPage++;
-				buscar();
-			}
-		});
-		view.getPager().onFirst(() -> {
-			if (!loading) {
-				goFirstPage();
-			}
-		});
-		view.getPager().onLast(() -> {
-			if (!loading && currentPage < totalPages) {
-				currentPage = totalPages;
-				buscar();
-			}
-		});
+               view.getPager().onPrev(new Runnable() {
+                       @Override
+                       public void run() {
+                               if (!loading && currentPage > 1) {
+                                       currentPage--;
+                                       buscar();
+                               }
+                       }
+               });
+               view.getPager().onNext(new Runnable() {
+                       @Override
+                       public void run() {
+                               if (!loading && currentPage < totalPages) {
+                                       currentPage++;
+                                       buscar();
+                               }
+                       }
+               });
+               view.getPager().onFirst(new Runnable() {
+                       @Override
+                       public void run() {
+                               if (!loading) {
+                                       goFirstPage();
+                               }
+                       }
+               });
+               view.getPager().onLast(new Runnable() {
+                       @Override
+                       public void run() {
+                               if (!loading && currentPage < totalPages) {
+                                       currentPage = totalPages;
+                                       buscar();
+                               }
+                       }
+               });
 
-		actions.onNuevo(() -> {
-			ReservaCreateDialog dlg = new ReservaCreateDialog(frame);
-			dlg.setVisible(true);
-			if (dlg.isConfirmed()) {
-				try {
-					reservaService.create(dlg.getReserva());
-					goFirstPage();
-				} catch (RentexpresException ex) {
-					SwingUtils.showError(view, "Error guardando reserva: " + ex.getMessage());
-				}
-			}
-		});
+               actions.onNuevo(new Runnable() {
+                       @Override
+                       public void run() {
+                               ReservaCreateDialog dlg = new ReservaCreateDialog(frame);
+                               dlg.setVisible(true);
+                               if (dlg.isConfirmed()) {
+                                       try {
+                                               reservaService.create(dlg.getReserva());
+                                               goFirstPage();
+                                       } catch (RentexpresException ex) {
+                                               SwingUtils.showError(view, "Error guardando reserva: " + ex.getMessage());
+                                       }
+                               }
+                       }
+               });
 
-		actions.onLimpiar(() -> {
-			filter.clear();
-			view.getTable().hideSelectColumn();
-			goFirstPage();
-		});
+               actions.onLimpiar(new Runnable() {
+                       @Override
+                       public void run() {
+                               filter.clear();
+                               view.getTable().hideSelectColumn();
+                               goFirstPage();
+                       }
+               });
 
-		actions.onBorrarSeleccionados(() -> {
-			ReservaSearchTableModel m = (ReservaSearchTableModel) view.getTable().getTable().getModel();
-			List<ReservaDTO> seleccionados = m.getSelectedItems();
-			if (seleccionados.isEmpty())
-				return;
+               actions.onBorrarSeleccionados(new Runnable() {
+                       @Override
+                       public void run() {
+                               ReservaSearchTableModel m = (ReservaSearchTableModel) view.getTable().getTable().getModel();
+                               List<ReservaDTO> seleccionados = m.getSelectedItems();
+                               if (seleccionados.isEmpty())
+                                       return;
 
-			int resp = SwingUtils.showConfirm(frame, "¿Eliminar las reservas seleccionadas?", "Confirmar borrado");
-			if (resp == JOptionPane.YES_OPTION) {
-				try {
-					for (ReservaDTO r : seleccionados) {
-						reservaService.delete(r.getId());
-					}
-					goFirstPage();
-				} catch (RentexpresException ex) {
-					SwingUtils.showError(view, "Error al eliminar reservas: " + ex.getMessage());
-				}
-			}
-		});
+                               int resp = SwingUtils.showConfirm(frame, "¿Eliminar las reservas seleccionadas?", "Confirmar borrado");
+                               if (resp == JOptionPane.YES_OPTION) {
+                                       try {
+                                               for (ReservaDTO r : seleccionados) {
+                                                       reservaService.delete(r.getId());
+                                               }
+                                               goFirstPage();
+                                       } catch (RentexpresException ex) {
+                                               SwingUtils.showError(view, "Error al eliminar reservas: " + ex.getMessage());
+                                       }
+                               }
+                       }
+               });
 
 		view.getTable().getTable().addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
@@ -198,8 +230,15 @@ public class ReservaSearchController {
 		JComboBox<String> cmbMarca = filter.getCmbMarca();
 		cmbMarca.removeAllItems();
 		cmbMarca.addItem(TODAS);
-		CatalogCache.getVehiculos(vehiculoService).stream().map(v -> v.getMarca()).distinct().sorted()
-				.forEach(cmbMarca::addItem);
+               java.util.Set<String> marcasSet = new java.util.HashSet<String>();
+               for (com.pinguela.rentexpres.model.VehiculoDTO v : CatalogCache.getVehiculos(vehiculoService)) {
+                       marcasSet.add(v.getMarca());
+               }
+               java.util.List<String> marcasList = new java.util.ArrayList<String>(marcasSet);
+               java.util.Collections.sort(marcasList);
+               for (String m : marcasList) {
+                       cmbMarca.addItem(m);
+               }
 		cmbMarca.setSelectedIndex(0);
 
 		cargarModelosPorMarca(null);
@@ -210,9 +249,17 @@ public class ReservaSearchController {
 		JComboBox<String> cmbModelo = filter.getCmbModelo();
 		cmbModelo.removeAllItems();
 		cmbModelo.addItem(TODOS);
-		CatalogCache.getVehiculos(vehiculoService).stream()
-				.filter(v -> marca == null || marca.equals(TODAS) || marca.equals(v.getMarca())).map(v -> v.getModelo())
-				.distinct().sorted().forEach(cmbModelo::addItem);
+               java.util.Set<String> modelosSet = new java.util.HashSet<String>();
+               for (com.pinguela.rentexpres.model.VehiculoDTO v : CatalogCache.getVehiculos(vehiculoService)) {
+                       if (marca == null || marca.equals(TODAS) || marca.equals(v.getMarca())) {
+                               modelosSet.add(v.getModelo());
+                       }
+               }
+               java.util.List<String> modelosList = new java.util.ArrayList<String>(modelosSet);
+               java.util.Collections.sort(modelosList);
+               for (String m : modelosList) {
+                       cmbModelo.addItem(m);
+               }
 		cmbModelo.setSelectedIndex(0);
 	}
 
@@ -229,10 +276,10 @@ public class ReservaSearchController {
 		if (f.getIdCliente() != null && f.getIdCliente() > 0) {
 			c.setIdCliente(f.getIdCliente());
 		}
-		if (f.getFechaInicio() != null && !f.getFechaInicio().isBlank()) {
+		if (f.getFechaInicio() != null && !f.getFechaInicio().trim().isEmpty()) {
 			c.setFechaInicio(f.getFechaInicio());
 		}
-		if (f.getFechaFin() != null && !f.getFechaFin().isBlank()) {
+		if (f.getFechaFin() != null && !f.getFechaFin().trim().isEmpty()) {
 			c.setFechaFin(f.getFechaFin());
 		}
 		String marca = f.getMarca();
@@ -246,13 +293,13 @@ public class ReservaSearchController {
 		if (f.getPrecioDia() != null) {
 			c.setPrecioDia(f.getPrecioDia().doubleValue());
 		}
-		if (f.getNombre() != null && !f.getNombre().isBlank()) {
+		if (f.getNombre() != null && !f.getNombre().trim().isEmpty()) {
 			c.setNombre(f.getNombre());
 		}
-		if (f.getApellido1() != null && !f.getApellido1().isBlank()) {
+		if (f.getApellido1() != null && !f.getApellido1().trim().isEmpty()) {
 			c.setApellido1(f.getApellido1());
 		}
-		if (f.getTelefono() != null && !f.getTelefono().isBlank()) {
+		if (f.getTelefono() != null && !f.getTelefono().trim().isEmpty()) {
 			c.setTelefono(f.getTelefono());
 		}
 		EstadoReservaDTO estSel = f.getEstadoSeleccionado();
