@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
@@ -70,18 +70,24 @@ public class DeleteSelectedAlquilerAction extends AbstractAction {
 		}
 	}
 
-	private DeletionResult deleteAlquileres(List<Integer> ids) throws RentexpresException {
-		List<Boolean> results = ids.stream().map(id -> {
-			try {
-				return alquilerService.delete(id);
-			} catch (RentexpresException e) {
-				return false;
-			}
-		}).collect(Collectors.toList());
+        private DeletionResult deleteAlquileres(List<Integer> ids) throws RentexpresException {
+                List<Boolean> results = new ArrayList<>();
+                for (Integer id : ids) {
+                        try {
+                                results.add(alquilerService.delete(id));
+                        } catch (RentexpresException e) {
+                                results.add(false);
+                        }
+                }
 
-		long successfulDeletions = results.stream().filter(Boolean::booleanValue).count();
-		return new DeletionResult(successfulDeletions, results.size());
-	}
+                long successfulDeletions = 0;
+                for (Boolean b : results) {
+                        if (b.booleanValue()) {
+                                successfulDeletions++;
+                        }
+                }
+                return new DeletionResult(successfulDeletions, results.size());
+        }
 
 	private void showResultMessage(DeletionResult result) {
 		if (result.totalCount == result.successCount) {

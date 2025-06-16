@@ -102,45 +102,78 @@ public class VehiculoSearchController {
 	}
 
 	private void wireListeners() {
-		VehiculoFilterPanel filtro = view.getFilter();
-		filtro.setOnChange(() -> {
-			if (!initializing && !loading) {
-				goFirstPage();
-			}
-		});
-		filtro.setToggleListener(() -> view.getTable().toggleSelectColumn());
+                VehiculoFilterPanel filtro = view.getFilter();
+                filtro.setOnChange(new Runnable() {
+                        @Override
+                        public void run() {
+                                if (!initializing && !loading) {
+                                        goFirstPage();
+                                }
+                        }
+                });
+                filtro.setToggleListener(new Runnable() {
+                        @Override
+                        public void run() {
+                                view.getTable().toggleSelectColumn();
+                        }
+                });
 
-		view.getPager().onFirst(() -> {
-			if (!loading)
-				goFirstPage();
-		});
-		view.getPager().onPrev(() -> {
-			if (!loading && currentPage > 1) {
-				currentPage--;
-				buscar();
-			}
-		});
-		view.getPager().onNext(() -> {
-			if (!loading && currentPage < totalPages) {
-				currentPage++;
-				buscar();
-			}
-		});
-		view.getPager().onLast(() -> {
-			if (!loading && currentPage < totalPages) {
-				currentPage = totalPages;
-				buscar();
-			}
-		});
+                view.getPager().onFirst(new Runnable() {
+                        @Override
+                        public void run() {
+                                if (!loading)
+                                        goFirstPage();
+                        }
+                });
+                view.getPager().onPrev(new Runnable() {
+                        @Override
+                        public void run() {
+                                if (!loading && currentPage > 1) {
+                                        currentPage--;
+                                        buscar();
+                                }
+                        }
+                });
+                view.getPager().onNext(new Runnable() {
+                        @Override
+                        public void run() {
+                                if (!loading && currentPage < totalPages) {
+                                        currentPage++;
+                                        buscar();
+                                }
+                        }
+                });
+                view.getPager().onLast(new Runnable() {
+                        @Override
+                        public void run() {
+                                if (!loading && currentPage < totalPages) {
+                                        currentPage = totalPages;
+                                        buscar();
+                                }
+                        }
+                });
 
 		VehiculoSearchActionsView acciones = view.getActions();
-		acciones.onNuevo(this::onNuevoVehiculo);
-		acciones.onLimpiar(() -> {
-			view.getFilter().clear();
-			view.getTable().hideSelectColumn();
-			goFirstPage();
-		});
-		acciones.onBorrarSeleccionados(this::onEliminarSeleccionados);
+                acciones.onNuevo(new Runnable() {
+                        @Override
+                        public void run() {
+                                onNuevoVehiculo();
+                        }
+                });
+                acciones.onLimpiar(new Runnable() {
+                        @Override
+                        public void run() {
+                                view.getFilter().clear();
+                                view.getTable().hideSelectColumn();
+                                goFirstPage();
+                        }
+                });
+                acciones.onBorrarSeleccionados(new Runnable() {
+                        @Override
+                        public void run() {
+                                onEliminarSeleccionados();
+                        }
+                });
 		
 	}
 

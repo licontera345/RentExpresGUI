@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -41,13 +41,16 @@ public class DeleteSelectedClienteAction implements ActionListener {
 		if (SwingUtils.showConfirm(parent, msg, "Confirmar borrado") != JOptionPane.YES_OPTION)
 			return;
 
-		List<Integer> noBorrados = ids.stream().filter(id -> {
-			try {
-				return !service.delete(id);
-			} catch (Exception ex) {
-				return true;
-			}
-		}).collect(Collectors.toList());
+                List<Integer> noBorrados = new ArrayList<>();
+                for (Integer id : ids) {
+                        try {
+                                if (!service.delete(id)) {
+                                        noBorrados.add(id);
+                                }
+                        } catch (Exception ex) {
+                                noBorrados.add(id);
+                        }
+                }
 
 		if (onRefresh != null)
 			onRefresh.run();

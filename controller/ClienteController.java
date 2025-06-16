@@ -5,6 +5,8 @@ import java.awt.Frame;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import com.pinguela.rentexpres.desktop.dialog.ClienteDetailDialog;
 import com.pinguela.rentexpres.desktop.dialog.ClienteEditDialog;
@@ -43,10 +45,20 @@ public class ClienteController {
 		loadDataAsync();
 	}
 
-	private void bindActions() {
-		btnVer.addActionListener(e -> showDetail());
-		btnEditar.addActionListener(e -> showEdit());
-	}
+    private void bindActions() {
+        btnVer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showDetail();
+            }
+        });
+        btnEditar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showEdit();
+            }
+        });
+    }
 
 	private ClienteDTO getSelectedCliente() {
 		int row = table.getSelectedRow();
@@ -76,29 +88,55 @@ public class ClienteController {
 			updateClienteAsync(dlg.getCliente());
 	}
 
-	private void loadDataAsync() {
-		new Thread(() -> {
-			try {
-                                List<ClienteDTO> clientes = service.findAll();
-				SwingUtilities.invokeLater(() -> table.setModel(
-						new ClienteSearchTableModel(clientes, ClienteSearchTableModel.buildLocalidadMap(clientes),
-								ClienteSearchTableModel.buildProvinciaMap(clientes))));
-			} catch (RentexpresException ex) {
-				SwingUtilities.invokeLater(() -> SwingUtils.showError(frame, TXT_CARGA_ERR + ex.getMessage()));
-			}
-		}).start();
-	}
+        private void loadDataAsync() {
+                new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                                try {
+                                        List<ClienteDTO> clientes = service.findAll();
+                                        SwingUtilities.invokeLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                        table.setModel(new ClienteSearchTableModel(clientes,
+                                                                        ClienteSearchTableModel.buildLocalidadMap(clientes),
+                                                                        ClienteSearchTableModel.buildProvinciaMap(clientes)));
+                                                }
+                                        });
+                                } catch (RentexpresException ex) {
+                                        SwingUtilities.invokeLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                        SwingUtils.showError(frame, TXT_CARGA_ERR + ex.getMessage());
+                                                }
+                                        });
+                                }
+                        }
+                }).start();
+        }
 
-	private void updateClienteAsync(ClienteDTO cli) {
-		new Thread(() -> {
-			try {
-				service.update(cli);
-				SwingUtilities.invokeLater(this::loadDataAsync);
-			} catch (RentexpresException ex) {
-				SwingUtilities.invokeLater(() -> SwingUtils.showError(frame, TXT_UPD_ERR + ex.getMessage()));
-			}
-		}).start();
-	}
+        private void updateClienteAsync(ClienteDTO cli) {
+                new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                                try {
+                                        service.update(cli);
+                                        SwingUtilities.invokeLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                        loadDataAsync();
+                                                }
+                                        });
+                                } catch (RentexpresException ex) {
+                                        SwingUtilities.invokeLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                        SwingUtils.showError(frame, TXT_UPD_ERR + ex.getMessage());
+                                                }
+                                        });
+                                }
+                        }
+                }).start();
+        }
 
 	public void refreshData() {
 		loadDataAsync();

@@ -4,6 +4,8 @@ import java.awt.Frame;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import com.pinguela.rentexpres.desktop.dialog.ReservaDetailDialog;
 import com.pinguela.rentexpres.desktop.dialog.ReservaEditDialog;
@@ -52,8 +54,18 @@ public class ReservaController {
     }
     
     private void bindActions() {
-        btnVer.addActionListener(e -> showDetail());
-        btnEditar.addActionListener(e -> showEdit());
+        btnVer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showDetail();
+            }
+        });
+        btnEditar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showEdit();
+            }
+        });
     }
     
     private ReservaDTO getSelectedReserva() {
@@ -86,33 +98,51 @@ public class ReservaController {
     }
     
     private void loadDataAsync() {
-        new Thread(() -> {
-            try {
-                final List<ReservaDTO> reservas = service.findAll();
-                
-                SwingUtilities.invokeLater(() -> {
-                    table.setModel(new ReservaSearchTableModel(reservas, null));
-                });
-            } catch (RentexpresException ex) {
-                SwingUtilities.invokeLater(() -> {
-                    SwingUtils.showError(frame, ERROR_CARGANDO + ex.getMessage());
-                });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final List<ReservaDTO> reservas = service.findAll();
+
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            table.setModel(new ReservaSearchTableModel(reservas, null));
+                        }
+                    });
+                } catch (RentexpresException ex) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            SwingUtils.showError(frame, ERROR_CARGANDO + ex.getMessage());
+                        }
+                    });
+                }
             }
         }).start();
     }
     
     private void updateReservaAsync(ReservaDTO reserva) {
-        new Thread(() -> {
-            try {
-                service.update(reserva);
-                
-                SwingUtilities.invokeLater(() -> {
-                    loadDataAsync(); 
-                });
-            } catch (RentexpresException ex) {
-                SwingUtilities.invokeLater(() -> {
-                    SwingUtils.showError(frame, ERROR_ACTUALIZANDO + ex.getMessage());
-                });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    service.update(reserva);
+
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadDataAsync();
+                        }
+                    });
+                } catch (RentexpresException ex) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            SwingUtils.showError(frame, ERROR_ACTUALIZANDO + ex.getMessage());
+                        }
+                    });
+                }
             }
         }).start();
     }
