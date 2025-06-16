@@ -5,22 +5,25 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 import com.pinguela.rentexpres.desktop.dialog.UsuarioEditDialog;
 import com.pinguela.rentexpres.desktop.model.UsuarioSearchTableModel;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.model.UsuarioDTO;
+import com.pinguela.rentexpres.service.UsuarioService;
 
 public class ShowUsuarioEditAction extends AbstractAction {
     private static final long serialVersionUID = 1L;
     private final Frame parent;
     private final JTable table;
     private final ActionCallback afterEdit;
+    private final UsuarioService usuarioService;
 
-    public ShowUsuarioEditAction(Frame parent, JTable table, ActionCallback afterEdit) {
+    public ShowUsuarioEditAction(Frame parent, JTable table, UsuarioService usuarioService, ActionCallback afterEdit) {
         super("Editar");
         this.parent = parent;
         this.table = table;
+        this.usuarioService = usuarioService;
         this.afterEdit = afterEdit;
     }
 
@@ -39,6 +42,10 @@ public class ShowUsuarioEditAction extends AbstractAction {
         if (dto != null) {
             UsuarioEditDialog dlg = new UsuarioEditDialog(parent, dto.getId());
             dlg.setVisible(true);
+            if (dlg.isConfirmed()) {
+                UsuarioDTO updated = dlg.getUsuario();
+                usuarioService.update(updated);
+            }
             afterEdit.execute();
         }
     }

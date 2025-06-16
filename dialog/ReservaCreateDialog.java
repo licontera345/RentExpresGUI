@@ -28,9 +28,7 @@ import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.model.EstadoReservaDTO;
 import com.pinguela.rentexpres.model.ReservaDTO;
 import com.pinguela.rentexpres.service.EstadoReservaService;
-import com.pinguela.rentexpres.service.ReservaService;
 import com.pinguela.rentexpres.service.impl.EstadoReservaServiceImpl;
-import com.pinguela.rentexpres.service.impl.ReservaServiceImpl;
 import com.toedter.calendar.JDateChooser;
 
 /**
@@ -49,8 +47,7 @@ public class ReservaCreateDialog extends JDialog {
 	public final JButton btnCrear = new JButton("Crear");
 	public final JButton btnCancelar = new JButton("Cancelar");
 
-	private final EstadoReservaService estadoService = new EstadoReservaServiceImpl();
-	private final ReservaService reservaService = new ReservaServiceImpl();
+        private final EstadoReservaService estadoService = new EstadoReservaServiceImpl();
 
 	public boolean confirmed = false;
 	private ReservaDTO createdReserva = null;
@@ -178,20 +175,11 @@ public class ReservaCreateDialog extends JDialog {
 
 		ReservaDTO dto = buildFromForm1();
 
-		try {
-			boolean creado = reservaService.create(dto);
-			if (creado) {
-				createdReserva = dto;
-				confirmed = true;
-				JOptionPane.showMessageDialog(this, "Reserva creada exitosamente. ID " + dto.getId(), "Éxito",
-						JOptionPane.INFORMATION_MESSAGE);
-				dispose();
-			} else {
-				SwingUtils.showError(this, "No se pudo crear la reserva.");
-			}
-		} catch (Exception ex) {
-			SwingUtils.showError(this, "Error creando reserva: " + ex.getMessage());
-		}
+                createdReserva = dto;
+                confirmed = true;
+                JOptionPane.showMessageDialog(this, "Reserva creada exitosamente.", "Éxito",
+                                JOptionPane.INFORMATION_MESSAGE);
+                dispose();
 	}
 
 	public boolean isConfirmed() {
