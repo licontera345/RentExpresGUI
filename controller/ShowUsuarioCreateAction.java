@@ -1,35 +1,30 @@
 package com.pinguela.rentexpres.desktop.controller;
 
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
+
 
 import com.pinguela.rentexpres.desktop.dialog.UsuarioCreateDialog;
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
+import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.service.UsuarioService;
 
-public class ShowUsuarioCreateAction extends AbstractAction {
+public class ShowUsuarioCreateAction extends AbstractCreateAction<UsuarioDTO, UsuarioCreateDialog> {
     private static final long serialVersionUID = 1L;
-    private final Frame parent;
-    private final ActionCallback afterCreate;
     private final UsuarioService usuarioService;
 
     public ShowUsuarioCreateAction(Frame parent, UsuarioService usuarioService, ActionCallback afterCreate) {
-        super("Nuevo");
-        this.parent = parent;
+        super("Nuevo", parent, afterCreate);
         this.usuarioService = usuarioService;
-        this.afterCreate = afterCreate;
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        UsuarioCreateDialog dlg = new UsuarioCreateDialog(parent);
-        dlg.setVisible(true);
-        if (dlg.isConfirmed()) {
-            UsuarioDTO dto = dlg.getUsuario();
-            usuarioService.create(dto);
-        }
-        afterCreate.execute();
+    protected UsuarioCreateDialog createDialog() {
+        return new UsuarioCreateDialog(frame);
+    }
+
+    @Override
+    protected void save(UsuarioDTO dto) throws RentexpresException {
+        usuarioService.create(dto);
     }
 }
