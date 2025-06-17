@@ -1,21 +1,12 @@
 package com.pinguela.rentexpres.desktop.renderer;
 
-import static com.pinguela.rentexpres.desktop.util.AppIcons.DELETE;
-import static com.pinguela.rentexpres.desktop.util.AppIcons.EDIT;
-import static com.pinguela.rentexpres.desktop.util.AppIcons.VIEW;
-
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.util.EventObject;
 
-import javax.swing.AbstractCellEditor;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.table.TableCellEditor;
+
+import com.pinguela.rentexpres.desktop.renderer.AbstractActionsCellEditor;
 
 import com.pinguela.rentexpres.desktop.dialog.AlquilerDetailDialog;
 import com.pinguela.rentexpres.desktop.dialog.AlquilerEditDialog;
@@ -29,27 +20,19 @@ import com.pinguela.rentexpres.service.AlquilerService;
 /**
  * Editor con botones Ver / Editar / Borrar. 100 % Java 8 clásico – sin lambdas.
  */
-public class AlquilerActionsCellEditor extends AbstractCellEditor implements TableCellEditor {
-	private static final long serialVersionUID = 1L;
+public class AlquilerActionsCellEditor extends AbstractActionsCellEditor {
+        private static final long serialVersionUID = 1L;
 
-	private final JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 0));
-	private final JButton btnVer = iconButton(VIEW, "Ver");
-	private final JButton btnEdit = iconButton(EDIT, "Editar");
-	private final JButton btnDel = iconButton(DELETE, "Borrar");
+        private final Frame frame;
+        private final AlquilerService service;
+        private final AlquilerTablePanel parentTable; // Para refrescar y obtener DTO
+        private AlquilerDTO alquilerActual;
 
-	private final Frame frame;
-	private final AlquilerService service;
-	private final AlquilerTablePanel parentTable; // Para refrescar y obtener DTO
-	private AlquilerDTO alquilerActual;
-
-	public AlquilerActionsCellEditor(Frame owner, AlquilerService srv, AlquilerTablePanel parent) {
-		this.frame = owner;
-		this.service = srv;
-		this.parentTable = parent;
-
-		panel.add(btnVer);
-		panel.add(btnEdit);
-		panel.add(btnDel);
+        public AlquilerActionsCellEditor(Frame owner, AlquilerService srv, AlquilerTablePanel parent) {
+                super();
+                this.frame = owner;
+                this.service = srv;
+                this.parentTable = parent;
 
 		/* Ver */
 		btnVer.addActionListener(new java.awt.event.ActionListener() {
@@ -107,21 +90,7 @@ public class AlquilerActionsCellEditor extends AbstractCellEditor implements Tab
 		return panel;
 	}
 
-	public Object getCellEditorValue() {
-		return null;
-	}
-
-	public boolean isCellEditable(EventObject e) {
-		return true;
-	}
-
-	/* === Utils === */
-	private static JButton iconButton(ImageIcon ico, String tip) {
-		JButton b = new JButton(ico);
-		b.setToolTipText(tip);
-		b.setBorderPainted(false);
-		b.setFocusPainted(false);
-		b.setContentAreaFilled(false);
-		return b;
-	}
+        public Object getCellEditorValue() {
+                return null;
+        }
 }
