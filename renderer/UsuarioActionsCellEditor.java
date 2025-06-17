@@ -1,23 +1,15 @@
 package com.pinguela.rentexpres.desktop.renderer;
 
-import static com.pinguela.rentexpres.desktop.util.AppIcons.DELETE;
-import static com.pinguela.rentexpres.desktop.util.AppIcons.EDIT;
-import static com.pinguela.rentexpres.desktop.util.AppIcons.VIEW;
-
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.util.EventObject;
 import java.util.function.Supplier;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.AbstractCellEditor;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.table.TableCellEditor;
+
+import com.pinguela.rentexpres.desktop.renderer.AbstractActionsCellEditor;
 
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
@@ -25,14 +17,9 @@ import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.service.UsuarioService;
 
 
-public class UsuarioActionsCellEditor extends AbstractCellEditor implements TableCellEditor {
+public class UsuarioActionsCellEditor extends AbstractActionsCellEditor {
 
-	private static final long serialVersionUID = 1L;
-
-	private final JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 0));
-	private final JButton btnView = new JButton(VIEW);
-	private final JButton btnEdit = new JButton(EDIT);
-	private final JButton btnDelete = new JButton(DELETE);
+        private static final long serialVersionUID = 1L;
 
 	private final Frame owner;
 	private final UsuarioService usuarioService;
@@ -40,18 +27,12 @@ public class UsuarioActionsCellEditor extends AbstractCellEditor implements Tabl
 	private final Supplier<UsuarioDTO> rowSupplier;
 
         public UsuarioActionsCellEditor(Frame owner, UsuarioService usuarioService, ActionCallback reload,
-			Supplier<UsuarioDTO> rowSupplier) {
-		this.owner = owner;
-		this.usuarioService = usuarioService;
-		this.reload = reload;
-		this.rowSupplier = rowSupplier;
-
-		for (JButton b : new JButton[] { btnView, btnEdit, btnDelete }) {
-			b.setBorderPainted(false);
-			b.setFocusPainted(false);
-			b.setContentAreaFilled(false);
-			panel.add(b);
-		}
+                        Supplier<UsuarioDTO> rowSupplier) {
+                super();
+                this.owner = owner;
+                this.usuarioService = usuarioService;
+                this.reload = reload;
+                this.rowSupplier = rowSupplier;
 
                btnView.addActionListener(new ActionListener() {
                        @Override
@@ -117,10 +98,6 @@ public class UsuarioActionsCellEditor extends AbstractCellEditor implements Tabl
 		return null;
 	}
 
-	@Override
-	public boolean isCellEditable(EventObject e) {
-		return true;
-	}
 
 	public Supplier<UsuarioDTO> getRowSupplier() {
 		return rowSupplier;
