@@ -26,7 +26,7 @@ public class VehiculoActionsCellEditor extends AbstractActionsCellEditor {
 
         private final Frame frame;
         private final VehiculoService service;
-        private final SearchVehiculoAction searchAction;
+        private SearchVehiculoAction searchAction;
 
 	private VehiculoDTO vehiculoActual;
 
@@ -49,10 +49,10 @@ public class VehiculoActionsCellEditor extends AbstractActionsCellEditor {
 		// Acción Editar
 		btnEdit.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				if (vehiculoActual != null) {
-					try {
-						List<EstadoVehiculoDTO> estados = searchAction.getEstadoService().findAll();
-						List<CategoriaVehiculoDTO> categorias = searchAction.getCategoriaService().findAll();
+                                if (vehiculoActual != null) {
+                                        try {
+                                                List<EstadoVehiculoDTO> estados = searchAction != null ? searchAction.getEstadoService().findAll() : java.util.Collections.emptyList();
+                                                List<CategoriaVehiculoDTO> categorias = searchAction != null ? searchAction.getCategoriaService().findAll() : java.util.Collections.emptyList();
 
 						VehiculoEditDialog dlg = new VehiculoEditDialog(frame, vehiculoActual, categorias, estados);
 						dlg.setVisible(true);
@@ -107,7 +107,11 @@ public class VehiculoActionsCellEditor extends AbstractActionsCellEditor {
 
 
 
-	public SearchVehiculoAction getSearchAction() {
-		return searchAction;
-	}
+        public SearchVehiculoAction getSearchAction() {
+                return searchAction;
+        }
+
+        public void setSearchAction(SearchVehiculoAction searchAction) {
+                this.searchAction = searchAction;
+        }
 }

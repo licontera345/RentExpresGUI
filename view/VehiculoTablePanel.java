@@ -142,7 +142,14 @@ public class VehiculoTablePanel extends JPanel {
 	 * Permite reasignar la SearchVehiculoAction, por ejemplo desde
 	 * VehiculoSearchView una vez que el controlador ya está construido.
 	 */
-	public void setSearchAction(SearchVehiculoAction searchAction) {
-		this.searchAction = searchAction;
-	}
+        public void setSearchAction(SearchVehiculoAction searchAction) {
+                this.searchAction = searchAction;
+                if (tableVehiculo.getColumnCount() > 0) {
+                        int last = tableVehiculo.getColumnModel().getColumnCount() - 1;
+                        javax.swing.table.TableCellEditor editor = tableVehiculo.getColumnModel().getColumn(last).getCellEditor();
+                        if (editor instanceof com.pinguela.rentexpres.desktop.renderer.VehiculoActionsCellEditor) {
+                                ((com.pinguela.rentexpres.desktop.renderer.VehiculoActionsCellEditor) editor).setSearchAction(searchAction);
+                        }
+                }
+        }
 }
