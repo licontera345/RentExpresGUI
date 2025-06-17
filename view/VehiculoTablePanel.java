@@ -6,8 +6,6 @@ import java.util.Collections;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import com.pinguela.rentexpres.desktop.controller.SearchVehiculoAction;
 import com.pinguela.rentexpres.desktop.model.VehiculoSearchTableModel;
@@ -22,53 +20,60 @@ import com.pinguela.rentexpres.service.VehiculoService;
 public class VehiculoTablePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private final JTable tableVehiculo;
-	private boolean selectVisible = false;
+        private final JTable tableVehiculo;
+        private final VehiculoService vehiculoService;
+        private boolean selectVisible = false;
 	/** Mantiene la acción para recargar la tabla cuando se usan los editores */
-	private SearchVehiculoAction searchAction;
+        private SearchVehiculoAction searchAction;
 
-	public VehiculoTablePanel(SearchVehiculoAction searchAction, VehiculoService vehiculoService) {
-		super(new BorderLayout());
-		this.searchAction = searchAction;
+        public VehiculoTablePanel(SearchVehiculoAction searchAction, VehiculoService vehiculoService) {
+                super(new BorderLayout());
+                this.searchAction = searchAction;
+                this.vehiculoService = vehiculoService;
 
-		tableVehiculo = new JTable();
+                tableVehiculo = new JTable();
 
-		// Modelo inicial vacío
-		tableVehiculo.setModel(new VehiculoSearchTableModel(Collections.emptyList()));
+                // Modelo inicial vacío
+                tableVehiculo.setModel(new VehiculoSearchTableModel(Collections.emptyList()));
 
-		// Ajustes básicos
-		tableVehiculo.setRowHeight(28);
-		tableVehiculo.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tableVehiculo.getTableHeader().setReorderingAllowed(false);
+                // Ajustes básicos
+                tableVehiculo.setRowHeight(28);
+                tableVehiculo.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                tableVehiculo.getTableHeader().setReorderingAllowed(false);
 
-		// Asegurarnos de que, al cambiar el modelo, forzamos tamaño de columnas:
-		ajustarColumnasAcciones();
+                add(new JScrollPane(tableVehiculo), BorderLayout.CENTER);
 
-		// Asignar render/editor para la columna "Acciones"
-		int lastCol = tableVehiculo.getColumnModel().getColumnCount() - 1;
-		tableVehiculo.getColumnModel().getColumn(lastCol).setCellRenderer(new VehiculoActionsCellRenderer());
-		tableVehiculo.getColumnModel().getColumn(lastCol)
-				.setCellEditor(new VehiculoActionsCellEditor(tableVehiculo, vehiculoService, this.searchAction));
+                configureColumns();
 
-		// Columna "Seleccionar" (si existe)
-		if (hasSelectColumn()) {
-			tableVehiculo.getColumn("Seleccionar").setCellRenderer(new SelectionRenderer());
-			tableVehiculo.getColumn("Seleccionar").setCellEditor(new SelectionEditor());
-			setSelectColumnVisible(false);
-		}
+                // Cuando alguien cambie el modelo, volver a configurar columnas
+                tableVehiculo.addPropertyChangeListener("model", evt -> configureColumns());
+        }
 
-		// Renderizador genérico para las demás columnas
-		DefaultTableCellRenderer gen = new DefaultTableCellRenderer();
-		gen.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
-		for (int c = 0; c < tableVehiculo.getColumnCount(); c++) {
-			String name = tableVehiculo.getColumnName(c);
-			if (!"Acciones".equals(name) && !"Seleccionar".equals(name)) {
-				tableVehiculo.getColumnModel().getColumn(c).setCellRenderer(new VehiculoTableCellRenderer());
-			}
-		}
+        private void configureColumns() {
+                if (tableVehiculo.getColumnCount() == 0)
+                        return;
 
-		add(new JScrollPane(tableVehiculo), BorderLayout.CENTER);
-	}
+                // Asegurarnos de que, al cambiar el modelo, forzamos tamaño de columnas
+                ajustarColumnasAcciones();
+
+                int lastCol = tableVehiculo.getColumnModel().getColumnCount() - 1;
+                tableVehiculo.getColumnModel().getColumn(lastCol).setCellRenderer(new VehiculoActionsCellRenderer());
+                tableVehiculo.getColumnModel().getColumn(lastCol)
+                                .setCellEditor(new VehiculoActionsCellEditor(tableVehiculo, vehiculoService, this.searchAction));
+
+                if (hasSelectColumn()) {
+                        tableVehiculo.getColumn("Seleccionar").setCellRenderer(new SelectionRenderer());
+                        tableVehiculo.getColumn("Seleccionar").setCellEditor(new SelectionEditor());
+                        setSelectColumnVisible(selectVisible);
+                }
+
+                for (int c = 0; c < tableVehiculo.getColumnCount(); c++) {
+                        String name = tableVehiculo.getColumnName(c);
+                        if (!"Acciones".equals(name) && !"Seleccionar".equals(name)) {
+                                tableVehiculo.getColumnModel().getColumn(c).setCellRenderer(new VehiculoTableCellRenderer());
+                        }
+                }
+        }
 
 	/**
 	 * Después de asignar un modelo nuevo (o en el constructor), llamamos a este
