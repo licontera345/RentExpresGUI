@@ -34,7 +34,7 @@ import com.toedter.calendar.JDateChooser;
 /**
  * Diálogo de creación de reservas.
  */
-public class ReservaCreateDialog extends JDialog {
+public class ReservaCreateDialog extends JDialog implements ConfirmDialog<ReservaDTO> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -188,9 +188,14 @@ public class ReservaCreateDialog extends JDialog {
 		return confirmed;
 	}
 
-	public ReservaDTO getReserva() {
-		return createdReserva;
-	}
+        public ReservaDTO getReserva() {
+                return createdReserva;
+        }
+
+        @Override
+        public ReservaDTO getValue() {
+                return getReserva();
+        }
 
 	public boolean validar() {
 		try {

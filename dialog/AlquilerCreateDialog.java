@@ -28,7 +28,7 @@ import com.toedter.calendar.JDateChooser;
 
 import net.miginfocom.swing.MigLayout;
 
-public class AlquilerCreateDialog extends JDialog {
+public class AlquilerCreateDialog extends JDialog implements ConfirmDialog<AlquilerDTO> {
 	private static final long serialVersionUID = 1L;
 
 	private final JSpinner spnIdReserva = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
@@ -161,8 +161,8 @@ public class AlquilerCreateDialog extends JDialog {
 		return confirmed;
 	}
 
-	public AlquilerDTO getAlquiler() {
-		AlquilerDTO dto = new AlquilerDTO();
+        public AlquilerDTO getAlquiler() {
+                AlquilerDTO dto = new AlquilerDTO();
 		dto.setIdReserva((Integer) spnIdReserva.getValue());
 		dto.setFechaInicioEfectivo(format(dcInicio.getDate()));
 		dto.setFechaFinEfectivo(format(dcFin.getDate()));
@@ -174,6 +174,11 @@ public class AlquilerCreateDialog extends JDialog {
                         dto.setIdUsuario(AppContext.getCurrentUser().getId());
                 }
                 return dto;
+        }
+
+        @Override
+        public AlquilerDTO getValue() {
+                return getAlquiler();
         }
 
 	public void setIdUsuario(Integer id) {

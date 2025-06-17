@@ -26,7 +26,7 @@ import net.miginfocom.swing.MigLayout;
 /**
  * Diálogo para CREAR un nuevo Usuario.
  */
-public class UsuarioCreateDialog extends JDialog {
+public class UsuarioCreateDialog extends JDialog implements ConfirmDialog<UsuarioDTO> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -153,5 +153,10 @@ public class UsuarioCreateDialog extends JDialog {
 
         public UsuarioDTO getUsuario() {
                 return usuario;
+        }
+
+        @Override
+        public UsuarioDTO getValue() {
+                return getUsuario();
         }
 }

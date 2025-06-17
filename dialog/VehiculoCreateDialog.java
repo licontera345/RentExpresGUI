@@ -29,7 +29,7 @@ import com.pinguela.rentexpres.model.CategoriaVehiculoDTO;
 import com.pinguela.rentexpres.model.EstadoVehiculoDTO;
 import com.pinguela.rentexpres.model.VehiculoDTO;
 
-public class VehiculoCreateDialog extends JDialog {
+public class VehiculoCreateDialog extends JDialog implements ConfirmDialog<VehiculoDTO> {
 	private static final long serialVersionUID = 1L;
 
 	private JTextField txtMarca;
@@ -243,9 +243,9 @@ public class VehiculoCreateDialog extends JDialog {
 		return confirmed;
 	}
 
-	public VehiculoDTO getVehiculo() {
-		if (!confirmed)
-			return null;
+        public VehiculoDTO getVehiculo() {
+                if (!confirmed)
+                        return null;
 
 		VehiculoDTO dto = new VehiculoDTO();
 		dto.setMarca(txtMarca.getText().trim());
@@ -259,8 +259,13 @@ public class VehiculoCreateDialog extends JDialog {
 		dto.setIdEstadoVehiculo(estado.getId());
 		CategoriaVehiculoDTO categoria = (CategoriaVehiculoDTO) cbCategoria.getSelectedItem();
 		dto.setIdCategoria(categoria.getId());
-		dto.setImagenPath(imagenSeleccionada);
+                dto.setImagenPath(imagenSeleccionada);
 
-		return dto;
-	}
+                return dto;
+        }
+
+        @Override
+        public VehiculoDTO getValue() {
+                return getVehiculo();
+        }
 }

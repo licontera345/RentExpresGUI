@@ -31,7 +31,7 @@ import com.toedter.calendar.JDateChooser;
 
 import net.miginfocom.swing.MigLayout;
 
-public class ClienteCreateDialog extends JDialog {
+public class ClienteCreateDialog extends JDialog implements ConfirmDialog<ClienteDTO> {
 	private static final long serialVersionUID = 1L;
 
 	protected final JTextField txtNombre = new JTextField(18);
@@ -207,9 +207,14 @@ public class ClienteCreateDialog extends JDialog {
 		return confirmed;
 	}
 
-	public ClienteDTO getCliente() {
-		return nuevo;
+        public ClienteDTO getCliente() {
+                return nuevo;
 
-	}
+        }
+
+        @Override
+        public ClienteDTO getValue() {
+                return getCliente();
+        }
 
 }
