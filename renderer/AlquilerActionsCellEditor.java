@@ -35,7 +35,7 @@ public class AlquilerActionsCellEditor extends AbstractActionsCellEditor {
                 this.parentTable = parent;
 
 		/* Ver */
-		btnVieww.addActionListener(new java.awt.event.ActionListener() {
+		btnView.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				if (alquilerActual != null) {
 					new AlquilerDetailDialog(frame, alquilerActual).setVisible(true);
