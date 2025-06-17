@@ -13,7 +13,7 @@ public class ReservaSearchView
                 extends StandardSearchView<ReservaFilterPanel, ReservaSearchActionsView, ReservaTablePanel> {
         private static final long serialVersionUID = 1L;
 
-        private ReservaSearchController controller;
+        private static ReservaSearchController controller;
 
 	private boolean initialized = false;
 
