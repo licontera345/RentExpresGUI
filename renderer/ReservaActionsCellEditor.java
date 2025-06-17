@@ -23,7 +23,7 @@ public class ReservaActionsCellEditor extends AbstractActionsCellEditor {
         public ReservaActionsCellEditor(Frame frame, ReservaService service) {
                 super();
 
-		btnVer.addActionListener(new java.awt.event.ActionListener() {
+		btnView.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				if (reservaActual != null) {
 					new ReservaDetailDialog(frame, reservaActual).setVisible(true);
