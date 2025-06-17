@@ -271,7 +271,8 @@ public class RentExpresMainWindow extends JFrame {
 		return new EstadoVehiculoServiceImpl();
 	}
 
-	public static void main(String[] args) {
+       public static void main(String[] args) {
+               System.setProperty("log4j.configurationFile", "config/log4j2.properties");
                com.pinguela.rentexpres.desktop.util.SwingUtils.invokeLater(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                        @Override
                        public void execute() {
