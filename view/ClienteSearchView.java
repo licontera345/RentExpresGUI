@@ -18,7 +18,7 @@ public class ClienteSearchView
                 extends StandardSearchView<ClienteFilterPanel, ClienteSearchActionsView, ClienteTablePanel> {
         private static final long serialVersionUID = 1L;
 
-        private ClienteSearchController controller = null;
+        private static ClienteSearchController controller = null;
         private boolean initialized = false;
 
 	/**
