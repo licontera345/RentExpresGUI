@@ -16,6 +16,7 @@ import com.pinguela.rentexpres.desktop.model.ReservaSearchTableModel;
 import com.pinguela.rentexpres.desktop.util.CatalogCache;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
+import com.pinguela.rentexpres.desktop.util.PaginationPanel;
 import com.pinguela.rentexpres.desktop.view.ReservaFilterPanel;
 import com.pinguela.rentexpres.desktop.view.ReservaSearchActionsView;
 import com.pinguela.rentexpres.desktop.view.ReservaSearchView;
@@ -115,35 +116,35 @@ public class ReservaSearchController {
                        }
                });
 
-               view.getPager().onPrev(new ActionCallback() {
+               view.getPager().onPrev(new PaginationPanel.OnPagerListener() {
                        @Override
-                       public void execute() {
+                       public void onAction() {
                                if (!loading && currentPage > 1) {
                                        currentPage--;
                                        buscar();
                                }
                        }
                });
-               view.getPager().onNext(new ActionCallback() {
+               view.getPager().onNext(new PaginationPanel.OnPagerListener() {
                        @Override
-                       public void execute() {
+                       public void onAction() {
                                if (!loading && currentPage < totalPages) {
                                        currentPage++;
                                        buscar();
                                }
                        }
                });
-               view.getPager().onFirst(new ActionCallback() {
+               view.getPager().onFirst(new PaginationPanel.OnPagerListener() {
                        @Override
-                       public void execute() {
+                       public void onAction() {
                                if (!loading) {
                                        goFirstPage();
                                }
                        }
                });
-               view.getPager().onLast(new ActionCallback() {
+               view.getPager().onLast(new PaginationPanel.OnPagerListener() {
                        @Override
-                       public void execute() {
+                       public void onAction() {
                                if (!loading && currentPage < totalPages) {
                                        currentPage = totalPages;
                                        buscar();
