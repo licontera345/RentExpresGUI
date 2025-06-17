@@ -56,21 +56,21 @@ public class ClienteSearchView extends JPanel {
 		// 4) Creamos el paginador
 		this.pager = new PaginationPanel();
 
-		// ——— Construimos un panel intermedio “northPanel” para filtros + acciones ———
-		// Dentro de este panel:
-		// BorderLayout.NORTH = filter
-		// BorderLayout.SOUTH = actions
-		JPanel northPanel = new JPanel(new BorderLayout(0, 4));
-		northPanel.add(actions, BorderLayout.SOUTH);
+                // 1) Creamos el panel de filtros
+                this.filter = new ClienteFilterPanel();
 
-		// ——— Configuramos el layout principal de ClienteSearchView ———
-		setLayout(new BorderLayout(8, 8));
-		add(northPanel, BorderLayout.NORTH); // FILTROS + BOTONES
-		add(new JScrollPane(table), BorderLayout.CENTER); // TABLA
+                // ——— Construimos un panel intermedio “northPanel” para filtros + acciones ———
+                // Dentro de este panel:
+                // BorderLayout.NORTH = filter
+                // BorderLayout.SOUTH = actions
+                JPanel northPanel = new JPanel(new BorderLayout(0, 4));
+                northPanel.add(filter, BorderLayout.NORTH);
+                northPanel.add(actions, BorderLayout.SOUTH);
 
-		// 1) Creamos el panel de filtros
-		this.filter = new ClienteFilterPanel();
-		table.add(filter, BorderLayout.NORTH);
+                // ——— Configuramos el layout principal de ClienteSearchView ———
+                setLayout(new BorderLayout(8, 8));
+                add(northPanel, BorderLayout.NORTH); // FILTROS + BOTONES
+                add(new JScrollPane(table), BorderLayout.CENTER); // TABLA
 
 		// El botón “Seleccionar” del filtro: al pulsarlo, muestra/oculta la columna de
 		// checkboxes
