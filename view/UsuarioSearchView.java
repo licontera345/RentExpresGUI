@@ -14,10 +14,10 @@ public class UsuarioSearchView
         extends StandardSearchView<UsuarioFilterPanel, UsuarioSearchActionsView, UsuarioTablePanel> {
     private static final long serialVersionUID = 1L;
 
-    private UsuarioSearchController controller;
+    private static UsuarioSearchController controller;
     private boolean initialized = false;
 
-    public UsuarioSearchView(UsuarioService service, Frame owner) throws RentexpresException {
+    public  UsuarioSearchView(UsuarioService service, Frame owner) throws RentexpresException {
         super(new UsuarioFilterPanel(), new UsuarioSearchActionsView(),
               new UsuarioTablePanel(service, owner, new ActionCallback() {
                   @Override
