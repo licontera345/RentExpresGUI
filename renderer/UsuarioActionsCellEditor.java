@@ -65,7 +65,7 @@ public class UsuarioActionsCellEditor extends AbstractActionsCellEditor {
                        }
                });
 
-               btnDelete.addActionListener(new ActionListener() {
+               btnDel.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
                        UsuarioDTO u = rowSupplier.get();
