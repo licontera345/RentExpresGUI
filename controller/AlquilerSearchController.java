@@ -97,24 +97,27 @@ public class AlquilerSearchController {
 		view.getPager().onFirst(new PaginationPanelListener(PaginationPanelListener.FIRST));
 		view.getPager().onLast(new PaginationPanelListener(PaginationPanelListener.LAST));
 
-		/* d) Botones de acciones */
-		view.getActions().setNuevoListener(new AlquilerSearchActionsView.NuevoListener() {
-			public void onNuevo() {
-				abrirNuevo();
-			}
-		});
-		view.getActions().setLimpiarListener(new AlquilerSearchActionsView.LimpiarListener() {
-			public void onLimpiar() {
-				view.getFilter().clear();
-				view.getTable().hideSelectColumn();
-				goFirstPage();
-			}
-		});
-		view.getActions().setBorrarSeleccionadosListener(new AlquilerSearchActionsView.BorrarSeleccionadosListener() {
-			public void onBorrarSeleccionados() {
-				borrarSeleccionados();
-			}
-		});
+                /* d) Botones de acciones */
+                view.getActions().onNuevo(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                        @Override
+                        public void execute() {
+                                abrirNuevo();
+                        }
+                });
+                view.getActions().onLimpiar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                        @Override
+                        public void execute() {
+                                view.getFilter().clear();
+                                view.getTable().hideSelectColumn();
+                                goFirstPage();
+                        }
+                });
+                view.getActions().onBorrarSeleccionados(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                        @Override
+                        public void execute() {
+                                borrarSeleccionados();
+                        }
+                });
 	}
 
 	/*
