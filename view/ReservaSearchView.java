@@ -25,16 +25,17 @@ public class ReservaSearchView
 	}
 
         public ReservaSearchView(ReservaService rs, EstadoReservaService es, VehiculoService vs, Frame owner) throws RentexpresException {
-                ReservaFilterPanel filter = new ReservaFilterPanel();
-                ReservaSearchActionsView actions = new ReservaSearchActionsView();
-                ReservaTablePanel table = new ReservaTablePanel(rs, owner, new ReservaTablePanel.ReloadCallback() {
-                        @Override
-                        public void reload() {
-                                controller.buscar();
-                        }
-                });
+        super(new ReservaFilterPanel(), new ReservaSearchActionsView(),
+              new ReservaTablePanel(rs, owner, new ReservaTablePanel.ReloadCallback() {
+                  @Override
+                  public void reload() {
+                      controller.buscar();
+                  }
+              }));
 
-                super(filter, actions, table);
+        ReservaFilterPanel filter = getFilter();
+        ReservaSearchActionsView actions = getActions();
+        ReservaTablePanel table = getTable();
 
                 controller = new ReservaSearchController(this, rs, es, vs, owner);
 

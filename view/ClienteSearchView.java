@@ -33,16 +33,17 @@ public class ClienteSearchView
         public ClienteSearchView(ClienteService clienteService, ProvinciaService provinciaService,
                         LocalidadService localidadService, Frame owner) throws Exception {
 
-                ClienteFilterPanel filter = new ClienteFilterPanel();
-                ClienteSearchActionsView actions = new ClienteSearchActionsView();
-                ClienteTablePanel table = new ClienteTablePanel(clienteService, owner, new ActionCallback() {
-                        @Override
-                        public void execute() {
-                                controller.buscar();
-                        }
-                });
+                super(new ClienteFilterPanel(), new ClienteSearchActionsView(),
+                      new ClienteTablePanel(clienteService, owner, new ActionCallback() {
+                              @Override
+                              public void execute() {
+                                      controller.buscar();
+                              }
+                      }));
 
-                super(filter, actions, table);
+                ClienteFilterPanel filter = getFilter();
+                ClienteSearchActionsView actions = getActions();
+                ClienteTablePanel table = getTable();
 
                 // El botón “Seleccionar” del filtro: al pulsarlo, muestra/oculta la columna de checkboxes
                 filter.setToggleListener(new ActionCallback() {

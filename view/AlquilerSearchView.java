@@ -17,11 +17,12 @@ public class AlquilerSearchView
         public AlquilerSearchView(AlquilerService alquilerSvc, EstadoAlquilerService estadoSvc, VehiculoService vehiculoSvc,
                         Frame owner) throws RentexpresException {
 
-                AlquilerFilterPanel filter = new AlquilerFilterPanel();
-                AlquilerSearchActionsView actions = new AlquilerSearchActionsView();
-                AlquilerTablePanel table = new AlquilerTablePanel(owner, alquilerSvc);
+                super(new AlquilerFilterPanel(), new AlquilerSearchActionsView(),
+                      new AlquilerTablePanel(owner, alquilerSvc));
 
-                super(filter, actions, table);
+                AlquilerFilterPanel filter = getFilter();
+                AlquilerSearchActionsView actions = getActions();
+                AlquilerTablePanel table = getTable();
 
                 controller = new AlquilerSearchController(this, alquilerSvc, estadoSvc, owner);
                 table.setReloadCallback(new AlquilerTablePanel.ReloadCallback() {

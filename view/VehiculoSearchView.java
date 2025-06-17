@@ -33,13 +33,12 @@ public class VehiculoSearchView
 	 */
         public VehiculoSearchView(VehiculoService vs, CategoriaVehiculoService cs, EstadoVehiculoService ess, Frame owner)
                         throws RentexpresException {
-                VehiculoFilterPanel filter = new VehiculoFilterPanel();
-                VehiculoSearchActionsView actions = new VehiculoSearchActionsView();
+                super(new VehiculoFilterPanel(), new VehiculoSearchActionsView(),
+                      new VehiculoTablePanel(null, vs));
 
-                // POR AHORA pasamos null como SearchVehiculoAction; luego lo ligaremos desde el controlador
-                VehiculoTablePanel table = new VehiculoTablePanel(null, vs);
-
-                super(filter, actions, table);
+                VehiculoFilterPanel filter = getFilter();
+                VehiculoSearchActionsView actions = getActions();
+                VehiculoTablePanel table = getTable();
 
                 controller = new VehiculoSearchController(this, vs, cs, ess, owner);
 
