@@ -18,16 +18,17 @@ public class UsuarioSearchView
     private boolean initialized = false;
 
     public UsuarioSearchView(UsuarioService service, Frame owner) throws RentexpresException {
-        UsuarioFilterPanel filter = new UsuarioFilterPanel();
-        UsuarioSearchActionsView actions = new UsuarioSearchActionsView();
-        UsuarioTablePanel table = new UsuarioTablePanel(service, owner, new ActionCallback() {
-            @Override
-            public void execute() {
-                controller.buscar();
-            }
-        });
+        super(new UsuarioFilterPanel(), new UsuarioSearchActionsView(),
+              new UsuarioTablePanel(service, owner, new ActionCallback() {
+                  @Override
+                  public void execute() {
+                      controller.buscar();
+                  }
+              }));
 
-        super(filter, actions, table);
+        UsuarioFilterPanel filter = getFilter();
+        UsuarioSearchActionsView actions = getActions();
+        UsuarioTablePanel table = getTable();
 
         controller = new UsuarioSearchController(this, service, owner);
 
