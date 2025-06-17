@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -24,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.pinguela.rentexpres.desktop.util.FileService;
+import com.pinguela.rentexpres.desktop.util.AppConfig;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.CategoriaVehiculoDTO;
@@ -56,11 +56,11 @@ public class VehiculoEditDialog extends JDialog {
 		super(owner, "Editar Vehículo #" + dto.getId(), true);
 		this.originalDto = dto;
 
-		try {
-			fileService = new FileService(Paths.get("imagenes", "vehiculos"));
-		} catch (IOException e) {
-			throw new RentexpresException("No se pudo inicializar FileService: " + e.getMessage(), e);
-		}
+                try {
+                        fileService = new FileService(AppConfig.getImageDir("vehiculos"));
+                } catch (IOException e) {
+                        throw new RentexpresException("No se pudo inicializar FileService: " + e.getMessage(), e);
+                }
 
 		initComponents(categorias, estados);
 		rellenarCamposConDto(dto);
@@ -220,8 +220,8 @@ public class VehiculoEditDialog extends JDialog {
 				break;
 			}
 		}
-		if (dto.getImagenPath() != null) {
-			Path imgFile = Paths.get("imagenes", "vehiculos").resolve(dto.getImagenPath());
+                if (dto.getImagenPath() != null) {
+                        Path imgFile = AppConfig.getImageDir("vehiculos").resolve(dto.getImagenPath());
 			if (Files.exists(imgFile)) {
 				ImageIcon ico = new ImageIcon(new ImageIcon(imgFile.toString()).getImage().getScaledInstance(120, 90,
 						java.awt.Image.SCALE_SMOOTH));

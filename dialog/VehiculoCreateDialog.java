@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -23,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.pinguela.rentexpres.desktop.util.FileService;
+import com.pinguela.rentexpres.desktop.util.AppConfig;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.CategoriaVehiculoDTO;
@@ -52,11 +52,11 @@ public class VehiculoCreateDialog extends JDialog implements ConfirmDialog<Vehic
 	public VehiculoCreateDialog(Frame owner, List<CategoriaVehiculoDTO> categorias, List<EstadoVehiculoDTO> estados)
 			throws RentexpresException {
 		super(owner, "Crear Vehículo", true);
-		try {
-			fileService = new FileService(Paths.get("imagenes", "vehiculos"));
-		} catch (IOException e) {
-			throw new RentexpresException("No se pudo inicializar FileService: " + e.getMessage(), e);
-		}
+                try {
+                        fileService = new FileService(AppConfig.getImageDir("vehiculos"));
+                } catch (IOException e) {
+                        throw new RentexpresException("No se pudo inicializar FileService: " + e.getMessage(), e);
+                }
 		initComponents(categorias, estados);
 		pack();
 		setLocationRelativeTo(owner);
