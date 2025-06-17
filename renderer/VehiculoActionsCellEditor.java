@@ -37,7 +37,7 @@ public class VehiculoActionsCellEditor extends AbstractActionsCellEditor {
                 this.searchAction = searchAction;
 
 		// Acción Ver
-		btnVer.addActionListener(new java.awt.event.ActionListener() {
+		btnView.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				if (vehiculoActual != null) {
 					new VehiculoDetailDialog(frame, vehiculoActual).setVisible(true);
