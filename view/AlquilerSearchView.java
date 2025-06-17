@@ -49,14 +49,15 @@ public class AlquilerSearchView extends JPanel {
 			}
 		});
 
-		/* acciones */
-		actions.setLimpiarListener(new AlquilerSearchActionsView.LimpiarListener() {
-			public void onLimpiar() {
-				filter.clear();
-				table.hideSelectColumn();
-				controller.goFirstPage();
-			}
-		});
+                /* acciones */
+                actions.onLimpiar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                        @Override
+                        public void execute() {
+                                filter.clear();
+                                table.hideSelectColumn();
+                                controller.goFirstPage();
+                        }
+                });
 		filter.setToggleListener(new AlquilerFilterPanel.ToggleListener() {
 			public void onToggle() {
 				table.toggleSelectColumn();
