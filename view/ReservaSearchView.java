@@ -36,9 +36,9 @@ public class ReservaSearchView extends JPanel {
 		this.filter = new ReservaFilterPanel();
 		this.actions = new ReservaSearchActionsView();
 		this.pager = new PaginationPanel();
-               this.table = new ReservaTablePanel(rs, owner, new ActionCallback() {
+               this.table = new ReservaTablePanel(rs, owner, new ReservaTablePanel.ReloadCallback() {
                        @Override
-                       public void execute() {
+                       public void reload() {
                                controller.buscar();
                        }
                });
