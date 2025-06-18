@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import com.pinguela.rentexpres.desktop.util.AppTheme;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
@@ -39,9 +40,9 @@ public class ReservaFilterPanel extends JPanel {
 
 	private final JSlider sldPrecioDia = new JSlider(0, 500, 500);
 
-	private final JTextField txtNombre = new JTextField();
-	private final JTextField txtApellido1 = new JTextField();
-	private final JTextField txtTelefono = new JTextField();
+        private final JTextField txtNombre = new JTextField();
+        private final JTextField txtApellido1 = new JTextField();
+        private final JTextField txtTelefono = new JTextField();
 
 	/* callbacks */
         private com.pinguela.rentexpres.desktop.util.ActionCallback onChange;
@@ -51,14 +52,19 @@ public class ReservaFilterPanel extends JPanel {
 	/** Nueva bandera para suprimir eventos mientras se limpia el panel */
 	private boolean suppressEvents = false;
 
-	public ReservaFilterPanel() {
-		/* ───── apariencia ───── */
-		setBorder(BorderFactory.createTitledBorder("Filtros de Reserva"));
+        public ReservaFilterPanel() {
+                /* ───── apariencia ───── */
+                setBackground(AppTheme.FILTER_BG);
+                setBorder(BorderFactory.createTitledBorder("Filtros de Reserva"));
 		setLayout(new MigLayout("wrap 4,insets 8", "[right]10[150!]20[right]10[150!][]", "[]8[]8[]8[]8[]8[]8[]"));
-		dcFin.setDateFormatString("yyyy-MM-dd");
+                dcFin.setDateFormatString("yyyy-MM-dd");
 
-		sldPrecioDia.setMajorTickSpacing(100);
-		sldPrecioDia.setPaintTicks(true);
+                txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
+                txtApellido1.putClientProperty("JTextField.placeholderText", "Apellido");
+                txtTelefono.putClientProperty("JTextField.placeholderText", "Teléfono");
+
+                sldPrecioDia.setMajorTickSpacing(100);
+                sldPrecioDia.setPaintTicks(true);
 		sldPrecioDia.setPaintLabels(true);
 
 		int r = 0;

@@ -23,6 +23,10 @@ public final class AppTheme {
     public static final Color NAV_BTN_HOVER_BG = new Color(220, 224, 230);
     public static final Color NAV_BTN_FG = new Color(45, 52, 70);
 
+    /** Colores utilizados en el diálogo de inicio de sesión */
+    public static final Color LOGIN_GRADIENT_START = new Color(240, 247, 255);
+    public static final Color LOGIN_GRADIENT_END = Color.WHITE;
+
     /** Altura por defecto de las filas de las tablas */
     public static final int TABLE_ROW_HEIGHT = 28;
 
