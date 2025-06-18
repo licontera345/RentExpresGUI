@@ -155,17 +155,23 @@ public class VehiculoSearchController {
                         }
                 });
 
-                VehiculoSearchActionsView acciones = view.getActions();
-                acciones.onNuevo(new ActionCallback() {
-                        @Override
-                        public void execute() {
-                                onNuevoVehiculo();
-                        }
-                });
-                acciones.onLimpiar(new ActionCallback() {
-                        @Override
-                        public void execute() {
-                                view.getFilter().clear();
+               VehiculoSearchActionsView acciones = view.getActions();
+               acciones.onNuevo(new ActionCallback() {
+                       @Override
+                       public void execute() {
+                               onNuevoVehiculo();
+                       }
+               });
+               acciones.onBuscar(new ActionCallback() {
+                       @Override
+                       public void execute() {
+                               goFirstPage();
+                       }
+               });
+               acciones.onLimpiar(new ActionCallback() {
+                       @Override
+                       public void execute() {
+                               view.getFilter().clear();
                                 view.getTable().hideSelectColumn();
                                 goFirstPage();
                         }

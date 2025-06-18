@@ -33,6 +33,7 @@ public class UsuarioSearchController {
     private void wireActions() {
         UsuarioSearchActionsView actions = view.getActions();
         actions.onNuevo(() -> {}); // reservado para futuras mejoras
+        actions.onBuscar(() -> goFirstPage());
         actions.onLimpiar(() -> onLimpiar());
         actions.onBorrarSeleccionados(() -> {});
     }

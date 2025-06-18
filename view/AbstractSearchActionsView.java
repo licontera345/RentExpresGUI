@@ -15,23 +15,26 @@ public abstract class AbstractSearchActionsView extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected final JButton btnNuevo;
-	protected final JButton btnLimpiarFiltros;
-	protected final JButton btnEliminar;
+        protected final JButton btnNuevo;
+        protected final JButton btnBuscar;
+        protected final JButton btnLimpiarFiltros;
+        protected final JButton btnEliminar;
 
 	public AbstractSearchActionsView() {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		btnNuevo = new JButton("Nuevo", NEW);
-		btnLimpiarFiltros = new JButton("Limpiar Filtros", CLEAR);
-		btnEliminar = new JButton("Eliminar seleccionados", DELETE);
+                btnNuevo = new JButton("Nuevo", NEW);
+                btnBuscar = new JButton("Buscar", SEARCH);
+                btnLimpiarFiltros = new JButton("Limpiar Filtros", CLEAR);
+                btnEliminar = new JButton("Eliminar seleccionados", DELETE);
 
-		makeFlat(btnNuevo, btnLimpiarFiltros, btnEliminar);
+                makeFlat(btnNuevo, btnBuscar, btnLimpiarFiltros, btnEliminar);
 
-		add(btnNuevo);
-		add(btnLimpiarFiltros);
-		add(btnEliminar);
-	}
+                add(btnNuevo);
+                add(btnBuscar);
+                add(btnLimpiarFiltros);
+                add(btnEliminar);
+        }
 
 	private void makeFlat(JButton... bs) {
 		for (JButton b : bs) {
@@ -72,9 +75,22 @@ public abstract class AbstractSearchActionsView extends JPanel {
                });
        }
 
-	public JButton getBtnNuevo() {
-		return btnNuevo;
-	}
+       public void onBuscar(ActionCallback r) {
+               btnBuscar.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               Objects.requireNonNull(r).execute();
+                       }
+               });
+       }
+
+        public JButton getBtnNuevo() {
+                return btnNuevo;
+        }
+
+        public JButton getBtnBuscar() {
+                return btnBuscar;
+        }
 
 	public JButton getBtnLimpiarFiltros() {
 		return btnLimpiarFiltros;
