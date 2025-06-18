@@ -178,18 +178,24 @@ public class AlquilerSearchController {
 
 	/* ───────────────────────── Nuevo Alquiler ─────────────────────── */
 	private void abrirNuevo() {
-		AlquilerCreateDialog dlg = new AlquilerCreateDialog(frame);
-		dlg.setVisible(true);
-		if (!dlg.isConfirmed())
-			return;
+                AlquilerCreateDialog dlg = new AlquilerCreateDialog(frame);
+                dlg.setVisible(true);
+                if (!dlg.isConfirmed())
+                        return;
 
-		try {
-			alquilerService.create(dlg.getAlquiler());
-			goFirstPage();
-		} catch (RentexpresException ex) {
-			SwingUtils.showError(view, "Error guardando: " + ex.getMessage());
-		}
-	}
+                try {
+                        AlquilerDTO dto = dlg.getAlquiler();
+                        if (alquilerService.existsByReserva(dto.getIdReserva())) {
+                                SwingUtils.showWarning(view,
+                                                "La reserva ya tiene un alquiler asignado.");
+                                return;
+                        }
+                        alquilerService.create(dto);
+                        goFirstPage();
+                } catch (RentexpresException ex) {
+                        SwingUtils.showError(view, "Error guardando: " + ex.getMessage());
+                }
+        }
 
 	/* ───────────────────────── Buscar ─────────────────────────────── */
 	public void buscar() {
