@@ -29,6 +29,7 @@ import com.pinguela.rentexpres.desktop.util.AuthService;
 import com.pinguela.rentexpres.desktop.util.AuthServiceImpl;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.desktop.util.GradientPanel;
+import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.desktop.view.LoginFormPanel;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 
@@ -51,7 +52,8 @@ public class LoginDialog extends JDialog {
 	}
 
 	private void initComponents() {
-                GradientPanel container = new GradientPanel(new Color(240, 247, 255), Color.WHITE);
+                GradientPanel container = new GradientPanel(AppTheme.LOGIN_GRADIENT_START,
+                                AppTheme.LOGIN_GRADIENT_END);
                 container.setLayout(new BorderLayout());
                 container.setBorder(new EmptyBorder(20, 20, 20, 20));
                 getContentPane().add(container);
