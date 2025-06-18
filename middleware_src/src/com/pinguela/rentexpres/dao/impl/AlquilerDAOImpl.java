@@ -181,18 +181,18 @@ public class AlquilerDAOImpl implements AlquilerDAO {
                         sql.append(" AND v.precio_dia <= ? ");
 		sql.append(" ORDER BY a.fecha_inicio_efectivo DESC LIMIT ? OFFSET ?");
 
-                try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
-                        int idx = 1;
-                        if (criteria.getIdAlquiler() != null)
-                                ps.setInt(idx++, criteria.getIdAlquiler());
-                        if (criteria.getIdReserva() != null)
-                                ps.setInt(idx++, criteria.getIdReserva());
-                        if (criteria.getFechaInicioEfectivo() != null && !criteria.getFechaInicioEfectivo().isEmpty())
-                                ps.setString(idx++, "%" + criteria.getFechaInicioEfectivo() + "%");
-                        if (criteria.getFechaFinEfectivo() != null && !criteria.getFechaFinEfectivo().isEmpty())
-                                ps.setString(idx++, "%" + criteria.getFechaFinEfectivo() + "%");
-                        if (criteria.getKmInicial() != null)
-                                ps.setInt(idx++, criteria.getKmInicial());
+		try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+			int idx = 1;
+			if (criteria.getIdAlquiler() != null)
+				ps.setInt(idx++, criteria.getIdAlquiler());
+			if (criteria.getIdReserva() != null)
+				ps.setInt(idx++, criteria.getIdReserva());
+			if (criteria.getFechaInicioEfectivo() != null && !criteria.getFechaInicioEfectivo().isEmpty())
+				ps.setString(idx++, "%" + criteria.getFechaInicioEfectivo() + "%");
+			if (criteria.getFechaFinEfectivo() != null && !criteria.getFechaFinEfectivo().isEmpty())
+				ps.setString(idx++, "%" + criteria.getFechaFinEfectivo() + "%");
+			if (criteria.getKmInicial() != null)
+				ps.setInt(idx++, criteria.getKmInicial());
                         if (criteria.getKmFinal() != null)
                                 ps.setInt(idx++, criteria.getKmFinal());
                         if (criteria.getIdEstadoAlquiler() != null)
@@ -289,8 +289,8 @@ public class AlquilerDAOImpl implements AlquilerDAO {
 				countPs.setString(idx++, "%" + criteria.getFechaFinEfectivo() + "%");
 			if (criteria.getKmInicial() != null)
 				countPs.setInt(idx++, criteria.getKmInicial());
-			if (criteria.getKmFinal() != null)
-				countPs.setInt(idx++, criteria.getKmFinal());
+                        if (criteria.getKmFinal() != null)
+                                countPs.setInt(idx++, criteria.getKmFinal());
                         if (criteria.getIdEstadoAlquiler() != null)
                                 countPs.setInt(idx++, criteria.getIdEstadoAlquiler());
                         if (criteria.getCostetotal() != null)
