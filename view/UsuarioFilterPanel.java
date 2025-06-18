@@ -15,6 +15,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
+import com.pinguela.rentexpres.desktop.util.AppTheme;
 
 import com.pinguela.rentexpres.model.TipoUsuarioDTO;
 import com.pinguela.rentexpres.service.TipoUsuarioService;
@@ -41,8 +42,15 @@ public class UsuarioFilterPanel extends JPanel {
 	private final TipoUsuarioService motivoService = new TipoUsuarioServiceImpl();
 
 	public UsuarioFilterPanel() {
-		setBorder(new TitledBorder("Filtros Usuarios"));
-		setLayout(new MigLayout("wrap 4", "[right][grow,fill][right][grow,fill]", "[]10[]10[]"));
+                setBorder(new TitledBorder("Filtros Usuarios"));
+                setLayout(new MigLayout("wrap 4", "[right][grow,fill][right][grow,fill]", "[]10[]10[]"));
+                setBackground(AppTheme.FILTER_BG);
+
+                txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
+                txtApellido1.putClientProperty("JTextField.placeholderText", "Apellido 1");
+                txtApellido2.putClientProperty("JTextField.placeholderText", "Apellido 2");
+                txtEmail.putClientProperty("JTextField.placeholderText", "Email");
+                txtUsuario.putClientProperty("JTextField.placeholderText", "Usuario");
 
 		// Fila 1: ID y Nombre
 		add(new JLabel("ID:"), "right");

@@ -9,6 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.JFormattedTextField;
+import java.text.NumberFormat;
+import com.pinguela.rentexpres.desktop.util.AppTheme;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -33,8 +36,8 @@ public class AlquilerFilterPanel extends JPanel {
 
         private final JComboBox<EstadoAlquilerDTO> cmbEstado = new JComboBox<EstadoAlquilerDTO>();
 
-        private final JTextField txtKmInicial = new JTextField();
-        private final JTextField txtKmFinal = new JTextField();
+        private final JFormattedTextField ftfKmInicial;
+        private final JFormattedTextField ftfKmFinal;
 
         // extra filters
         private final JSpinner spnIdCliente = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
@@ -47,19 +50,39 @@ public class AlquilerFilterPanel extends JPanel {
         private final JTextField txtMarca = new JTextField();
         private final JTextField txtModelo = new JTextField();
 
-        private final JTextField txtCosteTotal = new JTextField();
-        private final JTextField txtPrecioDia = new JTextField();
+        private final JFormattedTextField ftfCosteTotal;
+        private final JFormattedTextField ftfPrecioDia;
 
 	/* ────────── Callbacks ────────── */
 	private OnChangeListener changeListener;
 	private ToggleListener toggleListener;
 
-	public AlquilerFilterPanel() {
-		setBorder(new TitledBorder("Filtros de Alquiler"));
-		setLayout(new MigLayout("wrap 4", "[right]10[150!]20[right]10[150!]", "[]8[]8[]8[]8[]"));
+        public AlquilerFilterPanel() {
+                setBorder(new TitledBorder("Filtros de Alquiler"));
+                setLayout(new MigLayout("wrap 4", "[right]10[150!]20[right]10[150!]", "[]8[]8[]8[]8[]"));
+                setBackground(AppTheme.FILTER_BG);
 
-		dcInicio.setDateFormatString("yyyy-MM-dd");
-		dcFin.setDateFormatString("yyyy-MM-dd");
+                NumberFormat intFormat = NumberFormat.getIntegerInstance();
+                ftfKmInicial = new JFormattedTextField(intFormat);
+                ftfKmInicial.putClientProperty("JTextField.placeholderText", "Inicial");
+                ftfKmFinal = new JFormattedTextField(intFormat);
+                ftfKmFinal.putClientProperty("JTextField.placeholderText", "Final");
+
+                NumberFormat doubleFormat = NumberFormat.getNumberInstance();
+                ftfCosteTotal = new JFormattedTextField(doubleFormat);
+                ftfCosteTotal.putClientProperty("JTextField.placeholderText", "Total");
+                ftfPrecioDia = new JFormattedTextField(doubleFormat);
+                ftfPrecioDia.putClientProperty("JTextField.placeholderText", "€/día");
+
+                txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
+                txtApellido.putClientProperty("JTextField.placeholderText", "Apellido");
+                txtTelefono.putClientProperty("JTextField.placeholderText", "Teléfono");
+                txtPlaca.putClientProperty("JTextField.placeholderText", "Placa");
+                txtMarca.putClientProperty("JTextField.placeholderText", "Marca");
+                txtModelo.putClientProperty("JTextField.placeholderText", "Modelo");
+
+                dcInicio.setDateFormatString("yyyy-MM-dd");
+                dcFin.setDateFormatString("yyyy-MM-dd");
 
 		add(new JLabel("ID Alquiler:"), "cell 0 0");
 		add(spnIdAlquiler, "cell 1 0");
@@ -71,15 +94,15 @@ public class AlquilerFilterPanel extends JPanel {
 		add(new JLabel("Fecha Fin:"), "cell 2 1");
 		add(dcFin, "cell 3 1");
 
-		add(new JLabel("KM Inicial:"), "cell 0 2");
-		add(txtKmInicial, "cell 1 2");
-		add(new JLabel("KM Final:"), "cell 2 2");
-		add(txtKmFinal, "cell 3 2");
+                add(new JLabel("KM Inicial:"), "cell 0 2");
+                add(ftfKmInicial, "cell 1 2");
+                add(new JLabel("KM Final:"), "cell 2 2");
+                add(ftfKmFinal, "cell 3 2");
 
                 add(new JLabel("Estado:"), "cell 0 3");
                 add(cmbEstado, "cell 1 3, growx");
                 add(new JLabel("Coste Total:"), "cell 2 3");
-                add(txtCosteTotal, "cell 3 3");
+                add(ftfCosteTotal, "cell 3 3");
 
                 add(new JLabel("ID Cliente:"), "cell 0 4");
                 add(spnIdCliente, "cell 1 4");
@@ -102,7 +125,7 @@ public class AlquilerFilterPanel extends JPanel {
                 add(txtModelo, "cell 3 7");
 
                 add(new JLabel("Precio Día:"), "cell 0 8");
-                add(txtPrecioDia, "cell 1 8");
+                add(ftfPrecioDia, "cell 1 8");
 
                 javax.swing.JButton btnToggle = new javax.swing.JButton("Mostrar/Ocultar Selección");
 		btnToggle.addActionListener(new java.awt.event.ActionListener() {
@@ -145,16 +168,16 @@ public class AlquilerFilterPanel extends JPanel {
 				fireChange();
 			}
 		};
-                txtKmInicial.getDocument().addDocumentListener(dListener);
-                txtKmFinal.getDocument().addDocumentListener(dListener);
-                txtCosteTotal.getDocument().addDocumentListener(dListener);
+                ftfKmInicial.getDocument().addDocumentListener(dListener);
+                ftfKmFinal.getDocument().addDocumentListener(dListener);
+                ftfCosteTotal.getDocument().addDocumentListener(dListener);
                 txtNombre.getDocument().addDocumentListener(dListener);
                 txtApellido.getDocument().addDocumentListener(dListener);
                 txtTelefono.getDocument().addDocumentListener(dListener);
                 txtPlaca.getDocument().addDocumentListener(dListener);
                 txtMarca.getDocument().addDocumentListener(dListener);
                 txtModelo.getDocument().addDocumentListener(dListener);
-                txtPrecioDia.getDocument().addDocumentListener(dListener);
+                ftfPrecioDia.getDocument().addDocumentListener(dListener);
 	}
 
 	/* ────────── Públicos ────────── */
@@ -163,10 +186,10 @@ public class AlquilerFilterPanel extends JPanel {
                 spnIdReserva.setValue(0);
                 dcInicio.setDate(null);
                 dcFin.setDate(null);
-                txtKmInicial.setText("");
-                txtKmFinal.setText("");
+                ftfKmInicial.setValue(null);
+                ftfKmFinal.setValue(null);
                 cmbEstado.setSelectedIndex(-1);
-                txtCosteTotal.setText("");
+                ftfCosteTotal.setValue(null);
                 spnIdCliente.setValue(0);
                 txtNombre.setText("");
                 txtApellido.setText("");
@@ -175,7 +198,7 @@ public class AlquilerFilterPanel extends JPanel {
                 txtPlaca.setText("");
                 txtMarca.setText("");
                 txtModelo.setText("");
-                txtPrecioDia.setText("");
+                ftfPrecioDia.setValue(null);
                 fireChange();
         }
 
@@ -204,16 +227,16 @@ public class AlquilerFilterPanel extends JPanel {
 		return formatDate(dcFin.getDate());
 	}
 
-	public Integer getKmInicial() {
-		return parseInt(txtKmInicial.getText());
-	}
+        public Integer getKmInicial() {
+                return parseIntValue(ftfKmInicial.getValue());
+        }
 
         public Integer getKmFinal() {
-                return parseInt(txtKmFinal.getText());
+                return parseIntValue(ftfKmFinal.getValue());
         }
 
         public Integer getCosteTotal() {
-                return parseInt(txtCosteTotal.getText());
+                return parseIntValue(ftfCosteTotal.getValue());
         }
 
         public Integer getIdCliente() {
@@ -250,7 +273,8 @@ public class AlquilerFilterPanel extends JPanel {
 
         public Double getPrecioDia() {
                 try {
-                        return Double.valueOf(txtPrecioDia.getText().trim());
+                        Object v = ftfPrecioDia.getValue();
+                        return (v == null) ? null : Double.valueOf(v.toString());
                 } catch (NumberFormatException ex) {
                         return null;
                 }
@@ -274,13 +298,15 @@ public class AlquilerFilterPanel extends JPanel {
 		return d == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(d);
 	}
 
-	private static Integer parseInt(String t) {
-		try {
-			return Integer.valueOf(t.trim());
-		} catch (NumberFormatException ex) {
-			return null;
-		}
-	}
+        private static Integer parseIntValue(Object v) {
+                if (v == null)
+                        return null;
+                try {
+                        return Integer.valueOf(v.toString());
+                } catch (NumberFormatException ex) {
+                        return null;
+                }
+        }
 
 	/* ────────── Interfaces ────────── */
 	public interface OnChangeListener {
