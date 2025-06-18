@@ -13,6 +13,7 @@ public class AlquilerSearchView
         private static final long serialVersionUID = 1L;
 
         private AlquilerSearchController controller;
+        private boolean initialized = false;
 
         public AlquilerSearchView(AlquilerService alquilerSvc, EstadoAlquilerService estadoSvc, VehiculoService vehiculoSvc,
                         Frame owner) throws RentexpresException {
@@ -44,6 +45,13 @@ public class AlquilerSearchView
                                 table.toggleSelectColumn();
                         }
                 });
+        }
+
+        public void initIfNeeded() {
+                if (!initialized) {
+                        controller.goFirstPage();
+                        initialized = true;
+                }
         }
 
         /* ───────── getters se heredan de StandardSearchView ───────── */
