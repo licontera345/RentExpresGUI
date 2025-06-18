@@ -229,12 +229,34 @@ public class AlquilerSearchController {
 
 		if (f.getKmInicial() != null && f.getKmInicial() > 0)
 			c.setKmInicial(f.getKmInicial().intValue());
-		if (f.getKmFinal() != null && f.getKmFinal() > 0)
-			c.setKmFinal(f.getKmFinal().intValue());
+                if (f.getKmFinal() != null && f.getKmFinal() > 0)
+                        c.setKmFinal(f.getKmFinal().intValue());
 
-		EstadoAlquilerDTO estadoSel = f.getEstadoSeleccionado();
-		if (estadoSel != null && estadoSel.getId() != null)
-			c.setIdEstadoAlquiler(estadoSel.getId());
+                EstadoAlquilerDTO estadoSel = f.getEstadoSeleccionado();
+                if (estadoSel != null && estadoSel.getId() != null)
+                        c.setIdEstadoAlquiler(estadoSel.getId());
+
+                if (f.getCosteTotal() != null)
+                        c.setCostetotal(f.getCosteTotal());
+                if (f.getIdCliente() != null && f.getIdCliente() > 0)
+                        c.setIdCliente(f.getIdCliente());
+                if (f.getNombre() != null && !f.getNombre().isEmpty())
+                        c.setNombre(f.getNombre());
+                if (f.getApellido() != null && !f.getApellido().isEmpty())
+                        c.setApellido1(f.getApellido());
+                if (f.getTelefono() != null && !f.getTelefono().isEmpty())
+                        c.setTelefono(f.getTelefono());
+
+                if (f.getIdVehiculo() != null && f.getIdVehiculo() > 0)
+                        c.setIdVehiculo(f.getIdVehiculo());
+                if (f.getPlaca() != null && !f.getPlaca().isEmpty())
+                        c.setPlaca(f.getPlaca());
+                if (f.getMarca() != null && !f.getMarca().isEmpty())
+                        c.setMarca(f.getMarca());
+                if (f.getModelo() != null && !f.getModelo().isEmpty())
+                        c.setModelo(f.getModelo());
+                if (f.getPrecioDia() != null)
+                        c.setPrecioDia(f.getPrecioDia());
 
 		return c;
 	}
