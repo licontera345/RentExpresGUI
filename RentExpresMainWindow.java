@@ -244,8 +244,9 @@ public class RentExpresMainWindow extends JFrame {
 		rsv.initIfNeeded();
 		contentPanel.add(rsv, "Reservas");
 
-		AlquilerSearchView asv = new AlquilerSearchView(alquilerService, estadoAlqService(), vehiculoService, this);
-		contentPanel.add(asv, "Alquileres");
+                AlquilerSearchView asv = new AlquilerSearchView(alquilerService, estadoAlqService(), vehiculoService, this);
+                asv.initIfNeeded();
+                contentPanel.add(asv, "Alquileres");
 
 		ClienteSearchView csv = new ClienteSearchView(clienteService, provinciaService, localidadService, this);
 		csv.initIfNeeded();
