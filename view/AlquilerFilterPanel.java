@@ -31,10 +31,24 @@ public class AlquilerFilterPanel extends JPanel {
 	private final JDateChooser dcInicio = new JDateChooser();
 	private final JDateChooser dcFin = new JDateChooser();
 
-	private final JComboBox<EstadoAlquilerDTO> cmbEstado = new JComboBox<EstadoAlquilerDTO>();
+        private final JComboBox<EstadoAlquilerDTO> cmbEstado = new JComboBox<EstadoAlquilerDTO>();
 
-	private final JTextField txtKmInicial = new JTextField();
-	private final JTextField txtKmFinal = new JTextField();
+        private final JTextField txtKmInicial = new JTextField();
+        private final JTextField txtKmFinal = new JTextField();
+
+        // extra filters
+        private final JSpinner spnIdCliente = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
+        private final JTextField txtNombre = new JTextField();
+        private final JTextField txtApellido = new JTextField();
+        private final JTextField txtTelefono = new JTextField();
+
+        private final JSpinner spnIdVehiculo = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
+        private final JTextField txtPlaca = new JTextField();
+        private final JTextField txtMarca = new JTextField();
+        private final JTextField txtModelo = new JTextField();
+
+        private final JTextField txtCosteTotal = new JTextField();
+        private final JTextField txtPrecioDia = new JTextField();
 
 	/* ────────── Callbacks ────────── */
 	private OnChangeListener changeListener;
@@ -62,17 +76,42 @@ public class AlquilerFilterPanel extends JPanel {
 		add(new JLabel("KM Final:"), "cell 2 2");
 		add(txtKmFinal, "cell 3 2");
 
-		add(new JLabel("Estado:"), "cell 0 3");
-		add(cmbEstado, "cell 1 3, growx");
+                add(new JLabel("Estado:"), "cell 0 3");
+                add(cmbEstado, "cell 1 3, growx");
+                add(new JLabel("Coste Total:"), "cell 2 3");
+                add(txtCosteTotal, "cell 3 3");
 
-		javax.swing.JButton btnToggle = new javax.swing.JButton("Mostrar/Ocultar Selección");
+                add(new JLabel("ID Cliente:"), "cell 0 4");
+                add(spnIdCliente, "cell 1 4");
+                add(new JLabel("Nombre:"), "cell 2 4");
+                add(txtNombre, "cell 3 4");
+
+                add(new JLabel("Apellido:"), "cell 0 5");
+                add(txtApellido, "cell 1 5");
+                add(new JLabel("Teléfono:"), "cell 2 5");
+                add(txtTelefono, "cell 3 5");
+
+                add(new JLabel("ID Vehículo:"), "cell 0 6");
+                add(spnIdVehiculo, "cell 1 6");
+                add(new JLabel("Placa:"), "cell 2 6");
+                add(txtPlaca, "cell 3 6");
+
+                add(new JLabel("Marca:"), "cell 0 7");
+                add(txtMarca, "cell 1 7");
+                add(new JLabel("Modelo:"), "cell 2 7");
+                add(txtModelo, "cell 3 7");
+
+                add(new JLabel("Precio Día:"), "cell 0 8");
+                add(txtPrecioDia, "cell 1 8");
+
+                javax.swing.JButton btnToggle = new javax.swing.JButton("Mostrar/Ocultar Selección");
 		btnToggle.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				if (toggleListener != null)
 					toggleListener.onToggle();
 			}
 		});
-		add(btnToggle, "cell 2 3, span 2");
+                add(btnToggle, "cell 2 9, span 2");
 
 		/* listeners que disparan cambios */
 		ChangeListener spListener = new ChangeListener() {
@@ -80,8 +119,10 @@ public class AlquilerFilterPanel extends JPanel {
 				fireChange();
 			}
 		};
-		spnIdAlquiler.addChangeListener(spListener);
-		spnIdReserva.addChangeListener(spListener);
+                spnIdAlquiler.addChangeListener(spListener);
+                spnIdReserva.addChangeListener(spListener);
+                spnIdCliente.addChangeListener(spListener);
+                spnIdVehiculo.addChangeListener(spListener);
 
 		PropertyChangeListener dateListener = new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -104,21 +145,39 @@ public class AlquilerFilterPanel extends JPanel {
 				fireChange();
 			}
 		};
-		txtKmInicial.getDocument().addDocumentListener(dListener);
-		txtKmFinal.getDocument().addDocumentListener(dListener);
+                txtKmInicial.getDocument().addDocumentListener(dListener);
+                txtKmFinal.getDocument().addDocumentListener(dListener);
+                txtCosteTotal.getDocument().addDocumentListener(dListener);
+                txtNombre.getDocument().addDocumentListener(dListener);
+                txtApellido.getDocument().addDocumentListener(dListener);
+                txtTelefono.getDocument().addDocumentListener(dListener);
+                txtPlaca.getDocument().addDocumentListener(dListener);
+                txtMarca.getDocument().addDocumentListener(dListener);
+                txtModelo.getDocument().addDocumentListener(dListener);
+                txtPrecioDia.getDocument().addDocumentListener(dListener);
 	}
 
 	/* ────────── Públicos ────────── */
-	public void clear() {
-		spnIdAlquiler.setValue(0);
-		spnIdReserva.setValue(0);
-		dcInicio.setDate(null);
-		dcFin.setDate(null);
-		txtKmInicial.setText("");
-		txtKmFinal.setText("");
-		cmbEstado.setSelectedIndex(-1);
-		fireChange();
-	}
+        public void clear() {
+                spnIdAlquiler.setValue(0);
+                spnIdReserva.setValue(0);
+                dcInicio.setDate(null);
+                dcFin.setDate(null);
+                txtKmInicial.setText("");
+                txtKmFinal.setText("");
+                cmbEstado.setSelectedIndex(-1);
+                txtCosteTotal.setText("");
+                spnIdCliente.setValue(0);
+                txtNombre.setText("");
+                txtApellido.setText("");
+                txtTelefono.setText("");
+                spnIdVehiculo.setValue(0);
+                txtPlaca.setText("");
+                txtMarca.setText("");
+                txtModelo.setText("");
+                txtPrecioDia.setText("");
+                fireChange();
+        }
 
 	public void setOnChange(OnChangeListener l) {
 		changeListener = l;
@@ -149,9 +208,53 @@ public class AlquilerFilterPanel extends JPanel {
 		return parseInt(txtKmInicial.getText());
 	}
 
-	public Integer getKmFinal() {
-		return parseInt(txtKmFinal.getText());
-	}
+        public Integer getKmFinal() {
+                return parseInt(txtKmFinal.getText());
+        }
+
+        public Integer getCosteTotal() {
+                return parseInt(txtCosteTotal.getText());
+        }
+
+        public Integer getIdCliente() {
+                return (Integer) spnIdCliente.getValue();
+        }
+
+        public String getNombre() {
+                return txtNombre.getText().trim();
+        }
+
+        public String getApellido() {
+                return txtApellido.getText().trim();
+        }
+
+        public String getTelefono() {
+                return txtTelefono.getText().trim();
+        }
+
+        public Integer getIdVehiculo() {
+                return (Integer) spnIdVehiculo.getValue();
+        }
+
+        public String getPlaca() {
+                return txtPlaca.getText().trim();
+        }
+
+        public String getMarca() {
+                return txtMarca.getText().trim();
+        }
+
+        public String getModelo() {
+                return txtModelo.getText().trim();
+        }
+
+        public Double getPrecioDia() {
+                try {
+                        return Double.valueOf(txtPrecioDia.getText().trim());
+                } catch (NumberFormatException ex) {
+                        return null;
+                }
+        }
 
 	public JComboBox<EstadoAlquilerDTO> getCmbEstado() {
 		return cmbEstado;
