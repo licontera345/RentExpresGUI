@@ -12,6 +12,7 @@ import javax.swing.JTable;
 import com.pinguela.rentexpres.desktop.model.UsuarioSearchTableModel;
 import com.pinguela.rentexpres.desktop.renderer.UsuarioActionsCellEditor;
 import com.pinguela.rentexpres.desktop.renderer.UsuarioActionsCellRenderer;
+import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.service.UsuarioService;
 
@@ -28,7 +29,7 @@ public class UsuarioTablePanel extends JPanel {
         this.owner = owner;
         this.reload = reload;
         setLayout(new BorderLayout());
-        table.setRowHeight(24);
+        table.setRowHeight(AppTheme.TABLE_ROW_HEIGHT);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.getTableHeader().setReorderingAllowed(false);
         add(new JScrollPane(table), BorderLayout.CENTER);

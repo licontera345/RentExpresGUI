@@ -15,6 +15,7 @@ import com.pinguela.rentexpres.desktop.renderer.ReservaActionsCellEditor;
 import com.pinguela.rentexpres.desktop.renderer.ReservaActionsCellRenderer;
 import com.pinguela.rentexpres.desktop.util.SelectionEditor;
 import com.pinguela.rentexpres.desktop.util.SelectionRenderer;
+import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.model.ReservaDTO;
 import com.pinguela.rentexpres.service.ReservaService;
 
@@ -29,8 +30,8 @@ public class ReservaTablePanel extends JPanel {
 	public ReservaTablePanel(ReservaService svc, Frame owner, ReloadCallback reload) {
 		this.service = svc;
 		this.owner = owner;
-		setLayout(new BorderLayout());
-		table.setRowHeight(24);
+                setLayout(new BorderLayout());
+                table.setRowHeight(AppTheme.TABLE_ROW_HEIGHT);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.getTableHeader().setReorderingAllowed(false);
 		add(new JScrollPane(table), BorderLayout.CENTER);

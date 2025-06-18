@@ -14,6 +14,7 @@ import com.pinguela.rentexpres.desktop.renderer.ClienteActionsCellRenderer;
 import com.pinguela.rentexpres.desktop.renderer.ClienteTableCellRenderer;
 import com.pinguela.rentexpres.desktop.util.SelectionRenderer;
 import com.pinguela.rentexpres.desktop.util.SelectionEditor;
+import com.pinguela.rentexpres.desktop.util.AppTheme;
 import java.util.function.Supplier;
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.model.ClienteDTO;
@@ -33,8 +34,8 @@ public class ClienteTablePanel extends JPanel {
 		this.service = svc;
 		this.owner = owner;
 		this.reload = reload;
-		setLayout(new BorderLayout());
-		table.setRowHeight(24);
+                setLayout(new BorderLayout());
+                table.setRowHeight(AppTheme.TABLE_ROW_HEIGHT);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.getTableHeader().setReorderingAllowed(false);
 		add(new JScrollPane(table), BorderLayout.CENTER);
