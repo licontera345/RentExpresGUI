@@ -167,6 +167,12 @@ public class ReservaSearchController {
                                }
                        }
                });
+               actions.onBuscar(new ActionCallback() {
+                       @Override
+                       public void execute() {
+                               goFirstPage();
+                       }
+               });
 
                actions.onLimpiar(new ActionCallback() {
                        @Override

@@ -104,6 +104,12 @@ public class AlquilerSearchController {
                                 abrirNuevo();
                         }
                 });
+                view.getActions().onBuscar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                        @Override
+                        public void execute() {
+                                goFirstPage();
+                        }
+                });
                 view.getActions().onLimpiar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                         @Override
                         public void execute() {

@@ -1,8 +1,6 @@
 package com.pinguela.rentexpres.desktop.view;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -49,86 +47,41 @@ public class ClienteFilterPanel extends JPanel {
         private ActionCallback toggleListener = null;
 	private java.util.function.Consumer<String> onProvinciaChange = null;
 
-	public ClienteFilterPanel() {
-		super(new GridBagLayout());
-		setBorder(javax.swing.BorderFactory.createTitledBorder("Filtros de Cliente"));
-		initLayout();
-		initListeners();
-	}
+       public ClienteFilterPanel() {
+               super(new MigLayout("wrap 4", "[right]10[150!]20[right]10[150!]", "[]8[]8[]8[]8[]"));
+               setBorder(javax.swing.BorderFactory.createTitledBorder("Filtros de Cliente"));
+               initLayout();
+               initListeners();
+       }
 
-	private void initLayout() {
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(4, 4, 4, 4);
-		gbc.anchor = GridBagConstraints.WEST;
+       private void initLayout() {
+               add(new JLabel("ID:"), "cell 0 0");
+               add(spnId, "cell 1 0");
+               add(new JLabel("Nombre:"), "cell 2 0");
+               add(txtNombre, "cell 3 0, growx");
 
-		int row = 0;
+               add(new JLabel("Apellido 1:"), "cell 0 1");
+               add(txtApellido1, "cell 1 1, growx");
+               add(new JLabel("Apellido 2:"), "cell 2 1");
+               add(txtApellido2, "cell 3 1, growx");
 
-		gbc.gridx = 0;
-		gbc.gridy = row;
-		add(new JLabel("ID:"), gbc);
-		gbc.gridx = 1;
-		add(spnId, gbc);
+               add(new JLabel("Email:"), "cell 0 2");
+               add(txtEmail, "cell 1 2, growx");
+               add(new JLabel("Teléfono:"), "cell 2 2");
+               add(txtTelefono, "cell 3 2, growx");
 
-		gbc.gridx = 2;
-		add(new JLabel("Nombre:"), gbc);
-		gbc.gridx = 3;
-		add(txtNombre, gbc);
+               add(new JLabel("Calle:"), "cell 0 3");
+               add(txtCalle, "cell 1 3, growx");
+               add(new JLabel("Nº:"), "cell 2 3");
+               add(txtNumero, "cell 3 3, growx");
 
-		row++;
-		gbc.gridx = 0;
-		gbc.gridy = row;
-		add(new JLabel("Apellido 1:"), gbc);
-		gbc.gridx = 1;
-		add(txtApellido1, gbc);
+               add(new JLabel("Provincia:"), "cell 0 4");
+               add(cmbProvincia, "cell 1 4, growx");
+               add(new JLabel("Localidad:"), "cell 2 4");
+               add(cmbLocalidad, "cell 3 4, growx");
 
-		gbc.gridx = 2;
-		add(new JLabel("Apellido 2:"), gbc);
-		gbc.gridx = 3;
-		add(txtApellido2, gbc);
-
-		row++;
-		gbc.gridx = 0;
-		gbc.gridy = row;
-		add(new JLabel("Email:"), gbc);
-		gbc.gridx = 1;
-		add(txtEmail, gbc);
-
-		gbc.gridx = 2;
-		add(new JLabel("Teléfono:"), gbc);
-		gbc.gridx = 3;
-		add(txtTelefono, gbc);
-
-		row++;
-		gbc.gridx = 0;
-		gbc.gridy = row;
-		add(new JLabel("Calle:"), gbc);
-		gbc.gridx = 1;
-		add(txtCalle, gbc);
-
-		gbc.gridx = 2;
-		add(new JLabel("Nº:"), gbc);
-		gbc.gridx = 3;
-		add(txtNumero, gbc);
-
-		row++;
-		gbc.gridx = 0;
-		gbc.gridy = row;
-		add(new JLabel("Provincia:"), gbc);
-		gbc.gridx = 1;
-		add(cmbProvincia, gbc);
-
-		gbc.gridx = 2;
-		add(new JLabel("Localidad:"), gbc);
-		gbc.gridx = 3;
-		add(cmbLocalidad, gbc);
-
-		row++;
-		gbc.gridx = 0;
-		gbc.gridy = row;
-		gbc.gridwidth = 4;
-		gbc.anchor = GridBagConstraints.EAST;
-		add(btnToggle, gbc);
-	}
+               add(btnToggle, "cell 0 5 4 1, alignx right");
+       }
 
 	private void initListeners() {
 		// ID spinner

@@ -192,6 +192,12 @@ public class ClienteSearchController {
                                }
                        }
                });
+               actions.onBuscar(new ActionCallback() {
+                       @Override
+                       public void execute() {
+                               goFirstPage();
+                       }
+               });
 
                actions.onLimpiar(new ActionCallback() {
                        @Override
