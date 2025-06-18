@@ -101,10 +101,9 @@ public class UsuarioDetailDialog extends JDialog {
 				dispose();
 				return;
 			}
-			txtNombre.setText(dto.getNombre());
-			txtApellidos.setText(dto.getApellido1());
-			txtApellidos.setText(dto.getApellido2());
-			txtEmail.setText(dto.getEmail());
+                        txtNombre.setText(dto.getNombre());
+                        txtApellidos.setText(dto.getApellido1() + " " + dto.getApellido2());
+                        txtEmail.setText(dto.getEmail());
 			txtUsuario.setText(dto.getNombreUsuario());
 
 			TipoUsuarioDTO tipo = tipoUsuarioService.findById(dto.getIdTipoUsuario());

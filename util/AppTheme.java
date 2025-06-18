@@ -13,6 +13,9 @@ public final class AppTheme {
 
     private AppTheme() {}
 
+    /** Color de fondo utilizado en los paneles de filtros. */
+    public static final Color FILTER_BG = new Color(250, 250, 250);
+
     /** Configura FlatLaf y algunos colores por defecto. */
     public static void setup() {
         FlatLightLaf.setup();
