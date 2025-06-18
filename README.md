@@ -1,0 +1,21 @@
+# RentExpresGUI
+
+This project depends on a middleware library located in `lib/middleware`. The
+provided JAR in that directory was built from an older version of the sources
+and lacks some features used by the GUI. To avoid distributing binary files
+and use the latest source code, you can build the middleware jar locally.
+
+## Building the middleware library
+
+Run the following command from the project root:
+
+```bash
+./build_middleware.sh
+```
+
+This compiles the sources under `middleware_src/src` and creates
+`lib/middleware/RentExpres.jar`.
+
+## Running
+
+After building, compile and run the GUI as usual with your IDE or `javac`.
