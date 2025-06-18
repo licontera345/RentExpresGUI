@@ -14,6 +14,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
+import com.pinguela.rentexpres.desktop.util.AppTheme;
 
 /**
  * Panel que permite filtrar Clientes por: - ID - Nombre / Apellido1 / Apellido2
@@ -50,6 +51,16 @@ public class ClienteFilterPanel extends JPanel {
        public ClienteFilterPanel() {
                super(new MigLayout("wrap 4", "[right]10[150!]20[right]10[150!]", "[]8[]8[]8[]8[]"));
                setBorder(javax.swing.BorderFactory.createTitledBorder("Filtros de Cliente"));
+               setBackground(AppTheme.FILTER_BG);
+
+               txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
+               txtApellido1.putClientProperty("JTextField.placeholderText", "Apellido 1");
+               txtApellido2.putClientProperty("JTextField.placeholderText", "Apellido 2");
+               txtEmail.putClientProperty("JTextField.placeholderText", "Email");
+               txtTelefono.putClientProperty("JTextField.placeholderText", "Teléfono");
+               txtCalle.putClientProperty("JTextField.placeholderText", "Calle");
+               txtNumero.putClientProperty("JTextField.placeholderText", "Nº");
+
                initLayout();
                initListeners();
        }

@@ -15,6 +15,7 @@ import com.pinguela.rentexpres.desktop.renderer.AlquilerActionsCellEditor;
 import com.pinguela.rentexpres.desktop.renderer.AlquilerActionsCellRenderer;
 import com.pinguela.rentexpres.desktop.util.SelectionEditor;
 import com.pinguela.rentexpres.desktop.util.SelectionRenderer;
+import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.service.AlquilerService;
 
@@ -31,8 +32,8 @@ public class AlquilerTablePanel extends JPanel {
 		this.owner = owner;
 		this.service = service;
 
-		setLayout(new BorderLayout());
-		table.setRowHeight(24);
+                setLayout(new BorderLayout());
+                table.setRowHeight(AppTheme.TABLE_ROW_HEIGHT);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.getTableHeader().setReorderingAllowed(false);
 		add(new JScrollPane(table), BorderLayout.CENTER);

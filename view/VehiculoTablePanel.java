@@ -14,6 +14,7 @@ import com.pinguela.rentexpres.desktop.renderer.VehiculoActionsCellRenderer;
 import com.pinguela.rentexpres.desktop.renderer.VehiculoTableCellRenderer;
 import com.pinguela.rentexpres.desktop.util.SelectionEditor;
 import com.pinguela.rentexpres.desktop.util.SelectionRenderer;
+import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.model.VehiculoDTO;
 import com.pinguela.rentexpres.service.VehiculoService;
 
@@ -37,7 +38,7 @@ public class VehiculoTablePanel extends JPanel {
                 tableVehiculo.setModel(new VehiculoSearchTableModel(Collections.emptyList()));
 
                 // Ajustes básicos
-                tableVehiculo.setRowHeight(28);
+                tableVehiculo.setRowHeight(AppTheme.TABLE_ROW_HEIGHT);
                 tableVehiculo.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                 tableVehiculo.getTableHeader().setReorderingAllowed(false);
 

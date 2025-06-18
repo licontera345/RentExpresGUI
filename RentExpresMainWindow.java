@@ -106,9 +106,9 @@ public class RentExpresMainWindow extends JFrame {
 	}
 
 	private void initTopBar() {
-		topBar.setFloatable(false);
-		topBar.setLayout(new FlowLayout(FlowLayout.RIGHT, 20, 5));
-		topBar.setBackground(new Color(245, 245, 245));
+        topBar.setFloatable(false);
+        topBar.setLayout(new FlowLayout(FlowLayout.RIGHT, 20, 5));
+        topBar.setBackground(AppTheme.TOPBAR_BG);
 
 		JLabel lblUser = new JLabel("Usuario: " + AppContext.getCurrentUser().getNombreUsuario(), AppIcons.USUARIO,
 				JLabel.LEFT);
@@ -154,11 +154,11 @@ public class RentExpresMainWindow extends JFrame {
 	}
 
 	private void initNavigation() {
-		// Colores para la navegación
-		Color navBg = new Color(240, 242, 245);
-		Color btnBg = new Color(255, 255, 255);
-		Color btnHoverBg = new Color(220, 224, 230);
-		Color btnFg = new Color(45, 52, 70);
+        // Colores para la navegación
+        Color navBg = AppTheme.NAV_BG;
+        Color btnBg = AppTheme.NAV_BTN_BG;
+        Color btnHoverBg = AppTheme.NAV_BTN_HOVER_BG;
+        Color btnFg = AppTheme.NAV_BTN_FG;
 
 		navPanel.setBackground(navBg);
 		navPanel.setPreferredSize(new Dimension(200, getHeight()));
