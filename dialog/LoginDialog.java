@@ -28,6 +28,7 @@ import com.pinguela.rentexpres.desktop.util.AppIcons;
 import com.pinguela.rentexpres.desktop.util.AuthService;
 import com.pinguela.rentexpres.desktop.util.AuthServiceImpl;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
+import com.pinguela.rentexpres.desktop.util.GradientPanel;
 import com.pinguela.rentexpres.desktop.view.LoginFormPanel;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 
@@ -50,14 +51,14 @@ public class LoginDialog extends JDialog {
 	}
 
 	private void initComponents() {
-		JPanel container = new JPanel(new BorderLayout());
-		container.setBackground(Color.WHITE);
-		container.setBorder(new EmptyBorder(20, 20, 20, 20));
-		getContentPane().add(container);
+                GradientPanel container = new GradientPanel(new Color(240, 247, 255), Color.WHITE);
+                container.setLayout(new BorderLayout());
+                container.setBorder(new EmptyBorder(20, 20, 20, 20));
+                getContentPane().add(container);
 
-		JPanel topPanel = new JPanel();
-		topPanel.setBackground(Color.WHITE);
-		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+                JPanel topPanel = new JPanel();
+                topPanel.setOpaque(false);
+                topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
 
 		JLabel lblTitle = new JLabel("¡Bienvenido a RentExpres!", SwingConstants.CENTER);
 		lblTitle.setFont(lblTitle.getFont().deriveFont(Font.BOLD, 22f));
@@ -77,14 +78,14 @@ public class LoginDialog extends JDialog {
 
 		container.add(topPanel, BorderLayout.NORTH);
 
-		JPanel centerPanel = new JPanel(new BorderLayout());
-		centerPanel.setBackground(Color.WHITE);
-		centerPanel.setBorder(new EmptyBorder(20, 0, 20, 0));
-		centerPanel.add(formPanel, BorderLayout.CENTER);
-		container.add(centerPanel, BorderLayout.CENTER);
+                JPanel centerPanel = new JPanel(new BorderLayout());
+                centerPanel.setOpaque(false);
+                centerPanel.setBorder(new EmptyBorder(20, 0, 20, 0));
+                centerPanel.add(formPanel, BorderLayout.CENTER);
+                container.add(centerPanel, BorderLayout.CENTER);
 
-		JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
-		btnPanel.setBackground(Color.WHITE);
+                JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+                btnPanel.setOpaque(false);
 
 		btnIngresar.setPreferredSize(new Dimension(120, 40));
 		btnIngresar.setFont(btnIngresar.getFont().deriveFont(Font.PLAIN, 14f));

@@ -25,11 +25,11 @@ import javax.swing.UIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import com.formdev.flatlaf.FlatLightLaf;
 import com.pinguela.rentexpres.desktop.controller.LogoutAction;
 import com.pinguela.rentexpres.desktop.dialog.LoginDialog;
 import com.pinguela.rentexpres.desktop.util.AppContext;
 import com.pinguela.rentexpres.desktop.util.AppIcons;
+import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.desktop.view.AlquilerSearchView;
 import com.pinguela.rentexpres.desktop.view.ClienteSearchView;
 import com.pinguela.rentexpres.desktop.view.ProfileView;
@@ -76,12 +76,7 @@ public class RentExpresMainWindow extends JFrame {
 			setIconImage(AppIcons.USUARIO.getImage());
 		}
 
-		FlatLightLaf.setup();
-		UIManager.put("Component.arc", 8);
-		UIManager.put("Button.arc", 12);
-		UIManager.put("Table.alternateRowColor", new Color(245, 249, 254));
-		UIManager.put("Table.selectionBackground", new Color(0xC7DEF8));
-		UIManager.put("Table.selectionForeground", Color.BLACK);
+               AppTheme.setup();
 
 		UsuarioDTO user = showLoginDialog();
 		if (user == null) {
