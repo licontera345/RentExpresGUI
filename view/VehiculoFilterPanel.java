@@ -14,6 +14,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
+import com.pinguela.rentexpres.desktop.util.AppTheme;
 
 import com.pinguela.rentexpres.model.CategoriaVehiculoDTO;
 import com.pinguela.rentexpres.model.EstadoVehiculoDTO;
@@ -36,16 +37,23 @@ public class VehiculoFilterPanel extends JPanel {
         private ActionCallback onChange;
         private ActionCallback toggleListener;
 
-	public VehiculoFilterPanel() {
-		setBorder(new TitledBorder("Filtros de Vehículo"));
-		setLayout(new MigLayout("wrap 4", "[right]10[150!]20[right]10[150!][][]", "[]8[]8[]8[]8[]"));
+        public VehiculoFilterPanel() {
+                setBorder(new TitledBorder("Filtros de Vehículo"));
+                setLayout(new MigLayout("wrap 4", "[right]10[150!]20[right]10[150!][][]", "[]8[]8[]8[]8[]"));
+                setBackground(AppTheme.FILTER_BG);
 
 		NumberFormat intFormat = NumberFormat.getIntegerInstance();
 		NumberFormat doubleFormat = NumberFormat.getNumberInstance();
 
-		ftfAnioDesde = new JFormattedTextField(intFormat);
-		ftfAnioHasta = new JFormattedTextField(intFormat);
-		ftfPrecioMax = new JFormattedTextField(doubleFormat);
+                ftfAnioDesde = new JFormattedTextField(intFormat);
+                ftfAnioHasta = new JFormattedTextField(intFormat);
+                ftfPrecioMax = new JFormattedTextField(doubleFormat);
+
+                txtMarca.putClientProperty("JTextField.placeholderText", "Marca");
+                txtModelo.putClientProperty("JTextField.placeholderText", "Modelo");
+                ftfAnioDesde.putClientProperty("JTextField.placeholderText", "Desde");
+                ftfAnioHasta.putClientProperty("JTextField.placeholderText", "Hasta");
+                ftfPrecioMax.putClientProperty("JTextField.placeholderText", "Máximo");
 
 		// Fila 0: Marca | Modelo
 		add(new JLabel("Marca:"), "cell 0 0");
