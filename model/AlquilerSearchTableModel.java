@@ -9,12 +9,12 @@ public class AlquilerSearchTableModel extends AbstractSearchTableModel<AlquilerD
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String[] DATA_COLUMNS = { "ID", "Reserva", "Vehículo", "Marca", "Modelo", "Cliente", "Inicio",
-			"Fin", "KM Inicio", "KM Fin", "Estado", "Acciones" };
+        private static final String[] DATA_COLUMNS = { "ID", "Reserva", "Vehículo", "Marca", "Modelo", "Cliente", "Inicio",
+                        "Fin", "KM Inicio", "KM Fin", "Coste", "Estado", "Acciones" };
 
-	private static final Class<?>[] DATA_CLASSES = { Integer.class, Integer.class, String.class, String.class,
-			String.class, String.class, String.class, String.class, Integer.class, Integer.class, String.class,
-			Object.class };
+        private static final Class<?>[] DATA_CLASSES = { Integer.class, Integer.class, String.class, String.class,
+                        String.class, String.class, String.class, String.class, Integer.class, Integer.class, Integer.class,
+                        String.class, Object.class };
 
 	private final Map<Integer, String> estadoMap;
 
@@ -62,12 +62,15 @@ public class AlquilerSearchTableModel extends AbstractSearchTableModel<AlquilerD
 		case 9:
 			value = a.getKmFinal();
 			break;
-		case 10:
-			value = estadoMap.getOrDefault(a.getIdEstadoAlquiler(), String.valueOf(a.getIdEstadoAlquiler()));
-			break;
-		case 11:
-			value = null;
-			break; 
+                case 10:
+                        value = a.getCostetotal();
+                        break;
+                case 11:
+                        value = estadoMap.getOrDefault(a.getIdEstadoAlquiler(), String.valueOf(a.getIdEstadoAlquiler()));
+                        break;
+                case 12:
+                        value = null;
+                        break;
 		default:
 			value = null;
 			break;

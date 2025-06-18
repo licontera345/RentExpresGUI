@@ -41,7 +41,7 @@ public class AlquilerTablePanel extends JPanel {
 	public void setModel(AlquilerSearchTableModel model) {
 		table.setModel(model);
 
-		int[] widths = { 40, 40, 60, 100, 100, 100, 100, 100, 100, 80, 80, 90, 150 };
+                int[] widths = { 40, 40, 60, 100, 100, 100, 100, 100, 100, 80, 80, 80, 90, 150 };
 		for (int i = 0; i < widths.length && i < table.getColumnCount(); i++) {
 			table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
 		}
