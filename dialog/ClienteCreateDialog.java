@@ -12,7 +12,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
+import com.pinguela.rentexpres.desktop.dialog.StyledDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -31,7 +31,7 @@ import com.toedter.calendar.JDateChooser;
 
 import net.miginfocom.swing.MigLayout;
 
-public class ClienteCreateDialog extends JDialog implements ConfirmDialog<ClienteDTO> {
+public class ClienteCreateDialog extends StyledDialog implements ConfirmDialog<ClienteDTO> {
 	private static final long serialVersionUID = 1L;
 
 	protected final JTextField txtNombre = new JTextField(18);
@@ -56,18 +56,19 @@ public class ClienteCreateDialog extends JDialog implements ConfirmDialog<Client
 	private boolean confirmed = false;
 	private ClienteDTO nuevo;
 
-	public ClienteCreateDialog(Frame owner) {
-		super(owner, "Nuevo Cliente", true);
-		initUI();
-		cargarProvincias();
-		pack();
-		setLocationRelativeTo(owner);
-	}
+        public ClienteCreateDialog(Frame owner) {
+                super(owner, "Nuevo Cliente", true);
+                initUI();
+                cargarProvincias();
+                pack();
+                setLocationRelativeTo(owner);
+        }
 
-	private void initUI() {
-		setLayout(new BorderLayout(8, 8));
+        private void initUI() {
+                setLayout(new BorderLayout(8, 8));
 
-		JPanel form = new JPanel(new MigLayout("wrap 4", "[right]10[200:200:200]20[right]10[200:200:200]", ""));
+                JPanel form = createContentPanel();
+                form.setLayout(new MigLayout("wrap 4", "[right]10[200:200:200]20[right]10[200:200:200]", ""));
 
 		form.add(new JLabel("Nombre:"));
 		form.add(txtNombre, "span 3,growx");
@@ -91,12 +92,14 @@ public class ClienteCreateDialog extends JDialog implements ConfirmDialog<Client
 		form.add(new JLabel("Localidad:"));
 		form.add(cmbLocalidad, "span 3,growx,wrap");
 
-		JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		buttons.add(btnGuardar);
-		buttons.add(btnCancelar);
+                JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+                stylePrimary(btnGuardar);
+                styleCancel(btnCancelar);
+                buttons.add(btnGuardar);
+                buttons.add(btnCancelar);
 
-		add(form, BorderLayout.CENTER);
-		add(buttons, BorderLayout.SOUTH);
+                getContentPane().add(form, BorderLayout.CENTER);
+                getContentPane().add(buttons, BorderLayout.SOUTH);
 
 		// listeners
 		cmbProvincia.addActionListener(new ActionListener() {
