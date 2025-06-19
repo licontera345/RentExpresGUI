@@ -19,3 +19,9 @@ This compiles the sources under `middleware_src/src` and creates
 ## Running
 
 After building, compile and run the GUI as usual with your IDE or `javac`.
+
+## Calendar view
+
+The main window now includes a basic calendar accessible from the side
+navigation. Use the "Calendario" button to open it and click on any day to
+receive a notification of the selected date.
