@@ -7,6 +7,7 @@ import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.service.CategoriaVehiculoService;
 import com.pinguela.rentexpres.service.EstadoVehiculoService;
 import com.pinguela.rentexpres.service.VehiculoService;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 /**
  * Vista de búsqueda de Vehículos.
@@ -44,7 +45,7 @@ public class VehiculoSearchView
 
                 table.setSearchAction(controller.getSearchAction());
 
-               actions.onLimpiar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+               actions.onLimpiar(new ActionCallback() {
                        @Override
                        public void execute() {
                                filter.clear();
@@ -53,28 +54,28 @@ public class VehiculoSearchView
                        }
                });
 
-               actions.onBorrarSeleccionados(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+               actions.onBorrarSeleccionados(new ActionCallback() {
                        @Override
                        public void execute() {
                                controller.onEliminarSeleccionados();
                        }
                });
 
-               actions.onNuevo(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+               actions.onNuevo(new ActionCallback() {
                        @Override
                        public void execute() {
                                controller.onNuevoVehiculo();
                        }
                });
 
-               filter.setOnChange(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+               filter.setOnChange(new ActionCallback() {
                        @Override
                        public void execute() {
                                controller.goFirstPage();
                        }
                });
 
-               filter.setToggleListener(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+               filter.setToggleListener(new ActionCallback() {
                        @Override
                        public void execute() {
                                table.toggleSelectColumn();

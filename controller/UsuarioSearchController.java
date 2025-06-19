@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.pinguela.rentexpres.desktop.model.UsuarioSearchTableModel;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
+import com.pinguela.rentexpres.desktop.util.PaginationPanel;
 import com.pinguela.rentexpres.desktop.view.UsuarioFilterPanel;
 import com.pinguela.rentexpres.desktop.view.UsuarioSearchActionsView;
 import com.pinguela.rentexpres.desktop.view.UsuarioSearchView;
@@ -39,10 +41,10 @@ public class UsuarioSearchController {
 
     private void wireActions() {
         UsuarioSearchActionsView actions = view.getActions();
-        actions.onNuevo(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+        actions.onNuevo(new ActionCallback() {
             @Override
             public void execute() {
-                new ShowUsuarioCreateAction(frame, service, new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                new ShowUsuarioCreateAction(frame, service, new ActionCallback() {
                     @Override
                     public void execute() {
                         goFirstPage();
@@ -50,19 +52,19 @@ public class UsuarioSearchController {
                 }).actionPerformed(null);
             }
         });
-        actions.onBuscar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+        actions.onBuscar(new ActionCallback() {
             @Override
             public void execute() {
                 goFirstPage();
             }
         });
-        actions.onLimpiar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+        actions.onLimpiar(new ActionCallback() {
             @Override
             public void execute() {
                 onLimpiar();
             }
         });
-        actions.onBorrarSeleccionados(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+        actions.onBorrarSeleccionados(new ActionCallback() {
             @Override
             public void execute() {
                 onDeleteSelected();
@@ -71,7 +73,7 @@ public class UsuarioSearchController {
     }
 
     private void wirePager() {
-        view.getPager().onFirst(new com.pinguela.rentexpres.desktop.util.PaginationPanel.OnPagerListener() {
+        view.getPager().onFirst(new PaginationPanel.OnPagerListener() {
             @Override
             public void onAction() {
                 if (!loading) {
@@ -79,7 +81,7 @@ public class UsuarioSearchController {
                 }
             }
         });
-        view.getPager().onPrev(new com.pinguela.rentexpres.desktop.util.PaginationPanel.OnPagerListener() {
+        view.getPager().onPrev(new PaginationPanel.OnPagerListener() {
             @Override
             public void onAction() {
                 if (!loading && currentPage > 1) {
@@ -88,7 +90,7 @@ public class UsuarioSearchController {
                 }
             }
         });
-        view.getPager().onNext(new com.pinguela.rentexpres.desktop.util.PaginationPanel.OnPagerListener() {
+        view.getPager().onNext(new PaginationPanel.OnPagerListener() {
             @Override
             public void onAction() {
                 if (!loading && currentPage < totalPages) {
@@ -97,7 +99,7 @@ public class UsuarioSearchController {
                 }
             }
         });
-        view.getPager().onLast(new com.pinguela.rentexpres.desktop.util.PaginationPanel.OnPagerListener() {
+        view.getPager().onLast(new PaginationPanel.OnPagerListener() {
             @Override
             public void onAction() {
                 if (!loading && currentPage < totalPages) {

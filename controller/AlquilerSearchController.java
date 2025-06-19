@@ -11,6 +11,8 @@ import com.pinguela.rentexpres.desktop.dialog.AlquilerCreateDialog;
 import com.pinguela.rentexpres.desktop.model.AlquilerSearchTableModel;
 import com.pinguela.rentexpres.desktop.util.CatalogCache;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
+import com.pinguela.rentexpres.desktop.util.PaginationPanel;
 import com.pinguela.rentexpres.desktop.view.AlquilerFilterPanel;
 import com.pinguela.rentexpres.desktop.view.AlquilerSearchActionsView;
 import com.pinguela.rentexpres.desktop.view.AlquilerSearchView;
@@ -98,19 +100,19 @@ public class AlquilerSearchController {
 		view.getPager().onLast(new PaginationPanelListener(PaginationPanelListener.LAST));
 
                 /* d) Botones de acciones */
-                view.getActions().onNuevo(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                view.getActions().onNuevo(new ActionCallback() {
                         @Override
                         public void execute() {
                                 abrirNuevo();
                         }
                 });
-                view.getActions().onBuscar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                view.getActions().onBuscar(new ActionCallback() {
                         @Override
                         public void execute() {
                                 goFirstPage();
                         }
                 });
-                view.getActions().onLimpiar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                view.getActions().onLimpiar(new ActionCallback() {
                         @Override
                         public void execute() {
                                 view.getFilter().clear();
@@ -118,7 +120,7 @@ public class AlquilerSearchController {
                                 goFirstPage();
                         }
                 });
-                view.getActions().onBorrarSeleccionados(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                view.getActions().onBorrarSeleccionados(new ActionCallback() {
                         @Override
                         public void execute() {
                                 borrarSeleccionados();
@@ -129,8 +131,8 @@ public class AlquilerSearchController {
 	/*
 	 * ────────────────── Auxiliar para el paginador (sin lambdas) ─────────────────
 	 */
-	private class PaginationPanelListener
-			implements com.pinguela.rentexpres.desktop.util.PaginationPanel.OnPagerListener {
+        private class PaginationPanelListener
+                        implements PaginationPanel.OnPagerListener {
 		static final int FIRST = 9999;
 		static final int LAST = -9999;
 		private final int delta;

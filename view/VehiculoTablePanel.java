@@ -15,6 +15,7 @@ import com.pinguela.rentexpres.desktop.renderer.VehiculoTableCellRenderer;
 import com.pinguela.rentexpres.desktop.util.SelectionEditor;
 import com.pinguela.rentexpres.desktop.util.SelectionRenderer;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.model.VehiculoDTO;
 import com.pinguela.rentexpres.service.VehiculoService;
 
@@ -86,7 +87,7 @@ public class VehiculoTablePanel extends JPanel {
 	 * método para forzar el ancho de la columna “Acciones”.
 	 */
 	private void ajustarColumnasAcciones() {
-               com.pinguela.rentexpres.desktop.util.SwingUtils.invokeLater(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+               com.pinguela.rentexpres.desktop.util.SwingUtils.invokeLater(new ActionCallback() {
                        @Override
                        public void execute() {
                                if (tableVehiculo.getColumnCount() == 0)

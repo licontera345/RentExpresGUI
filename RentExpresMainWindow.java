@@ -31,6 +31,7 @@ import com.pinguela.rentexpres.desktop.dialog.LoginDialog;
 import com.pinguela.rentexpres.desktop.util.AppContext;
 import com.pinguela.rentexpres.desktop.util.AppIcons;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.desktop.view.AlquilerSearchView;
 import com.pinguela.rentexpres.desktop.view.ClienteSearchView;
 import com.pinguela.rentexpres.desktop.view.ProfileView;
@@ -285,7 +286,7 @@ public class RentExpresMainWindow extends JFrame {
 
        public static void main(String[] args) {
                System.setProperty("log4j.configurationFile", "config/log4j2.properties");
-               com.pinguela.rentexpres.desktop.util.SwingUtils.invokeLater(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+               com.pinguela.rentexpres.desktop.util.SwingUtils.invokeLater(new ActionCallback() {
                        @Override
                        public void execute() {
                                try {

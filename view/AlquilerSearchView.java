@@ -7,6 +7,7 @@ import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.service.AlquilerService;
 import com.pinguela.rentexpres.service.EstadoAlquilerService;
 import com.pinguela.rentexpres.service.VehiculoService;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 
 public class AlquilerSearchView
                 extends StandardSearchView<AlquilerFilterPanel, AlquilerSearchActionsView, AlquilerTablePanel> {
@@ -32,7 +33,7 @@ public class AlquilerSearchView
                         }
                 });
 
-                actions.onLimpiar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                actions.onLimpiar(new ActionCallback() {
                         @Override
                         public void execute() {
                                 filter.clear();
