@@ -26,8 +26,8 @@ public class StandardSearchView<F extends JPanel, A extends AbstractSearchAction
         this.pager = new PaginationPanel();
 
         JPanel north = new JPanel(new BorderLayout(0, 4));
-        north.add(filter, BorderLayout.NORTH);
-        north.add(actions, BorderLayout.SOUTH);
+        north.add(actions, BorderLayout.NORTH);
+        north.add(filter, BorderLayout.SOUTH);
 
         JScrollPane scroll = new JScrollPane(table);
 
