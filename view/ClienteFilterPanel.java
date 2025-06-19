@@ -1,6 +1,8 @@
 package com.pinguela.rentexpres.desktop.view;
 
-import net.miginfocom.swing.MigLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
@@ -60,8 +62,8 @@ public class ClienteFilterPanel extends JPanel {
        }
 
        public ClienteFilterPanel() {
-               super(new MigLayout("wrap 4,fillx", "[right]10[grow,fill]20[right]10[grow,fill]", "[]8[]8[]8[]8[]"));
-               setBorder(new CompoundBorder(new TitledBorder("Filtros de Cliente"), new EmptyBorder(10,10,10,10)));
+               super(new GridBagLayout());
+               setBorder(new CompoundBorder(new TitledBorder("Filtros de Cliente"), new EmptyBorder(12,12,12,12)));
                setBackground(AppTheme.FILTER_BG);
 
                txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
@@ -77,34 +79,50 @@ public class ClienteFilterPanel extends JPanel {
        }
 
        private void initLayout() {
-               add(lbl("ID:"), "cell 0 0");
-               add(spnId, "cell 1 0");
-               add(lbl("Nombre:"), "cell 2 0");
-               add(txtNombre, "cell 3 0, growx");
+               GridBagConstraints gbc = new GridBagConstraints();
+               gbc.insets = new Insets(4, 4, 4, 4);
+               gbc.fill = GridBagConstraints.HORIZONTAL;
 
-               add(lbl("Apellido 1:"), "cell 0 1");
-               add(txtApellido1, "cell 1 1, growx");
-               add(lbl("Apellido 2:"), "cell 2 1");
-               add(txtApellido2, "cell 3 1, growx");
+               // fila 0
+               gbc.gridy = 0; gbc.gridx = 0; gbc.weightx = 0;
+               add(lbl("ID:"), gbc);
+               gbc.gridx = 1; add(spnId, gbc);
+               gbc.gridx = 2; add(lbl("Nombre:"), gbc);
+               gbc.gridx = 3; gbc.weightx = 1; add(txtNombre, gbc);
 
-               add(lbl("Email:"), "cell 0 2");
-               add(txtEmail, "cell 1 2, growx");
-               add(lbl("Teléfono:"), "cell 2 2");
-               add(txtTelefono, "cell 3 2, growx");
+               // fila 1
+               gbc.gridy = 1; gbc.gridx = 0; gbc.weightx = 0;
+               add(lbl("Apellido 1:"), gbc);
+               gbc.gridx = 1; gbc.weightx = 1; add(txtApellido1, gbc);
+               gbc.gridx = 2; gbc.weightx = 0; add(lbl("Apellido 2:"), gbc);
+               gbc.gridx = 3; gbc.weightx = 1; add(txtApellido2, gbc);
 
-               add(lbl("Calle:"), "cell 0 3");
-               add(txtCalle, "cell 1 3, growx");
-               add(lbl("Nº:"), "cell 2 3");
-               add(txtNumero, "cell 3 3, growx");
+               // fila 2
+               gbc.gridy = 2; gbc.gridx = 0; gbc.weightx = 0;
+               add(lbl("Email:"), gbc);
+               gbc.gridx = 1; gbc.weightx = 1; add(txtEmail, gbc);
+               gbc.gridx = 2; gbc.weightx = 0; add(lbl("Teléfono:"), gbc);
+               gbc.gridx = 3; gbc.weightx = 1; add(txtTelefono, gbc);
 
-               add(lbl("Provincia:"), "cell 0 4");
-               add(cmbProvincia, "cell 1 4, growx");
-               add(lbl("Localidad:"), "cell 2 4");
-               add(cmbLocalidad, "cell 3 4, growx");
+               // fila 3
+               gbc.gridy = 3; gbc.gridx = 0; gbc.weightx = 0;
+               add(lbl("Calle:"), gbc);
+               gbc.gridx = 1; gbc.weightx = 1; add(txtCalle, gbc);
+               gbc.gridx = 2; gbc.weightx = 0; add(lbl("Nº:"), gbc);
+               gbc.gridx = 3; gbc.weightx = 1; add(txtNumero, gbc);
 
+               // fila 4
+               gbc.gridy = 4; gbc.gridx = 0; gbc.weightx = 0;
+               add(lbl("Provincia:"), gbc);
+               gbc.gridx = 1; gbc.weightx = 1; add(cmbProvincia, gbc);
+               gbc.gridx = 2; gbc.weightx = 0; add(lbl("Localidad:"), gbc);
+               gbc.gridx = 3; gbc.weightx = 1; add(cmbLocalidad, gbc);
+
+               // botón toggle
                btnToggle.setBackground(AppTheme.PRIMARY);
                btnToggle.setForeground(Color.WHITE);
-               add(btnToggle, "cell 0 5 4 1, alignx right");
+               gbc.gridy = 5; gbc.gridx = 3; gbc.weightx = 0; gbc.anchor = GridBagConstraints.EAST;
+               add(btnToggle, gbc);
        }
 
 	private void initListeners() {
