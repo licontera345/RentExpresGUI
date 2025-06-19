@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
+import com.pinguela.rentexpres.desktop.util.AppIcons;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
@@ -15,6 +16,8 @@ import com.pinguela.rentexpres.model.EstadoReservaDTO;
 import com.toedter.calendar.JDateChooser;
 
 import net.miginfocom.swing.MigLayout;
+
+import java.awt.Color;
 
 /**
  * Panel de filtros para la búsqueda de Reservas. Incluye spinners, date-picker,
@@ -47,10 +50,16 @@ public class ReservaFilterPanel extends JPanel {
 	/* callbacks */
         private com.pinguela.rentexpres.desktop.util.ActionCallback onChange;
         private com.pinguela.rentexpres.desktop.util.ActionCallback toggleListener;
-	private Consumer<String> onMarcaChange;
+        private Consumer<String> onMarcaChange;
 
 	/** Nueva bandera para suprimir eventos mientras se limpia el panel */
-	private boolean suppressEvents = false;
+        private boolean suppressEvents = false;
+
+        private JLabel lbl(String t) {
+                JLabel l = new JLabel(t);
+                l.setForeground(AppTheme.LABEL_FG);
+                return l;
+        }
 
         public ReservaFilterPanel() {
                 /* ───── apariencia ───── */
@@ -60,8 +69,11 @@ public class ReservaFilterPanel extends JPanel {
                 dcFin.setDateFormatString("yyyy-MM-dd");
 
                 txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
+                txtNombre.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtApellido1.putClientProperty("JTextField.placeholderText", "Apellido");
+                txtApellido1.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtTelefono.putClientProperty("JTextField.placeholderText", "Teléfono");
+                txtTelefono.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
 
                 sldPrecioDia.setMajorTickSpacing(100);
                 sldPrecioDia.setPaintTicks(true);
@@ -69,55 +81,57 @@ public class ReservaFilterPanel extends JPanel {
 
 		int r = 0;
 		// Primera línea: ID Reserva y ID Vehículo
-		add(new JLabel("ID Reserva:"), "cell 0 " + r);
-		add(spnIdReserva, "cell 1 " + r);
-		JLabel lblIdVeh = new JLabel("ID Vehículo:");
-		add(lblIdVeh, "flowx,cell 4 0");
+                add(lbl("ID Reserva:"), "cell 0 " + r);
+                add(spnIdReserva, "cell 1 " + r);
+                JLabel lblIdVeh = lbl("ID Vehículo:");
+                add(lblIdVeh, "flowx,cell 4 0");
 
 		r++;
 		// Segunda línea: ID Cliente y Fecha Inicio
-		add(new JLabel("ID Cliente:"), "cell 0 " + r);
-		add(spnIdCliente, "cell 1 " + r);
-		JLabel lblFInicio = new JLabel("Fecha Inicio:");
-		add(lblFInicio, "flowx,cell 4 1");
+                add(lbl("ID Cliente:"), "cell 0 " + r);
+                add(spnIdCliente, "cell 1 " + r);
+                JLabel lblFInicio = lbl("Fecha Inicio:");
+                add(lblFInicio, "flowx,cell 4 1");
 
 		r++;
 		// Tercera línea: Fecha Fin y Estado
-		add(new JLabel("Fecha Fin:"), "cell 0 " + r);
-		add(dcFin, "cell 1 " + r);
-		JLabel lblEstado = new JLabel("Estado:");
-		add(lblEstado, "flowx,cell 4 2");
+                add(lbl("Fecha Fin:"), "cell 0 " + r);
+                add(dcFin, "cell 1 " + r);
+                JLabel lblEstado = lbl("Estado:");
+                add(lblEstado, "flowx,cell 4 2");
 
 		r++;
 		// Cuarta línea: Marca y Modelo
-		add(new JLabel("Marca:"), "cell 0 " + r);
-		add(cmbMarca, "cell 1 " + r);
-		JLabel lblModelo = new JLabel("Modelo:");
-		add(lblModelo, "flowx,cell 4 3");
+                add(lbl("Marca:"), "cell 0 " + r);
+                add(cmbMarca, "cell 1 " + r);
+                JLabel lblModelo = lbl("Modelo:");
+                add(lblModelo, "flowx,cell 4 3");
 
 		r++;
 		// Quinta línea: Precio/Día
-		add(new JLabel("Precio/Día ≤"), "cell 0 " + r);
-		add(sldPrecioDia, "cell 1 " + r + " 3");
+                add(lbl("Precio/Día ≤"), "cell 0 " + r);
+                add(sldPrecioDia, "cell 1 " + r + " 3");
 
 		r++;
 		// Sexta línea: Nombre y Apellido
-		add(new JLabel("Nombre:"), "cell 0 " + r);
-		add(txtNombre, "cell 1 " + r);
-		add(new JLabel("Apellido:"), "cell 2 " + r);
-		add(txtApellido1, "cell 3 " + r);
+                add(lbl("Nombre:"), "cell 0 " + r);
+                add(txtNombre, "cell 1 " + r);
+                add(lbl("Apellido:"), "cell 2 " + r);
+                add(txtApellido1, "cell 3 " + r);
 
 		r++;
 		// Séptima línea: Teléfono y botón Seleccionar
-		add(new JLabel("Teléfono:"), "cell 0 " + r);
-		add(txtTelefono, "cell 1 " + r);
+                add(lbl("Teléfono:"), "cell 0 " + r);
+                add(txtTelefono, "cell 1 " + r);
                 JButton btnSel = SwingUtils.button("Seleccionar", new com.pinguela.rentexpres.desktop.util.ActionCallback() {
                         @Override
                         public void execute() {
                                 fireToggleSelect();
                         }
                 });
-		add(btnSel, "cell 3 " + r + ",alignx right");
+                btnSel.setBackground(AppTheme.PRIMARY);
+                btnSel.setForeground(Color.WHITE);
+                add(btnSel, "cell 3 " + r + ",alignx right");
 
 		/* ───── listeners genéricos ───── */
 		// Cada vez que un JTextField cambie, invocamos fire()

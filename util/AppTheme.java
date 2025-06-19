@@ -27,8 +27,17 @@ public final class AppTheme {
     public static final Color LOGIN_GRADIENT_START = new Color(240, 247, 255);
     public static final Color LOGIN_GRADIENT_END = Color.WHITE;
 
+    /** Color de texto para etiquetas en paneles */
+    public static final Color LABEL_FG = new Color(70, 70, 70);
+
     /** Altura por defecto de las filas de las tablas */
     public static final int TABLE_ROW_HEIGHT = 28;
+
+    /** Color de fondo usado en todos los diálogos. */
+    public static final Color DIALOG_BG = Color.WHITE;
+
+    /** Color acento para botones primarios. */
+    public static final Color PRIMARY = new Color(33, 150, 243);
 
     /** Configura FlatLaf y algunos colores por defecto. */
     public static void setup() {
@@ -40,6 +49,10 @@ public final class AppTheme {
         UIManager.put("Table.selectionBackground", new Color(0xC7DEF8));
         UIManager.put("Table.selectionForeground", Color.BLACK);
         UIManager.put("Table.rowHeight", TABLE_ROW_HEIGHT);
+
+        UIManager.put("Panel.background", DIALOG_BG);
+        UIManager.put("Button.background", PRIMARY);
+        UIManager.put("Button.foreground", Color.WHITE);
     }
 }
 

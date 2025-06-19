@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.JFormattedTextField;
 import java.text.NumberFormat;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
+import com.pinguela.rentexpres.desktop.util.AppIcons;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -23,6 +24,8 @@ import com.pinguela.rentexpres.model.EstadoAlquilerDTO;
 import com.toedter.calendar.JDateChooser;
 
 import net.miginfocom.swing.MigLayout;
+
+import java.awt.Color;
 
 public class AlquilerFilterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -55,7 +58,13 @@ public class AlquilerFilterPanel extends JPanel {
 
 	/* ────────── Callbacks ────────── */
 	private OnChangeListener changeListener;
-	private ToggleListener toggleListener;
+        private ToggleListener toggleListener;
+
+        private JLabel lbl(String t) {
+                JLabel l = new JLabel(t);
+                l.setForeground(AppTheme.LABEL_FG);
+                return l;
+        }
 
         public AlquilerFilterPanel() {
                 setBorder(new TitledBorder("Filtros de Alquiler"));
@@ -65,70 +74,82 @@ public class AlquilerFilterPanel extends JPanel {
                 NumberFormat intFormat = NumberFormat.getIntegerInstance();
                 ftfKmInicial = new JFormattedTextField(intFormat);
                 ftfKmInicial.putClientProperty("JTextField.placeholderText", "Inicial");
+                ftfKmInicial.putClientProperty("JTextField.leadingIcon", AppIcons.ALQUILER);
                 ftfKmFinal = new JFormattedTextField(intFormat);
                 ftfKmFinal.putClientProperty("JTextField.placeholderText", "Final");
+                ftfKmFinal.putClientProperty("JTextField.leadingIcon", AppIcons.ALQUILER);
 
                 NumberFormat doubleFormat = NumberFormat.getNumberInstance();
                 ftfCosteTotal = new JFormattedTextField(doubleFormat);
                 ftfCosteTotal.putClientProperty("JTextField.placeholderText", "Total");
+                ftfCosteTotal.putClientProperty("JTextField.leadingIcon", AppIcons.ALQUILER);
                 ftfPrecioDia = new JFormattedTextField(doubleFormat);
                 ftfPrecioDia.putClientProperty("JTextField.placeholderText", "€/día");
+                ftfPrecioDia.putClientProperty("JTextField.leadingIcon", AppIcons.ALQUILER);
 
                 txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
+                txtNombre.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtApellido.putClientProperty("JTextField.placeholderText", "Apellido");
+                txtApellido.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtTelefono.putClientProperty("JTextField.placeholderText", "Teléfono");
+                txtTelefono.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtPlaca.putClientProperty("JTextField.placeholderText", "Placa");
+                txtPlaca.putClientProperty("JTextField.leadingIcon", AppIcons.VEHICULO);
                 txtMarca.putClientProperty("JTextField.placeholderText", "Marca");
+                txtMarca.putClientProperty("JTextField.leadingIcon", AppIcons.VEHICULO);
                 txtModelo.putClientProperty("JTextField.placeholderText", "Modelo");
+                txtModelo.putClientProperty("JTextField.leadingIcon", AppIcons.VEHICULO);
 
                 dcInicio.setDateFormatString("yyyy-MM-dd");
                 dcFin.setDateFormatString("yyyy-MM-dd");
 
-		add(new JLabel("ID Alquiler:"), "cell 0 0");
-		add(spnIdAlquiler, "cell 1 0");
-		add(new JLabel("ID Reserva:"), "cell 2 0");
-		add(spnIdReserva, "cell 3 0");
+                add(lbl("ID Alquiler:"), "cell 0 0");
+                add(spnIdAlquiler, "cell 1 0");
+                add(lbl("ID Reserva:"), "cell 2 0");
+                add(spnIdReserva, "cell 3 0");
 
-		add(new JLabel("Fecha Inicio:"), "cell 0 1");
-		add(dcInicio, "cell 1 1");
-		add(new JLabel("Fecha Fin:"), "cell 2 1");
-		add(dcFin, "cell 3 1");
+                add(lbl("Fecha Inicio:"), "cell 0 1");
+                add(dcInicio, "cell 1 1");
+                add(lbl("Fecha Fin:"), "cell 2 1");
+                add(dcFin, "cell 3 1");
 
-                add(new JLabel("KM Inicial:"), "cell 0 2");
+                add(lbl("KM Inicial:"), "cell 0 2");
                 add(ftfKmInicial, "cell 1 2");
-                add(new JLabel("KM Final:"), "cell 2 2");
+                add(lbl("KM Final:"), "cell 2 2");
                 add(ftfKmFinal, "cell 3 2");
 
-                add(new JLabel("Estado:"), "cell 0 3");
+                add(lbl("Estado:"), "cell 0 3");
                 add(cmbEstado, "cell 1 3, growx");
-                add(new JLabel("Coste Total:"), "cell 2 3");
+                add(lbl("Coste Total:"), "cell 2 3");
                 add(ftfCosteTotal, "cell 3 3");
 
-                add(new JLabel("ID Cliente:"), "cell 0 4");
+                add(lbl("ID Cliente:"), "cell 0 4");
                 add(spnIdCliente, "cell 1 4");
-                add(new JLabel("Nombre:"), "cell 2 4");
+                add(lbl("Nombre:"), "cell 2 4");
                 add(txtNombre, "cell 3 4");
 
-                add(new JLabel("Apellido:"), "cell 0 5");
+                add(lbl("Apellido:"), "cell 0 5");
                 add(txtApellido, "cell 1 5");
-                add(new JLabel("Teléfono:"), "cell 2 5");
+                add(lbl("Teléfono:"), "cell 2 5");
                 add(txtTelefono, "cell 3 5");
 
-                add(new JLabel("ID Vehículo:"), "cell 0 6");
+                add(lbl("ID Vehículo:"), "cell 0 6");
                 add(spnIdVehiculo, "cell 1 6");
-                add(new JLabel("Placa:"), "cell 2 6");
+                add(lbl("Placa:"), "cell 2 6");
                 add(txtPlaca, "cell 3 6");
 
-                add(new JLabel("Marca:"), "cell 0 7");
+                add(lbl("Marca:"), "cell 0 7");
                 add(txtMarca, "cell 1 7");
-                add(new JLabel("Modelo:"), "cell 2 7");
+                add(lbl("Modelo:"), "cell 2 7");
                 add(txtModelo, "cell 3 7");
 
-                add(new JLabel("Precio Día:"), "cell 0 8");
+                add(lbl("Precio Día:"), "cell 0 8");
                 add(ftfPrecioDia, "cell 1 8");
 
                 javax.swing.JButton btnToggle = new javax.swing.JButton("Mostrar/Ocultar Selección");
-		btnToggle.addActionListener(new java.awt.event.ActionListener() {
+                btnToggle.setBackground(AppTheme.PRIMARY);
+                btnToggle.setForeground(Color.WHITE);
+                btnToggle.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				if (toggleListener != null)
 					toggleListener.onToggle();
