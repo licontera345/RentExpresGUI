@@ -32,7 +32,9 @@ public class UsuarioEditDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private JTextField txtNombre;
-	private JTextField txtApellidos;
+        private JTextField txtApellido1;
+        private JTextField txtApellido2;
+        private JTextField txtTelefono;
 	private JTextField txtEmail;
 	private JTextField txtUsuario; // nombreUsuario (no editable)
 	private JPasswordField txtContrasena; // si el usuario quiere cambiarla
@@ -71,10 +73,20 @@ public class UsuarioEditDialog extends JDialog {
 		txtNombre = new JTextField(25);
 		getContentPane().add(txtNombre, "growx");
 
-		// Apellidos
-		getContentPane().add(new JLabel("Apellidos:"), "align label");
-		txtApellidos = new JTextField(25);
-		getContentPane().add(txtApellidos, "growx");
+                // Apellido1
+                getContentPane().add(new JLabel("1.º Apellido:"), "align label");
+                txtApellido1 = new JTextField(25);
+                getContentPane().add(txtApellido1, "growx, wrap");
+
+                // Apellido2
+                getContentPane().add(new JLabel("2.º Apellido:"), "align label");
+                txtApellido2 = new JTextField(25);
+                getContentPane().add(txtApellido2, "growx");
+
+                // Teléfono
+                getContentPane().add(new JLabel("Teléfono:"), "align label");
+                txtTelefono = new JTextField(15);
+                getContentPane().add(txtTelefono, "growx");
 
 		// Email
 		getContentPane().add(new JLabel("Email:"), "align label");
@@ -141,17 +153,11 @@ public class UsuarioEditDialog extends JDialog {
 				return;
 			}
                         txtNombre.setText(dto.getNombre());
-                        // Mostrar ambos apellidos en un único campo
-                        String aps = (dto.getApellido1() != null ? dto.getApellido1() : "");
-                        if (dto.getApellido2() != null && !dto.getApellido2().isEmpty()) {
-                                if (!aps.isEmpty()) {
-                                        aps += " ";
-                                }
-                                aps += dto.getApellido2();
-                        }
-                        txtApellidos.setText(aps.trim());
-			txtEmail.setText(dto.getEmail());
-			txtUsuario.setText(dto.getNombreUsuario());
+                        txtApellido1.setText(dto.getApellido1());
+                        txtApellido2.setText(dto.getApellido2());
+                        txtTelefono.setText(dto.getTelefono());
+                        txtEmail.setText(dto.getEmail());
+                        txtUsuario.setText(dto.getNombreUsuario());
 
 			Integer idTipo = dto.getIdTipoUsuario();
 			for (int i = 0; i < cmbTipoUsuario.getItemCount(); i++) {
@@ -168,17 +174,18 @@ public class UsuarioEditDialog extends JDialog {
 
 	private void onGuardar() {
 		// Validaciones mínimas (except usuario, que no cambia)
-		if (txtNombre.getText().trim().isEmpty() || txtApellidos.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty()
-				|| cmbTipoUsuario.getSelectedItem() == null) {
-			SwingUtils.showWarning(this, "Nombre, Apellidos, Email y Tipo Usuario son obligatorios.");
-			return;
-		}
+                if (txtNombre.getText().trim().isEmpty() || txtApellido1.getText().trim().isEmpty()
+                                || txtEmail.getText().trim().isEmpty() || cmbTipoUsuario.getSelectedItem() == null) {
+                        SwingUtils.showWarning(this, "Nombre, Apellidos, Email y Tipo Usuario son obligatorios.");
+                        return;
+                }
 
                 UsuarioDTO dto = new UsuarioDTO();
                 dto.setId(idUsuario);
                 dto.setNombre(txtNombre.getText().trim());
-                dto.setApellido1(txtApellidos.getText().trim());
-                dto.setApellido2(txtApellidos.getText().trim());
+                dto.setApellido1(txtApellido1.getText().trim());
+                dto.setApellido2(txtApellido2.getText().trim());
+                dto.setTelefono(txtTelefono.getText().trim());
                 dto.setEmail(txtEmail.getText().trim());
                 if (txtContrasena.getPassword().length > 0) {
                         dto.setContrasena(new String(txtContrasena.getPassword()));
