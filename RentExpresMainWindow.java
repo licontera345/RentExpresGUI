@@ -139,9 +139,8 @@ public class RentExpresMainWindow extends JFrame {
                        @Override
                        public void actionPerformed(ActionEvent e) {
                                new LogoutAction(RentExpresMainWindow.this).actionPerformed(null);
-                               UsuarioDTO newUser = showLoginDialog();
-                               if (newUser != null) {
-                                       AppContext.setCurrentUser(newUser);
+                               UsuarioDTO current = AppContext.getCurrentUser();
+                               if (current != null) {
                                        topBar.removeAll();
                                        initTopBar();
                                        revalidate();
