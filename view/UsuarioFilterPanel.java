@@ -203,9 +203,23 @@ public class UsuarioFilterPanel extends JPanel {
 		return txtUsuario;
 	}
 
-	public JComboBox<TipoUsuarioDTO> getCmbTipoUsuario() {
-		return cmbTipoUsuario;
-	}
+        public JComboBox<TipoUsuarioDTO> getCmbTipoUsuario() {
+                return cmbTipoUsuario;
+        }
+
+        /**
+         * Resetea todos los campos de filtro a su valor por defecto sin
+         * disparar eventos de cambio.
+         */
+        public void clear() {
+                spnIdUsuario.setValue(0);
+                txtNombre.setText("");
+                txtApellido1.setText("");
+                txtApellido2.setText("");
+                txtEmail.setText("");
+                txtUsuario.setText("");
+                cmbTipoUsuario.setSelectedIndex(-1);
+        }
 }
 
 /**

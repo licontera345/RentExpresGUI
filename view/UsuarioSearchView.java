@@ -33,7 +33,6 @@ public class UsuarioSearchView
         controller = new UsuarioSearchController(this, service, owner);
 
         filter.addPropertyChangeListener("filtrosCambio", e -> controller.goFirstPage());
-        actions.onLimpiar(() -> controller.onLimpiar());
     }
 
     public void initIfNeeded() {
