@@ -139,9 +139,16 @@ public class UsuarioEditDialog extends JDialog {
 				dispose();
 				return;
 			}
-			txtNombre.setText(dto.getNombre());
-			txtApellidos.setText(dto.getApellido1());
-			txtApellidos.setText(dto.getApellido2());
+                        txtNombre.setText(dto.getNombre());
+                        // Mostrar ambos apellidos en un único campo
+                        String aps = (dto.getApellido1() != null ? dto.getApellido1() : "");
+                        if (dto.getApellido2() != null && !dto.getApellido2().isEmpty()) {
+                                if (!aps.isEmpty()) {
+                                        aps += " ";
+                                }
+                                aps += dto.getApellido2();
+                        }
+                        txtApellidos.setText(aps.trim());
 			txtEmail.setText(dto.getEmail());
 			txtUsuario.setText(dto.getNombreUsuario());
 
