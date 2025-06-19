@@ -12,6 +12,9 @@ import javax.swing.JTable;
 import com.pinguela.rentexpres.desktop.renderer.AbstractActionsCellEditor;
 
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
+import com.pinguela.rentexpres.desktop.util.SwingUtils;
+import com.pinguela.rentexpres.desktop.dialog.UsuarioDetailDialog;
+import com.pinguela.rentexpres.desktop.dialog.UsuarioEditDialog;
 
 import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.service.UsuarioService;
@@ -21,10 +24,11 @@ public class UsuarioActionsCellEditor extends AbstractActionsCellEditor {
 
         private static final long serialVersionUID = 1L;
 
-	private final Frame owner;
-	private final UsuarioService usuarioService;
+        private final Frame owner;
+        private final UsuarioService usuarioService;
         private final ActionCallback reload;
-	private final Supplier<UsuarioDTO> rowSupplier;
+        private final Supplier<UsuarioDTO> rowSupplier;
+        private UsuarioDTO usuarioActual;
 
         public UsuarioActionsCellEditor(Frame owner, UsuarioService usuarioService, ActionCallback reload,
                         Supplier<UsuarioDTO> rowSupplier) {
@@ -37,61 +41,68 @@ public class UsuarioActionsCellEditor extends AbstractActionsCellEditor {
                btnView.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
-                       UsuarioDTO u = rowSupplier.get();
-                       if (u != null) {
-                               StringBuilder info = new StringBuilder();
-                               info.append("ID: ").append(u.getId()).append("\n");
-                               info.append("Nombre: ").append(u.getNombre()).append(" ").append(u.getApellido1()).append(" ")
-                                               .append(u.getApellido2()).append("\n");
-                               info.append("Email: ").append(u.getEmail()).append("\n");
-                               info.append("Usuario: ").append(u.getNombreUsuario()).append("\n");
-                               info.append("Tipo Usuario (ID): ").append(u.getIdTipoUsuario()).append("\n");
-                               JOptionPane.showMessageDialog(owner, info.toString(), "Ver Usuario", JOptionPane.INFORMATION_MESSAGE);
-                       }
-                       fireEditingStopped();
+                               if (usuarioActual != null) {
+                                       new UsuarioDetailDialog(owner, usuarioActual.getId()).setVisible(true);
+                               }
+                               fireEditingStopped();
                        }
                });
 
                btnEdit.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
-                       UsuarioDTO u = rowSupplier.get();
-                       if (u != null) {
-
-                               JOptionPane.showMessageDialog(owner, "Abre diálogo de edición para ID=" + u.getId(), "Editar Usuario",
-                                               JOptionPane.INFORMATION_MESSAGE);
-                       }
-                       fireEditingStopped();
+                               if (usuarioActual != null) {
+                                       UsuarioEditDialog dlg = new UsuarioEditDialog(owner, usuarioActual.getId());
+                                       dlg.setVisible(true);
+                                       if (dlg.isConfirmed()) {
+                                               try {
+                                                       usuarioService.update(dlg.getUsuario());
+                                                       if (reload != null) {
+                                                               reload.execute();
+                                                       }
+                                               } catch (Exception ex) {
+                                                       SwingUtils.showError(owner, ex.getMessage());
+                                               }
+                                       }
+                               }
+                               fireEditingStopped();
                        }
                });
 
                btnDel.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
-                       UsuarioDTO u = rowSupplier.get();
-                       if (u != null) {
-                               int resp = JOptionPane.showConfirmDialog(owner,
-                                               "¿Seguro que deseas eliminar al usuario “" + u.getNombre() + "”?", "Eliminar Usuario",
-                                               JOptionPane.YES_NO_OPTION);
-                               if (resp == JOptionPane.YES_OPTION) {
-                                       try {
-                                               usuarioService.delete(u, u.getId());
-                                               reload.execute();
-                                       } catch (Exception ex) {
-                                               JOptionPane.showMessageDialog(owner, "Error al eliminar usuario:\n" + ex.getMessage(), "Error",
-                                                               JOptionPane.ERROR_MESSAGE);
+                               if (usuarioActual != null) {
+                                       int resp = JOptionPane.showConfirmDialog(owner,
+                                                       "¿Seguro que deseas eliminar al usuario " + usuarioActual.getNombre() + "?", "Eliminar Usuario",
+                                                       JOptionPane.YES_NO_OPTION);
+                                       if (resp == JOptionPane.YES_OPTION) {
+                                               try {
+                                                       usuarioService.delete(usuarioActual, usuarioActual.getId());
+                                                       if (reload != null) {
+                                                               reload.execute();
+                                                       }
+                                               } catch (Exception ex) {
+                                                       SwingUtils.showError(owner, ex.getMessage());
+                                               }
                                        }
                                }
-                       }
-                       fireEditingStopped();
+                               fireEditingStopped();
                        }
                });
 	}
 
 	@Override
-	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		return panel;
-	}
+       public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+               if (rowSupplier != null) {
+                       usuarioActual = rowSupplier.get();
+               } else if (table.getModel() instanceof com.pinguela.rentexpres.desktop.model.UsuarioSearchTableModel) {
+                       com.pinguela.rentexpres.desktop.model.UsuarioSearchTableModel m =
+                               (com.pinguela.rentexpres.desktop.model.UsuarioSearchTableModel) table.getModel();
+                       usuarioActual = m.getUsuarioAt(table.convertRowIndexToModel(row));
+               }
+               return panel;
+       }
 
 	@Override
 	public Object getCellEditorValue() {

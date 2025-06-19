@@ -47,10 +47,11 @@ public class UsuarioEditDialog extends JDialog {
 
 	private Integer idUsuario;
 
-	public UsuarioEditDialog(Frame parent, Integer idUsuario) {
-		super(parent, "Editar Usuario", true);
-		this.idUsuario = idUsuario;
-		initComponents();
+        public UsuarioEditDialog(Frame parent, Integer idUsuario) {
+                super(parent, "Editar Usuario", true);
+                setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                this.idUsuario = idUsuario;
+                initComponents();
 		cargarTiposUsuario();
 		cargarDatosUsuario(idUsuario);
 		pack();
