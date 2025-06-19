@@ -24,9 +24,7 @@ import com.pinguela.rentexpres.model.TipoUsuarioDTO;
 import com.pinguela.rentexpres.service.TipoUsuarioService;
 import com.pinguela.rentexpres.service.impl.TipoUsuarioServiceImpl;
 
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Panel de filtros para buscar Usuarios, adaptado al mismo estilo de
@@ -54,7 +52,7 @@ public class UsuarioFilterPanel extends JPanel {
 
         public UsuarioFilterPanel() {
                 setBorder(new CompoundBorder(new TitledBorder("Filtros Usuarios"), new EmptyBorder(12,12,12,12)));
-                setLayout(new GridBagLayout());
+                setLayout(new MigLayout("wrap 4,fillx", "[right]10[grow,fill]20[right]10[grow,fill]", "[]8[]8[]8[]8[]"));
                 setBackground(AppTheme.FILTER_BG);
 
                 txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
@@ -63,35 +61,27 @@ public class UsuarioFilterPanel extends JPanel {
                 txtEmail.putClientProperty("JTextField.placeholderText", "Email");
                 txtUsuario.putClientProperty("JTextField.placeholderText", "Usuario");
 
-                GridBagConstraints gbc = new GridBagConstraints();
-                gbc.insets = new Insets(4, 4, 4, 4);
-                gbc.fill = GridBagConstraints.HORIZONTAL;
+                // Fila 0: ID | Nombre
+                add(lbl("ID:"), "cell 0 0");
+                add(spnIdUsuario, "cell 1 0,growx");
+                add(lbl("Nombre:"), "cell 2 0");
+                add(txtNombre, "cell 3 0,growx");
 
-                // fila 0
-                gbc.gridy = 0; gbc.gridx = 0; gbc.weightx = 0;
-                add(lbl("ID:"), gbc);
-                gbc.gridx = 1; gbc.weightx = 1; add(spnIdUsuario, gbc);
-                gbc.gridx = 2; gbc.weightx = 0; add(lbl("Nombre:"), gbc);
-                gbc.gridx = 3; gbc.weightx = 1; add(txtNombre, gbc);
+                // Fila 1: Apellido1 | Apellido2
+                add(lbl("Apellido1:"), "cell 0 1");
+                add(txtApellido1, "cell 1 1,growx");
+                add(lbl("Apellido2:"), "cell 2 1");
+                add(txtApellido2, "cell 3 1,growx");
 
-                // fila 1
-                gbc.gridy = 1; gbc.gridx = 0; gbc.weightx = 0;
-                add(lbl("Apellido1:"), gbc);
-                gbc.gridx = 1; gbc.weightx = 1; add(txtApellido1, gbc);
-                gbc.gridx = 2; gbc.weightx = 0; add(lbl("Apellido2:"), gbc);
-                gbc.gridx = 3; gbc.weightx = 1; add(txtApellido2, gbc);
+                // Fila 2: Email | Usuario
+                add(lbl("Email:"), "cell 0 2");
+                add(txtEmail, "cell 1 2,growx");
+                add(lbl("Usuario (login):"), "cell 2 2");
+                add(txtUsuario, "cell 3 2,growx");
 
-                // fila 2
-                gbc.gridy = 2; gbc.gridx = 0; gbc.weightx = 0;
-                add(lbl("Email:"), gbc);
-                gbc.gridx = 1; gbc.weightx = 1; add(txtEmail, gbc);
-                gbc.gridx = 2; gbc.weightx = 0; add(lbl("Usuario (login):"), gbc);
-                gbc.gridx = 3; gbc.weightx = 1; add(txtUsuario, gbc);
-
-                // fila 3
-                gbc.gridy = 3; gbc.gridx = 0; gbc.weightx = 0;
-                add(lbl("Tipo Usuario:"), gbc);
-                gbc.gridx = 1; gbc.gridwidth = 3; gbc.weightx = 1; add(cmbTipoUsuario, gbc);
+                // Fila 3: Tipo usuario
+                add(lbl("Tipo Usuario:"), "cell 0 3");
+                add(cmbTipoUsuario, "cell 1 3 3 1,growx");
 
 		cargarTipos();
 

@@ -5,9 +5,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import net.miginfocom.swing.MigLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -60,47 +58,23 @@ public class ReservaCreateDialog extends JDialog implements ConfirmDialog<Reserv
 
 	private void initComponents() {
 
-		JPanel form = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(4, 4, 4, 4);
-		gbc.anchor = GridBagConstraints.WEST;
+                JPanel form = new JPanel(new MigLayout("wrap 4", "[right]10[grow,fill]20[right]10[grow,fill]", "[]8[]8[]8[]8[]"));
 
-		int row = 0;
+                // Fila 0
+                form.add(new JLabel("Vehículo ID:"), "cell 0 0");
+                form.add(txtVeh, "cell 1 0,growx");
+                form.add(new JLabel("Cliente ID:"), "cell 2 0");
+                form.add(txtCli, "cell 3 0,growx");
 
-		gbc.gridx = 0;
-		gbc.gridy = row;
-		form.add(new JLabel("Vehículo ID:"), gbc);
-		gbc.gridx = 1;
-		form.add(txtVeh, gbc);
-		row++;
+                // Fila 1
+                form.add(new JLabel("Fecha Inicio:"), "cell 0 1");
+                form.add(dcInicio, "cell 1 1,growx");
+                form.add(new JLabel("Fecha Fin:"), "cell 2 1");
+                form.add(dcFin, "cell 3 1,growx");
 
-		gbc.gridx = 0;
-		gbc.gridy = row;
-		form.add(new JLabel("Cliente ID:"), gbc);
-		gbc.gridx = 1;
-		form.add(txtCli, gbc);
-		row++;
-
-		gbc.gridx = 0;
-		gbc.gridy = row;
-		form.add(new JLabel("Fecha Inicio:"), gbc);
-		gbc.gridx = 1;
-		form.add(dcInicio, gbc);
-		row++;
-
-		gbc.gridx = 0;
-		gbc.gridy = row;
-		form.add(new JLabel("Fecha Fin:"), gbc);
-		gbc.gridx = 1;
-		form.add(dcFin, gbc);
-		row++;
-
-		gbc.gridx = 0;
-		gbc.gridy = row;
-		form.add(new JLabel("Estado:"), gbc);
-		gbc.gridx = 1;
-		form.add(cmbEst, gbc);
-		row++;
+                // Fila 2
+                form.add(new JLabel("Estado:"), "cell 0 2");
+                form.add(cmbEst, "cell 1 2 3 1,growx");
 
 		JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		buttons.add(btnCrear);
