@@ -11,6 +11,7 @@ import com.pinguela.rentexpres.desktop.dialog.VehiculoCreateDialog;
 import com.pinguela.rentexpres.desktop.model.VehiculoSearchTableModel;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
+import com.pinguela.rentexpres.desktop.util.CatalogCache;
 import com.pinguela.rentexpres.desktop.view.VehiculoFilterPanel;
 import com.pinguela.rentexpres.desktop.view.VehiculoSearchActionsView;
 import com.pinguela.rentexpres.desktop.view.VehiculoSearchView;
@@ -27,7 +28,9 @@ import com.pinguela.rentexpres.service.VehiculoService;
 
 public class VehiculoSearchController {
 
-	private static final int PAGE_SIZE = 25;
+        private static final int PAGE_SIZE = 25;
+        private static final String TODAS = "Todas";
+        private static final String TODOS = "Todos";
 
 	private final VehiculoSearchView view;
 	private final VehiculoService vehiculoService;
@@ -60,8 +63,10 @@ public class VehiculoSearchController {
 		this.model = new VehiculoSearchTableModel();
 		view.getTable().getTable().setModel(model); 
 
-		cargarEstados();
-		cargarCategorias();
+                cargarEstados();
+                cargarCategorias();
+                cargarMarcas();
+                cargarModelosPorMarca(null);
 
 		wireListeners();
 
@@ -86,22 +91,56 @@ public class VehiculoSearchController {
 		}
 	}
 
-	private void cargarCategorias() {
-		try {
+        private void cargarCategorias() {
+                try {
                         JComboBox<CategoriaVehiculoDTO> cmb = view.getFilter().getCbCategoria();
-			cmb.removeAllItems();
-			CategoriaVehiculoDTO todas = new CategoriaVehiculoDTO();
-			todas.setId(null);
-			todas.setNombreCategoria("Todas");
-			cmb.addItem(todas);
-			for (CategoriaVehiculoDTO c : categoriaService.findAll()) {
-				cmb.addItem(c);
-			}
-			cmb.setSelectedIndex(0);
-		} catch (Exception ex) {
-			SwingUtils.showError(view, "Error cargando categorías: " + ex.getMessage());
-		}
-	}
+                        cmb.removeAllItems();
+                        CategoriaVehiculoDTO todas = new CategoriaVehiculoDTO();
+                        todas.setId(null);
+                        todas.setNombreCategoria("Todas");
+                        cmb.addItem(todas);
+                        for (CategoriaVehiculoDTO c : categoriaService.findAll()) {
+                                cmb.addItem(c);
+                        }
+                        cmb.setSelectedIndex(0);
+                } catch (Exception ex) {
+                        SwingUtils.showError(view, "Error cargando categorías: " + ex.getMessage());
+                }
+        }
+
+        private void cargarMarcas() throws RentexpresException {
+                JComboBox<String> cmb = view.getFilter().getCmbMarca();
+                cmb.removeAllItems();
+                cmb.addItem(TODAS);
+                java.util.Set<String> marcas = new java.util.HashSet<>();
+                for (VehiculoDTO v : CatalogCache.getVehiculos(vehiculoService)) {
+                        marcas.add(v.getMarca());
+                }
+                java.util.List<String> lista = new java.util.ArrayList<>(marcas);
+                java.util.Collections.sort(lista);
+                for (String m : lista) {
+                        cmb.addItem(m);
+                }
+                cmb.setSelectedIndex(0);
+        }
+
+        private void cargarModelosPorMarca(String marca) throws RentexpresException {
+                JComboBox<String> cmb = view.getFilter().getCmbModelo();
+                cmb.removeAllItems();
+                cmb.addItem(TODOS);
+                java.util.Set<String> modelos = new java.util.HashSet<>();
+                for (VehiculoDTO v : CatalogCache.getVehiculos(vehiculoService)) {
+                        if (marca == null || TODAS.equals(marca) || marca.equals(v.getMarca())) {
+                                modelos.add(v.getModelo());
+                        }
+                }
+                java.util.List<String> lista = new java.util.ArrayList<>(modelos);
+                java.util.Collections.sort(lista);
+                for (String m : lista) {
+                        cmb.addItem(m);
+                }
+                cmb.setSelectedIndex(0);
+        }
 
 	private void wireListeners() {
                 VehiculoFilterPanel filtro = view.getFilter();
@@ -117,6 +156,16 @@ public class VehiculoSearchController {
                         @Override
                         public void execute() {
                                 view.getTable().toggleSelectColumn();
+                        }
+                });
+                filtro.setOnMarcaChange(marca -> {
+                        if (!initializing && !loading) {
+                                try {
+                                        cargarModelosPorMarca(marca);
+                                } catch (RentexpresException ex) {
+                                        SwingUtils.showError(view, "Error al cargar modelos: " + ex.getMessage());
+                                }
+                                goFirstPage();
                         }
                 });
 
@@ -232,12 +281,14 @@ public class VehiculoSearchController {
                 VehiculoFilterPanel f = view.getFilter();
 		VehiculoCriteria c = new VehiculoCriteria();
 
-		if (f.getMarca() != null && !f.getMarca().trim().isEmpty()) {
-			c.setMarca(f.getMarca());
-		}
-		if (f.getModelo() != null && !f.getModelo().trim().isEmpty()) {
-			c.setModelo(f.getModelo());
-		}
+                String marca = f.getMarca();
+                if (marca != null && !marca.equals(TODAS)) {
+                        c.setMarca(marca);
+                }
+                String modelo = f.getModelo();
+                if (modelo != null && !modelo.equals(TODOS)) {
+                        c.setModelo(modelo);
+                }
 		if (f.getAnioDesde() != null) {
 			c.setAnioDesde(f.getAnioDesde());
 		}
