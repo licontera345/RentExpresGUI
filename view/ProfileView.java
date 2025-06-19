@@ -12,7 +12,6 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -28,6 +27,8 @@ import com.pinguela.rentexpres.desktop.dialog.UsuarioEditDialog;
 import com.pinguela.rentexpres.service.UsuarioService;
 import com.pinguela.rentexpres.service.impl.UsuarioServiceImpl;
 import com.pinguela.rentexpres.model.UsuarioDTO;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Diálogo de Perfil de Usuario, con diseño estilizado. El botón "Cerrar Sesión"
@@ -80,35 +81,40 @@ public class ProfileView extends JDialog {
 		container.add(topPanel, BorderLayout.NORTH);
 
 		// Panel central: información de usuario en líneas
-		JPanel infoPanel = new JPanel();
-		infoPanel.setBackground(Color.WHITE);
-		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-		infoPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+                JPanel infoPanel = new JPanel();
+                infoPanel.setBackground(Color.WHITE);
+                infoPanel.setLayout(new MigLayout("wrap 2", "[right]10[grow,fill]", "[]10[]10[]10[]10[]10[]"));
+                infoPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-		lblNombre.setFont(lblNombre.getFont().deriveFont(Font.PLAIN, 16f));
-		lblNombre.setForeground(new Color(30, 30, 30));
-		lblNombre.setBorder(new EmptyBorder(10, 0, 5, 0));
-		infoPanel.add(lblNombre);
+                lblNombre.setFont(lblNombre.getFont().deriveFont(Font.PLAIN, 16f));
+                lblNombre.setForeground(new Color(30, 30, 30));
+                lblNombre.setBorder(new EmptyBorder(0, 0, 0, 0));
+                infoPanel.add(new JLabel("Nombre:"));
+                infoPanel.add(lblNombre);
 
                 lblEmail.setFont(lblEmail.getFont().deriveFont(Font.PLAIN, 16f));
                 lblEmail.setForeground(new Color(30, 30, 30));
-                lblEmail.setBorder(new EmptyBorder(5, 0, 5, 0));
+                lblEmail.setBorder(new EmptyBorder(0, 0, 0, 0));
+                infoPanel.add(new JLabel("Email:"));
                 infoPanel.add(lblEmail);
 
                 lblUsuario.setFont(lblUsuario.getFont().deriveFont(Font.PLAIN, 16f));
                 lblUsuario.setForeground(new Color(30, 30, 30));
-                lblUsuario.setBorder(new EmptyBorder(5, 0, 5, 0));
+                lblUsuario.setBorder(new EmptyBorder(0, 0, 0, 0));
+                infoPanel.add(new JLabel("Usuario:"));
                 infoPanel.add(lblUsuario);
 
                 lblTelefono.setFont(lblTelefono.getFont().deriveFont(Font.PLAIN, 16f));
                 lblTelefono.setForeground(new Color(30, 30, 30));
-                lblTelefono.setBorder(new EmptyBorder(5, 0, 5, 0));
+                lblTelefono.setBorder(new EmptyBorder(0, 0, 0, 0));
+                infoPanel.add(new JLabel("Teléfono:"));
                 infoPanel.add(lblTelefono);
 
-		lblTipo.setFont(lblTipo.getFont().deriveFont(Font.PLAIN, 16f));
-		lblTipo.setForeground(new Color(30, 30, 30));
-		lblTipo.setBorder(new EmptyBorder(5, 0, 10, 0));
-		infoPanel.add(lblTipo);
+                lblTipo.setFont(lblTipo.getFont().deriveFont(Font.PLAIN, 16f));
+                lblTipo.setForeground(new Color(30, 30, 30));
+                lblTipo.setBorder(new EmptyBorder(0, 0, 10, 0));
+                infoPanel.add(new JLabel("Tipo:"));
+                infoPanel.add(lblTipo);
 
 		// Separator para estética
 		JSeparator separator = new JSeparator();
@@ -158,19 +164,19 @@ public class ProfileView extends JDialog {
 	}
 
 	private void loadUserData() {
-		UsuarioDTO u = AppContext.getCurrentUser();
+                UsuarioDTO u = AppContext.getCurrentUser();
                 if (u != null) {
-                        lblNombre.setText("Nombre: " + u.getNombre() + " " + u.getApellido1() + " " + u.getApellido2());
-                        lblEmail.setText("Email: " + u.getEmail());
-                        lblUsuario.setText("Usuario: " + u.getNombreUsuario());
-                        lblTelefono.setText("Teléfono: " + u.getTelefono());
-                        lblTipo.setText("Tipo: " + u.getIdTipoUsuario());
+                        lblNombre.setText(u.getNombre() + " " + u.getApellido1() + " " + u.getApellido2());
+                        lblEmail.setText(u.getEmail());
+                        lblUsuario.setText(u.getNombreUsuario());
+                        lblTelefono.setText(u.getTelefono());
+                        lblTipo.setText(String.valueOf(u.getIdTipoUsuario()));
                 } else {
-                        lblNombre.setText("No hay usuario autenticado.");
-                        lblEmail.setText("");
-                        lblUsuario.setText("");
-                        lblTelefono.setText("");
-                        lblTipo.setText("");
+                        lblNombre.setText("-");
+                        lblEmail.setText("-");
+                        lblUsuario.setText("-");
+                        lblTelefono.setText("-");
+                        lblTipo.setText("-");
                 }
 	}
 

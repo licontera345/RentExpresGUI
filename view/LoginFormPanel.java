@@ -17,44 +17,49 @@ public class LoginFormPanel extends JPanel {
         private final char defaultEcho = txtPassword.getEchoChar();
 
 	public LoginFormPanel() {
-		setLayout(new GridBagLayout());
-		setBorder(new EmptyBorder(20, 20, 20, 20));
-		setOpaque(false);
+                setLayout(new GridBagLayout());
+                setBorder(new EmptyBorder(20, 20, 20, 20));
+                setOpaque(false);
 
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.anchor = GridBagConstraints.CENTER;
-		gbc.insets = new Insets(8, 8, 8, 8);
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.insets = new Insets(8, 8, 8, 8);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
 
                 JLabel lblUser = new JLabel("Usuario");
                 lblUser.setFont(lblUser.getFont().deriveFont(Font.PLAIN, 14f));
                 gbc.gridx = 0;
                 gbc.gridy = 0;
+                gbc.anchor = GridBagConstraints.EAST;
                 add(lblUser, gbc);
 
                 txtUsername.setFont(txtUsername.getFont().deriveFont(14f));
                 txtUsername.putClientProperty("JTextField.placeholderText", "Nombre de usuario");
                 txtUsername.putClientProperty("JTextField.leadingIcon", AppIcons.USUARIO);
-                gbc.gridx = 0;
-                gbc.gridy = 1;
+                gbc.gridx = 1;
+                gbc.gridy = 0;
+                gbc.anchor = GridBagConstraints.WEST;
                 add(txtUsername, gbc);
 
                 JLabel lblPass = new JLabel("Contraseña");
                 lblPass.setFont(lblPass.getFont().deriveFont(Font.PLAIN, 14f));
                 gbc.gridx = 0;
-                gbc.gridy = 2;
+                gbc.gridy = 1;
+                gbc.anchor = GridBagConstraints.EAST;
                 add(lblPass, gbc);
 
                 txtPassword.setFont(txtPassword.getFont().deriveFont(14f));
                 txtPassword.putClientProperty("JTextField.placeholderText", "Contraseña");
                 txtPassword.putClientProperty("JTextField.leadingIcon", AppIcons.VIEW);
-                gbc.gridx = 0;
-                gbc.gridy = 3;
+                gbc.gridx = 1;
+                gbc.gridy = 1;
+                gbc.anchor = GridBagConstraints.WEST;
                 add(txtPassword, gbc);
 
                 chkRemember.setOpaque(false);
                 gbc.gridx = 0;
-                gbc.gridy = 4;
+                gbc.gridy = 2;
+                gbc.gridwidth = 2;
+                gbc.anchor = GridBagConstraints.WEST;
                 add(chkRemember, gbc);
 
                 chkShowPass.setOpaque(false);
@@ -62,7 +67,9 @@ public class LoginFormPanel extends JPanel {
                         txtPassword.setEchoChar(chkShowPass.isSelected() ? (char)0 : defaultEcho);
                 });
                 gbc.gridx = 0;
-                gbc.gridy = 5;
+                gbc.gridy = 3;
+                gbc.gridwidth = 2;
+                gbc.anchor = GridBagConstraints.WEST;
                 add(chkShowPass, gbc);
         }
 

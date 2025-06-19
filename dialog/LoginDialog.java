@@ -15,7 +15,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -60,27 +59,22 @@ public class LoginDialog extends JDialog {
                 container.setBorder(new EmptyBorder(20, 20, 20, 20));
                 getContentPane().add(container);
 
-                JPanel topPanel = new JPanel();
+                JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
                 topPanel.setOpaque(false);
-                topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
 
-		JLabel lblTitle = new JLabel("¡Bienvenido a RentExpres!", SwingConstants.CENTER);
-		lblTitle.setFont(lblTitle.getFont().deriveFont(Font.BOLD, 22f));
-		lblTitle.setForeground(new Color(45, 45, 45));
-		lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-		topPanel.add(lblTitle);
+                JLabel lblTitle = new JLabel("¡Bienvenido a RentExpres!");
+                lblTitle.setFont(lblTitle.getFont().deriveFont(Font.BOLD, 22f));
+                lblTitle.setForeground(new Color(45, 45, 45));
 
-		topPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+                if (AppIcons.ALQUILER != null) {
+                        ImageIcon vehicleIcon = AppIcons.ALQUILER;
+                        Image scaled = vehicleIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                        JLabel lblIcon = new JLabel(new ImageIcon(scaled));
+                        topPanel.add(lblIcon);
+                }
 
-		if (AppIcons.ALQUILER != null) {
-			ImageIcon vehicleIcon = AppIcons.ALQUILER;
-			Image scaled = vehicleIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-			JLabel lblIcon = new JLabel(new ImageIcon(scaled));
-			lblIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
-			topPanel.add(lblIcon);
-		}
-
-		container.add(topPanel, BorderLayout.NORTH);
+                topPanel.add(lblTitle);
+                container.add(topPanel, BorderLayout.NORTH);
 
                 JPanel centerPanel = new JPanel(new BorderLayout());
                 centerPanel.setOpaque(false);
