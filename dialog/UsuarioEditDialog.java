@@ -122,6 +122,7 @@ public class UsuarioEditDialog extends JDialog {
                 // Tipo Usuario
                 getContentPane().add(new JLabel("Tipo Usuario:"), "align label");
                 cmbTipoUsuario = new JComboBox<>();
+                cmbTipoUsuario.setRenderer(new com.pinguela.rentexpres.desktop.renderer.TipoUsuarioRenderer());
                 getContentPane().add(cmbTipoUsuario, "growx");
 
                 // Imagen de perfil
