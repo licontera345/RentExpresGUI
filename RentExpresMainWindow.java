@@ -36,6 +36,7 @@ import com.pinguela.rentexpres.desktop.view.ProfileView;
 import com.pinguela.rentexpres.desktop.view.ReservaSearchView;
 import com.pinguela.rentexpres.desktop.view.VehiculoSearchView;
 import com.pinguela.rentexpres.desktop.view.CalendarView;
+import com.pinguela.rentexpres.desktop.view.UsuarioSearchView;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.service.AlquilerService;
 import com.pinguela.rentexpres.service.CategoriaVehiculoService;
@@ -44,6 +45,7 @@ import com.pinguela.rentexpres.service.EstadoAlquilerService;
 import com.pinguela.rentexpres.service.EstadoVehiculoService;
 import com.pinguela.rentexpres.service.LocalidadService;
 import com.pinguela.rentexpres.service.ProvinciaService;
+import com.pinguela.rentexpres.service.UsuarioService;
 import com.pinguela.rentexpres.service.VehiculoService;
 import com.pinguela.rentexpres.service.impl.AlquilerServiceImpl;
 import com.pinguela.rentexpres.service.impl.CategoriaVehiculoServiceImpl;
@@ -54,16 +56,18 @@ import com.pinguela.rentexpres.service.impl.EstadoVehiculoServiceImpl;
 import com.pinguela.rentexpres.service.impl.LocalidadServiceImpl;
 import com.pinguela.rentexpres.service.impl.ProvinciaServiceImpl;
 import com.pinguela.rentexpres.service.impl.ReservaServiceImpl;
+import com.pinguela.rentexpres.service.impl.UsuarioServiceImpl;
 import com.pinguela.rentexpres.service.impl.VehiculoServiceImpl;
 
 public class RentExpresMainWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private final AlquilerService alquilerService = new AlquilerServiceImpl();
-	private final VehiculoService vehiculoService = new VehiculoServiceImpl();
-	private final ClienteService clienteService = new ClienteServiceImpl();
-	private final LocalidadService localidadService = new LocalidadServiceImpl();
-	private final ProvinciaService provinciaService = new ProvinciaServiceImpl();
+        private final VehiculoService vehiculoService = new VehiculoServiceImpl();
+        private final ClienteService clienteService = new ClienteServiceImpl();
+        private final LocalidadService localidadService = new LocalidadServiceImpl();
+        private final ProvinciaService provinciaService = new ProvinciaServiceImpl();
+        private final UsuarioService usuarioService = new UsuarioServiceImpl();
 
 	private final JPanel navPanel = new JPanel();
 	private final JPanel contentPanel = new JPanel(new CardLayout());
@@ -172,9 +176,10 @@ public class RentExpresMainWindow extends JFrame {
                 navPanel.add(createNavButton("Clientes", AppIcons.CLIENTE, btnBg, btnHoverBg, btnFg));
 
                 if (AppContext.getCurrentUser().getIdTipoUsuario() == 1) {
+                        navPanel.add(createNavButton("Usuarios", AppIcons.USUARIO, btnBg, btnHoverBg, btnFg));
                         navPanel.add(createNavButton("Vehículos", AppIcons.VEHICULO, btnBg, btnHoverBg, btnFg));
                 }
-	}
+        }
 
 	private JButton createNavButton(String text, ImageIcon icon, Color bg, Color hoverBg, Color fg) {
 		JButton btn = new JButton(text, icon);
@@ -241,17 +246,21 @@ public class RentExpresMainWindow extends JFrame {
                 CalendarView calView = new CalendarView();
                 contentPanel.add(calView, "Calendario");
 
-		ClienteSearchView csv = new ClienteSearchView(clienteService, provinciaService, localidadService, this);
-		csv.initIfNeeded();
-		contentPanel.add(csv, "Clientes");
+                ClienteSearchView csv = new ClienteSearchView(clienteService, provinciaService, localidadService, this);
+                csv.initIfNeeded();
+                contentPanel.add(csv, "Clientes");
 
-		// Solo administradores
-		if (AppContext.getCurrentUser().getIdTipoUsuario() == 1) {
-			VehiculoSearchView vsv = new VehiculoSearchView(vehiculoService, catVehService(), estadoVehService(), this);
-			vsv.initIfNeeded();
-			contentPanel.add(vsv, "Vehículos");
-		}
-	}
+                // Solo administradores
+                if (AppContext.getCurrentUser().getIdTipoUsuario() == 1) {
+                        UsuarioSearchView usv = new UsuarioSearchView(usuarioService, this);
+                        usv.initIfNeeded();
+                        contentPanel.add(usv, "Usuarios");
+
+                        VehiculoSearchView vsv = new VehiculoSearchView(vehiculoService, catVehService(), estadoVehService(), this);
+                        vsv.initIfNeeded();
+                        contentPanel.add(vsv, "Vehículos");
+                }
+        }
 
 	private EstadoAlquilerService estadoAlqService() {
 		return new EstadoAlquilerServiceImpl();
