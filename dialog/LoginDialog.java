@@ -140,25 +140,40 @@ public class LoginDialog extends JDialog {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 
-	private void onIngresar(ActionEvent e) {
-		String username = formPanel.getUsername();
-		String password = formPanel.getPassword();
+       private void onIngresar(ActionEvent e) {
+               String username = formPanel.getUsername();
+               String password = formPanel.getPassword();
 
-		if (username.trim().isEmpty() || password.trim().isEmpty()) {
-			SwingUtils.showWarning(this, "Debe ingresar usuario y contraseña.");
-			return;
-		}
+               if (username.trim().isEmpty() || password.trim().isEmpty()) {
+                       SwingUtils.showWarning(this, "Debe ingresar usuario y contraseña.");
+                       return;
+               }
 
-				SwingUtils.showError(this, "Credenciales incorrectas.");
-				formPanel.clear();
-			}
-		} catch (Exception ex) {
-			SwingUtils.showError(this, "Error al autenticar: " + ex.getMessage());
-		}
-	}
+               try {
+                       UsuarioDTO user = authService.authenticate(username, password);
+                       if (user == null) {
+                               SwingUtils.showError(this, "Credenciales incorrectas.");
+                               formPanel.clearPassword();
+                               return;
+                       }
+                       authenticatedUser = user;
+                       AppContext.setCurrentUser(user);
+                       rememberUser = formPanel.isRememberSelected();
+                       if (rememberUser) {
+                               AppContext.setRememberedUser(username);
+                       } else {
+                               AppContext.setRememberedUser(null);
+                       }
+                       dispose();
+               } catch (Exception ex) {
+                       SwingUtils.showError(this, "Error al autenticar: " + ex.getMessage());
+               }
+       }
 
-        public UsuarioDTO showDialog() {
-                formPanel.clear();
-        }
-}
+       public UsuarioDTO showDialog() {
+               formPanel.clear();
+               formPanel.setUsername(AppContext.getRememberedUser());
+               setVisible(true);
+               return authenticatedUser;
+       }
 }
