@@ -14,6 +14,7 @@ import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.Results;
 import com.pinguela.rentexpres.model.UsuarioCriteria;
 import com.pinguela.rentexpres.model.UsuarioDTO;
+import com.pinguela.rentexpres.service.FileService;
 import com.pinguela.rentexpres.service.UsuarioService;
 import com.pinguela.rentexpres.util.JDBCUtils;
 
@@ -101,10 +102,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 				usuario.setContrasena(null);
 
 				// Subir imágenes, si las tiene
-				if (usuario.getImagenes() != null && !usuario.getImagenes().isEmpty()) {
-					FileServiceImpl fileService = new FileServiceImpl();
-					fileService.uploadImages(usuario.getImagenes(), usuario.getId(), usuario.getId());
-				}
+                                if (usuario.getImagenes() != null && !usuario.getImagenes().isEmpty()) {
+                                        FileService fileService = new FileServiceImpl();
+                                        fileService.uploadUsuarioImages(usuario.getImagenes(), usuario.getId());
+                                }
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
 				logger.warn("No se pudo crear el Usuario.");
@@ -133,10 +134,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 				logger.info("Usuario actualizado exitosamente. ID: {}", usuario.getId());
 
 				usuario.setContrasena(null);
-				if (usuario.getImagenes() != null && !usuario.getImagenes().isEmpty()) {
-					FileServiceImpl fileService = new FileServiceImpl();
-					fileService.uploadImages(usuario.getImagenes(), usuario.getId(), usuario.getId());
-				}
+                                if (usuario.getImagenes() != null && !usuario.getImagenes().isEmpty()) {
+                                        FileService fileService = new FileServiceImpl();
+                                        fileService.uploadUsuarioImages(usuario.getImagenes(), usuario.getId());
+                                }
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
 				logger.warn("No se pudo actualizar el Usuario. ID: {}", usuario.getId());
@@ -204,7 +205,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public Results<UsuarioDTO> findByCriteria(UsuarioCriteria criteria) throws RentexpresException {
+        public Results<UsuarioDTO> findByCriteria(UsuarioCriteria criteria) throws RentexpresException {
 		Connection connection = null;
 		Results<UsuarioDTO> results = null;
 		try {
@@ -229,6 +230,17 @@ public class UsuarioServiceImpl implements UsuarioService {
 		} finally {
 			JDBCUtils.close(connection);
 		}
-		return results;
-	}
+                return results;
+        }
+
+        @Override
+        public List<String> getUsuarioImages(Integer idUsuario) throws RentexpresException {
+                FileService fileService = new FileServiceImpl();
+                try {
+                        return fileService.getUsuarioImagePaths(idUsuario);
+                } catch (Exception e) {
+                        logger.error("Error al obtener imágenes del usuario {}", idUsuario, e);
+                        throw new RentexpresException("Error al obtener imágenes del usuario", e);
+                }
+        }
 }

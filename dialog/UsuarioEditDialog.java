@@ -7,20 +7,31 @@ import java.awt.Frame;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.Collections;
 
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
+import com.pinguela.rentexpres.desktop.util.AppConfig;
 import com.pinguela.rentexpres.model.TipoUsuarioDTO;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.service.TipoUsuarioService;
 import com.pinguela.rentexpres.service.UsuarioService;
 import com.pinguela.rentexpres.service.impl.TipoUsuarioServiceImpl;
 import com.pinguela.rentexpres.service.impl.UsuarioServiceImpl;
+
+import java.awt.Image;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import javax.swing.ImageIcon;
+import java.util.List;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -39,8 +50,12 @@ public class UsuarioEditDialog extends JDialog {
 	private JTextField txtUsuario; // nombreUsuario (no editable)
 	private JPasswordField txtContrasena; // si el usuario quiere cambiarla
 	private JComboBox<TipoUsuarioDTO> cmbTipoUsuario;
-	private JButton btnGuardar;
-	private JButton btnCancelar;
+        private JButton btnGuardar;
+        private JButton btnCancelar;
+
+        private JButton btnSeleccionarImagen;
+        private JLabel lblImagenPreview;
+        private File imagenSeleccionada;
 
         private UsuarioService usuarioService = new UsuarioServiceImpl();
         private TipoUsuarioService tipoUsuarioService = new TipoUsuarioServiceImpl();
@@ -104,10 +119,31 @@ public class UsuarioEditDialog extends JDialog {
 		txtContrasena = new JPasswordField(25);
 		getContentPane().add(txtContrasena, "growx");
 
-		// Tipo Usuario
-		getContentPane().add(new JLabel("Tipo Usuario:"), "align label");
-		cmbTipoUsuario = new JComboBox<>();
-		getContentPane().add(cmbTipoUsuario, "growx");
+                // Tipo Usuario
+                getContentPane().add(new JLabel("Tipo Usuario:"), "align label");
+                cmbTipoUsuario = new JComboBox<>();
+                getContentPane().add(cmbTipoUsuario, "growx");
+
+                // Imagen de perfil
+                getContentPane().add(new JLabel("Imagen:"), "align label");
+                btnSeleccionarImagen = new JButton("Seleccionar Imagen");
+                lblImagenPreview = new JLabel();
+                lblImagenPreview.setPreferredSize(new java.awt.Dimension(120, 90));
+                JPanel imgPanel = new JPanel(new java.awt.BorderLayout());
+                imgPanel.add(btnSeleccionarImagen, java.awt.BorderLayout.WEST);
+                imgPanel.add(lblImagenPreview, java.awt.BorderLayout.CENTER);
+                getContentPane().add(imgPanel, "growx, wrap");
+
+                btnSeleccionarImagen.addActionListener(e -> {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
+                        int resp = chooser.showOpenDialog(UsuarioEditDialog.this);
+                        if (resp == JFileChooser.APPROVE_OPTION) {
+                                imagenSeleccionada = chooser.getSelectedFile();
+                                javax.swing.ImageIcon ico = new javax.swing.ImageIcon(new javax.swing.ImageIcon(imagenSeleccionada.getAbsolutePath()).getImage().getScaledInstance(120, 90, java.awt.Image.SCALE_SMOOTH));
+                                lblImagenPreview.setIcon(ico);
+                        }
+                });
 
 		// Botones
 		JPanel pnlBotones = new JPanel();
@@ -159,14 +195,23 @@ public class UsuarioEditDialog extends JDialog {
                         txtEmail.setText(dto.getEmail());
                         txtUsuario.setText(dto.getNombreUsuario());
 
-			Integer idTipo = dto.getIdTipoUsuario();
-			for (int i = 0; i < cmbTipoUsuario.getItemCount(); i++) {
-				if (cmbTipoUsuario.getItemAt(i).getId().equals(idTipo)) {
-					cmbTipoUsuario.setSelectedIndex(i);
-					break;
-				}
-			}
-		} catch (Exception ex) {
+                        Integer idTipo = dto.getIdTipoUsuario();
+                        for (int i = 0; i < cmbTipoUsuario.getItemCount(); i++) {
+                                if (cmbTipoUsuario.getItemAt(i).getId().equals(idTipo)) {
+                                        cmbTipoUsuario.setSelectedIndex(i);
+                                        break;
+                                }
+                        }
+
+                        List<String> imgs = usuarioService.getUsuarioImages(id);
+                        if (imgs != null && !imgs.isEmpty()) {
+                                Path imgFile = AppConfig.getImageDir().resolve(imgs.get(0));
+                                if (Files.exists(imgFile)) {
+                                        ImageIcon ico = new ImageIcon(new ImageIcon(imgFile.toString()).getImage().getScaledInstance(120, 90, Image.SCALE_SMOOTH));
+                                        lblImagenPreview.setIcon(ico);
+                                }
+                        }
+                } catch (Exception ex) {
 			SwingUtils.showError(this, "Error al cargar datos de Usuario: " + ex.getMessage());
 			dispose();
 		}
@@ -192,6 +237,10 @@ public class UsuarioEditDialog extends JDialog {
                 }
 
                 dto.setIdTipoUsuario(((TipoUsuarioDTO) cmbTipoUsuario.getSelectedItem()).getId());
+
+                if (imagenSeleccionada != null) {
+                        dto.setImagenes(Collections.singletonList(imagenSeleccionada));
+                }
 
                 usuario = dto;
                 confirmed = true;
