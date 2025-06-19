@@ -1,14 +1,13 @@
 package com.pinguela.rentexpres.desktop.view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import com.pinguela.rentexpres.desktop.util.PaginationPanel;
 
 /**
  * Generic view providing standard layout for search screens:
- * a sidebar on the left with filter panel and actions,
+ * filter panel on top, actions right below,
  * the table in the center and pagination panel at the bottom.
  */
 public class StandardSearchView<F extends JPanel, A extends AbstractSearchActionsView, T extends JPanel>
@@ -26,15 +25,14 @@ public class StandardSearchView<F extends JPanel, A extends AbstractSearchAction
         this.table = table;
         this.pager = new PaginationPanel();
 
-        JPanel sidebar = new JPanel(new BorderLayout(0, 8));
-        sidebar.add(filter, BorderLayout.CENTER);
-        sidebar.add(actions, BorderLayout.SOUTH);
-        sidebar.setPreferredSize(new Dimension(300, 0));
+        JPanel north = new JPanel(new BorderLayout(0, 4));
+        north.add(filter, BorderLayout.NORTH);
+        north.add(actions, BorderLayout.SOUTH);
 
         JScrollPane scroll = new JScrollPane(table);
 
         setLayout(new BorderLayout(8, 8));
-        add(sidebar, BorderLayout.WEST);
+        add(north, BorderLayout.NORTH);
         add(scroll, BorderLayout.CENTER);
         add(pager, BorderLayout.SOUTH);
     }
