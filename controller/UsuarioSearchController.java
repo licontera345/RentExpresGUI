@@ -34,6 +34,7 @@ public class UsuarioSearchController {
         this.frame = frame;
         view.getTable().setModel(model);
         wireActions();
+        wirePager();
     }
 
     private void wireActions() {
@@ -43,7 +44,57 @@ public class UsuarioSearchController {
         });
         actions.onBuscar(() -> goFirstPage());
         actions.onLimpiar(() -> onLimpiar());
-        actions.onBorrarSeleccionados(() -> {});
+        actions.onBorrarSeleccionados(() -> onDeleteSelected());
+    }
+
+    private void wirePager() {
+        view.getPager().onFirst(() -> { if (!loading) goFirstPage(); });
+        view.getPager().onPrev(() -> {
+            if (!loading && currentPage > 1) {
+                currentPage--;
+                buscar();
+            }
+        });
+        view.getPager().onNext(() -> {
+            if (!loading && currentPage < totalPages) {
+                currentPage++;
+                buscar();
+            }
+        });
+        view.getPager().onLast(() -> {
+            if (!loading && currentPage < totalPages) {
+                currentPage = totalPages;
+                buscar();
+            }
+        });
+    }
+
+    private void onDeleteSelected() {
+        List<UsuarioDTO> selected = model.getSelectedItems();
+        if (selected.isEmpty()) {
+            SwingUtils.showWarning(frame, "No hay usuarios seleccionados.");
+            return;
+        }
+        int resp = javax.swing.JOptionPane.showConfirmDialog(frame,
+                "¿Eliminar " + selected.size() + " usuario" + (selected.size() > 1 ? "s" : "") + " seleccionado" + (selected.size() > 1 ? "s" : "") + "?",
+                "Confirmar borrado", javax.swing.JOptionPane.YES_NO_OPTION);
+        if (resp != javax.swing.JOptionPane.YES_OPTION) {
+            return;
+        }
+        StringBuilder errores = new StringBuilder();
+        for (UsuarioDTO u : selected) {
+            try {
+                service.delete(u, u.getId());
+            } catch (Exception ex) {
+                errores.append(u.getId()).append(": ").append(ex.getMessage()).append("\n");
+            }
+        }
+        goFirstPage();
+        if (errores.length() > 0) {
+            SwingUtils.showError(frame, "Errores al eliminar:\n" + errores.toString());
+        } else {
+            SwingUtils.showInfo(frame, "Usuarios eliminados correctamente.");
+        }
     }
 
     public void init() {
