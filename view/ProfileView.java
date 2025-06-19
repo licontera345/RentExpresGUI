@@ -23,9 +23,14 @@ import javax.swing.border.EmptyBorder;
 import com.pinguela.rentexpres.desktop.util.AppContext;
 import com.pinguela.rentexpres.desktop.util.AppIcons;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
+import com.pinguela.rentexpres.desktop.util.AppConfig;
 import com.pinguela.rentexpres.desktop.dialog.UsuarioEditDialog;
 import com.pinguela.rentexpres.service.UsuarioService;
 import com.pinguela.rentexpres.service.impl.UsuarioServiceImpl;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 
 import net.miginfocom.swing.MigLayout;
@@ -171,6 +176,19 @@ public class ProfileView extends JDialog {
                         lblUsuario.setText(u.getNombreUsuario());
                         lblTelefono.setText(u.getTelefono());
                         lblTipo.setText(String.valueOf(u.getIdTipoUsuario()));
+
+                        try {
+                                List<String> imgs = usuarioService.getUsuarioImages(u.getId());
+                                if (imgs != null && !imgs.isEmpty()) {
+                                        Path imgFile = AppConfig.getImageDir().resolve(imgs.get(0));
+                                        if (Files.exists(imgFile)) {
+                                                ImageIcon avatarIcon = new ImageIcon(new ImageIcon(imgFile.toString()).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
+                                                lblAvatar.setIcon(avatarIcon);
+                                        }
+                                }
+                        } catch (Exception ex) {
+                                // ignore, keep default icon
+                        }
                 } else {
                         lblNombre.setText("-");
                         lblEmail.setText("-");

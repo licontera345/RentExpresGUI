@@ -51,8 +51,8 @@ public class FileServiceImpl implements FileService {
 		return relativePath;
 	}
 
-	@Override
-	public List<String> getImagePaths(Integer idVehiculo) {
+    @Override
+    public List<String> getImagePaths(Integer idVehiculo) {
 		String carpetaImagenes = BASE_IMAGE_PATH + File.separator + "vehiculos" + File.separator + idVehiculo;
 		File directorioImagenes = new File(carpetaImagenes);
 		List<String> imagePaths = new ArrayList<>();
@@ -75,8 +75,34 @@ public class FileServiceImpl implements FileService {
 			logger.info("No se encontraron imágenes para el vehículo ID: {}", idVehiculo);
 		}
 
-		return imagePaths;
-	}
+                return imagePaths;
+        }
+
+        @Override
+        public List<String> getUsuarioImagePaths(Integer idUsuario) {
+                String carpetaImagenes = BASE_IMAGE_PATH + File.separator + "usuarios" + File.separator + idUsuario;
+                File directorioImagenes = new File(carpetaImagenes);
+                List<String> imagePaths = new ArrayList<>();
+
+                if (directorioImagenes.exists() && directorioImagenes.isDirectory()) {
+                        File[] archivos = directorioImagenes.listFiles();
+                        if (archivos != null) {
+                                for (File archivo : archivos) {
+                                        if (archivo.isFile()) {
+                                                String nombre = archivo.getName().toLowerCase();
+                                                if (nombre.endsWith(".jpg") || nombre.endsWith(".png") || nombre.endsWith(".jpeg")) {
+                                                        String relativePath = "usuarios" + File.separator + idUsuario + File.separator + archivo.getName();
+                                                        imagePaths.add(relativePath);
+                                                }
+                                        }
+                                }
+                        }
+                } else {
+                        logger.info("No se encontraron imágenes para el usuario ID: {}", idUsuario);
+                }
+
+                return imagePaths;
+        }
 
 	@Override
 	public boolean deleteImage(String imagePath) {
@@ -108,7 +134,8 @@ public class FileServiceImpl implements FileService {
 		return nombreArchivo + "_" + timestamp;
 	}
 
-    public void uploadImages(List<File> imagenes, Integer idUsuario, Integer unused) {
+    @Override
+    public void uploadUsuarioImages(List<File> imagenes, Integer idUsuario) {
         if (imagenes == null || imagenes.isEmpty()) {
             return;
         }

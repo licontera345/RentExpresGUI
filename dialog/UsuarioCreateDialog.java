@@ -5,15 +5,19 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.model.TipoUsuarioDTO;
@@ -38,8 +42,12 @@ public class UsuarioCreateDialog extends JDialog implements ConfirmDialog<Usuari
 	private JTextField txtUsuario; // nombreUsuario
 	private JPasswordField txtContrasena; // contraseña en claro
 	private JComboBox<TipoUsuarioDTO> cmbTipoUsuario;
-	private JButton btnGuardar;
-	private JButton btnCancelar;
+        private JButton btnGuardar;
+        private JButton btnCancelar;
+
+        private JButton btnSeleccionarImagen;
+        private JLabel lblImagenPreview;
+        private File imagenSeleccionada;
 
         private TipoUsuarioService tipoUsuarioService = new TipoUsuarioServiceImpl();
         private boolean confirmed = false;
@@ -97,10 +105,31 @@ public class UsuarioCreateDialog extends JDialog implements ConfirmDialog<Usuari
 		txtContrasena = new JPasswordField(25);
 		getContentPane().add(txtContrasena, "growx");
 
-		// Tipo de Usuario
-		getContentPane().add(new JLabel("Tipo Usuario:"), "align label");
-		cmbTipoUsuario = new JComboBox<>();
-		getContentPane().add(cmbTipoUsuario, "growx");
+                // Tipo de Usuario
+                getContentPane().add(new JLabel("Tipo Usuario:"), "align label");
+                cmbTipoUsuario = new JComboBox<>();
+                getContentPane().add(cmbTipoUsuario, "growx");
+
+                // Imagen de perfil
+                getContentPane().add(new JLabel("Imagen:"), "align label");
+                btnSeleccionarImagen = new JButton("Seleccionar Imagen");
+                lblImagenPreview = new JLabel();
+                lblImagenPreview.setPreferredSize(new java.awt.Dimension(120, 90));
+                JPanel imgPanel = new JPanel(new java.awt.BorderLayout());
+                imgPanel.add(btnSeleccionarImagen, java.awt.BorderLayout.WEST);
+                imgPanel.add(lblImagenPreview, java.awt.BorderLayout.CENTER);
+                getContentPane().add(imgPanel, "growx, wrap");
+
+                btnSeleccionarImagen.addActionListener(e -> {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
+                        int resp = chooser.showOpenDialog(UsuarioCreateDialog.this);
+                        if (resp == JFileChooser.APPROVE_OPTION) {
+                                imagenSeleccionada = chooser.getSelectedFile();
+                                javax.swing.ImageIcon ico = new javax.swing.ImageIcon(new javax.swing.ImageIcon(imagenSeleccionada.getAbsolutePath()).getImage().getScaledInstance(120, 90, java.awt.Image.SCALE_SMOOTH));
+                                lblImagenPreview.setIcon(ico);
+                        }
+                });
 
 		// Botones en panel aparte
 		JPanel pnlBotones = new JPanel();
@@ -155,6 +184,10 @@ public class UsuarioCreateDialog extends JDialog implements ConfirmDialog<Usuari
                 dto.setNombreUsuario(txtUsuario.getText().trim());
                 dto.setContrasena(new String(txtContrasena.getPassword()));
                 dto.setIdTipoUsuario(((TipoUsuarioDTO) cmbTipoUsuario.getSelectedItem()).getId());
+
+                if (imagenSeleccionada != null) {
+                        dto.setImagenes(Collections.singletonList(imagenSeleccionada));
+                }
 
                 usuario = dto;
                 confirmed = true;

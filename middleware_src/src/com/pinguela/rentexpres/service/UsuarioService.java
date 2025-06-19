@@ -21,5 +21,8 @@ public interface UsuarioService {
 
 	public List<UsuarioDTO> findAll() throws RentexpresException;
 
-	public Results<UsuarioDTO> findByCriteria(UsuarioCriteria criteria) throws RentexpresException;
+        public Results<UsuarioDTO> findByCriteria(UsuarioCriteria criteria) throws RentexpresException;
+
+        /** Obtiene las rutas de las imágenes asociadas a un usuario. */
+        public List<String> getUsuarioImages(Integer idUsuario) throws RentexpresException;
 }
