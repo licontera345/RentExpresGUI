@@ -7,15 +7,14 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.function.Consumer;
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
-import com.pinguela.rentexpres.desktop.util.AppIcons;
 
 import com.pinguela.rentexpres.model.CategoriaVehiculoDTO;
 import com.pinguela.rentexpres.model.EstadoVehiculoDTO;
@@ -27,18 +26,20 @@ import java.awt.Color;
 public class VehiculoFilterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private final JTextField txtMarca = new JTextField();
-	private final JTextField txtModelo = new JTextField();
-	private final JFormattedTextField ftfAnioDesde;
-	private final JFormattedTextField ftfAnioHasta;
-	private final JFormattedTextField ftfPrecioMax;
+       private final JComboBox<String> cmbMarca = new JComboBox<>();
+       private final JComboBox<String> cmbModelo = new JComboBox<>();
+       private final JFormattedTextField ftfAnioDesde;
+       private final JFormattedTextField ftfAnioHasta;
+       private final JFormattedTextField ftfPrecioMax;
 
 	
-	public final JComboBox<EstadoVehiculoDTO> cmbEstado = new JComboBox<>();
-        public final JComboBox<CategoriaVehiculoDTO> cmbCategoria = new JComboBox<>();
+       public final JComboBox<EstadoVehiculoDTO> cmbEstado = new JComboBox<>();
+       public final JComboBox<CategoriaVehiculoDTO> cmbCategoria = new JComboBox<>();
 
-        private ActionCallback onChange;
-        private ActionCallback toggleListener;
+       private ActionCallback onChange;
+       private ActionCallback toggleListener;
+       private Consumer<String> onMarcaChange;
+       private boolean suppressEvents = false;
 
         private JLabel lbl(String t) {
                 JLabel l = new JLabel(t);
@@ -54,21 +55,19 @@ public class VehiculoFilterPanel extends JPanel {
 		NumberFormat intFormat = NumberFormat.getIntegerInstance();
 		NumberFormat doubleFormat = NumberFormat.getNumberInstance();
 
-                ftfAnioDesde = new JFormattedTextField(intFormat);
-                ftfAnioHasta = new JFormattedTextField(intFormat);
-                ftfPrecioMax = new JFormattedTextField(doubleFormat);
+               ftfAnioDesde = new JFormattedTextField(intFormat);
+               ftfAnioHasta = new JFormattedTextField(intFormat);
+               ftfPrecioMax = new JFormattedTextField(doubleFormat);
 
-                txtMarca.putClientProperty("JTextField.placeholderText", "Marca");
-                txtModelo.putClientProperty("JTextField.placeholderText", "Modelo");
-                ftfAnioDesde.putClientProperty("JTextField.placeholderText", "Desde");
-                ftfAnioHasta.putClientProperty("JTextField.placeholderText", "Hasta");
-                ftfPrecioMax.putClientProperty("JTextField.placeholderText", "Máximo");
+               ftfAnioDesde.putClientProperty("JTextField.placeholderText", "Desde");
+               ftfAnioHasta.putClientProperty("JTextField.placeholderText", "Hasta");
+               ftfPrecioMax.putClientProperty("JTextField.placeholderText", "Máximo");
 
 		// Fila 0: Marca | Modelo
-                add(lbl("Marca:"), "cell 0 0");
-                add(txtMarca, "cell 1 0, growx");
-                add(lbl("Modelo:"), "cell 2 0");
-                add(txtModelo, "cell 3 0, growx");
+               add(lbl("Marca:"), "cell 0 0");
+               add(cmbMarca, "cell 1 0, growx");
+               add(lbl("Modelo:"), "cell 2 0");
+               add(cmbModelo, "cell 3 0, growx");
 
 		// Fila 1: Año Desde | Año Hasta
                 add(lbl("Año Desde:"), "cell 0 1");
@@ -98,12 +97,25 @@ public class VehiculoFilterPanel extends JPanel {
                });
                add(btnToggleSel, "cell 0 4 2 1, alignx right");
 
-		// DocumentListeners para notificar cambios
-		txtMarca.getDocument().addDocumentListener(new SimpleDocumentListener());
-		txtModelo.getDocument().addDocumentListener(new SimpleDocumentListener());
-		ftfAnioDesde.getDocument().addDocumentListener(new SimpleDocumentListener());
-		ftfAnioHasta.getDocument().addDocumentListener(new SimpleDocumentListener());
-		ftfPrecioMax.getDocument().addDocumentListener(new SimpleDocumentListener());
+               // DocumentListeners para notificar cambios
+               ftfAnioDesde.getDocument().addDocumentListener(new SimpleDocumentListener());
+               ftfAnioHasta.getDocument().addDocumentListener(new SimpleDocumentListener());
+               ftfPrecioMax.getDocument().addDocumentListener(new SimpleDocumentListener());
+               cmbMarca.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               fire();
+                               if (onMarcaChange != null) {
+                                       onMarcaChange.accept(getMarca());
+                               }
+                       }
+               });
+               cmbModelo.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               fire();
+                       }
+               });
                cmbEstado.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
@@ -128,19 +140,25 @@ public class VehiculoFilterPanel extends JPanel {
 	/**
 	 * Getter para que el controlador pueda hacer: getCbCategoria().removeAllItems()
 	 */
-	public JComboBox<CategoriaVehiculoDTO> getCbCategoria() {
-		return cmbCategoria;
-	}
+        public JComboBox<CategoriaVehiculoDTO> getCbCategoria() {
+                return cmbCategoria;
+        }
 
-	public String getMarca() {
-		String text = txtMarca.getText().trim();
-		return text.isEmpty() ? null : text;
-	}
+       public JComboBox<String> getCmbMarca() {
+               return cmbMarca;
+       }
 
-	public String getModelo() {
-		String text = txtModelo.getText().trim();
-		return text.isEmpty() ? null : text;
-	}
+       public JComboBox<String> getCmbModelo() {
+               return cmbModelo;
+       }
+
+       public String getMarca() {
+               return (String) cmbMarca.getSelectedItem();
+       }
+
+       public String getModelo() {
+               return (String) cmbModelo.getSelectedItem();
+       }
 
 	public Integer getAnioDesde() {
 		try {
@@ -177,29 +195,39 @@ public class VehiculoFilterPanel extends JPanel {
 		return (CategoriaVehiculoDTO) cmbCategoria.getSelectedItem();
 	}
 
-	public void clear() {
-		txtMarca.setText("");
-		txtModelo.setText("");
-		ftfAnioDesde.setValue(null);
-		ftfAnioHasta.setValue(null);
-		ftfPrecioMax.setValue(null);
-		cmbEstado.setSelectedIndex(-1);
-		cmbCategoria.setSelectedIndex(-1);
-		fire();
-	}
+       public void clear() {
+               suppressEvents = true;
+
+               cmbMarca.setSelectedIndex(-1);
+               cmbModelo.setSelectedIndex(-1);
+               ftfAnioDesde.setValue(null);
+               ftfAnioHasta.setValue(null);
+               ftfPrecioMax.setValue(null);
+               cmbEstado.setSelectedIndex(-1);
+               cmbCategoria.setSelectedIndex(-1);
+
+               suppressEvents = false;
+               fire();
+       }
 
         public void setOnChange(ActionCallback r) {
                 this.onChange = r;
        }
 
-        public void setToggleListener(ActionCallback r) {
-                this.toggleListener = r;
+       public void setToggleListener(ActionCallback r) {
+               this.toggleListener = r;
        }
 
-        private void fire() {
-                if (onChange != null)
-                        onChange.execute();
-        }
+       public void setOnMarcaChange(Consumer<String> r) {
+               this.onMarcaChange = r;
+       }
+
+       private void fire() {
+               if (suppressEvents)
+                       return;
+               if (onChange != null)
+                       onChange.execute();
+       }
 
         private void fireToggleSelect() {
                 if (toggleListener != null)
