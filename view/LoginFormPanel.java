@@ -12,6 +12,9 @@ public class LoginFormPanel extends JPanel {
 
         private final JTextField txtUsername = new JTextField(20);
         private final JPasswordField txtPassword = new JPasswordField(20);
+        private final JCheckBox chkRemember = new JCheckBox("Recordarme");
+        private final JCheckBox chkShowPass = new JCheckBox("Mostrar contraseña");
+        private final char defaultEcho = txtPassword.getEchoChar();
 
 	public LoginFormPanel() {
 		setLayout(new GridBagLayout());
@@ -53,7 +56,15 @@ public class LoginFormPanel extends JPanel {
                 gbc.gridx = 0;
                 gbc.gridy = 4;
                 add(chkRemember, gbc);
-	}
+
+                chkShowPass.setOpaque(false);
+                chkShowPass.addActionListener(e -> {
+                        txtPassword.setEchoChar(chkShowPass.isSelected() ? (char)0 : defaultEcho);
+                });
+                gbc.gridx = 0;
+                gbc.gridy = 5;
+                add(chkShowPass, gbc);
+        }
 
 	public String getUsername() {
 		return txtUsername.getText().trim();
@@ -61,5 +72,25 @@ public class LoginFormPanel extends JPanel {
 
         public String getPassword() {
                 return new String(txtPassword.getPassword());
+        }
+
+        public boolean isRememberSelected() {
+                return chkRemember.isSelected();
+        }
+
+        public void clear() {
+                txtUsername.setText("");
+                txtPassword.setText("");
+                chkRemember.setSelected(false);
+                chkShowPass.setSelected(false);
+                txtPassword.setEchoChar(defaultEcho);
+        }
+
+        public void clearPassword() {
+                txtPassword.setText("");
+        }
+
+        public void setUsername(String username) {
+                txtUsername.setText(username == null ? "" : username);
         }
 }
