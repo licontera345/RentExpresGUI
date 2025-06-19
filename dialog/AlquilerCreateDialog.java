@@ -25,8 +25,10 @@ import com.pinguela.rentexpres.model.ReservaDTO;
 import com.pinguela.rentexpres.model.ClienteDTO;
 import com.pinguela.rentexpres.service.EstadoAlquilerService;
 import com.pinguela.rentexpres.service.ClienteService;
+import com.pinguela.rentexpres.service.ReservaService;
 import com.pinguela.rentexpres.service.impl.EstadoAlquilerServiceImpl;
 import com.pinguela.rentexpres.service.impl.ClienteServiceImpl;
+import com.pinguela.rentexpres.service.impl.ReservaServiceImpl;
 import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.desktop.dialog.ClienteCreateDialog;
 import com.toedter.calendar.JDateChooser;
@@ -44,11 +46,12 @@ public class AlquilerCreateDialog extends JDialog implements ConfirmDialog<Alqui
 	private final JTextField txtCosteTotal = new JTextField();
 	private final JComboBox<EstadoAlquilerDTO> cmbEstado = new JComboBox<>();
 	private final JButton btnCrear = new JButton("Crear");
-	private final JButton btnCancelar = new JButton("Cancelar");
+       private final JButton btnCancelar = new JButton("Cancelar");
        private final JButton btnNuevaReserva = new JButton("Nueva Reserva");
        private final JButton btnNuevoCliente = new JButton("Nuevo Cliente");
 
        private final ClienteService clienteService = new ClienteServiceImpl();
+       private final ReservaService reservaService = new ReservaServiceImpl();
        private Integer ultimoClienteId = null;
 
 	private final EstadoAlquilerService estadoService = new EstadoAlquilerServiceImpl();
@@ -175,11 +178,16 @@ public class AlquilerCreateDialog extends JDialog implements ConfirmDialog<Alqui
                }
                 dlg.setVisible(true);
                 if (dlg.isConfirmed()) {
-                        ReservaDTO nueva = dlg.getReserva();
-                        if (nueva != null && nueva.getId() != null) {
-                                spnIdReserva.setValue(nueva.getId());
-                                JOptionPane.showMessageDialog(this, "Reserva creada con ID: " + nueva.getId(), "Éxito",
-                                                JOptionPane.INFORMATION_MESSAGE);
+                        try {
+                                ReservaDTO nueva = dlg.getReserva();
+                                if (reservaService.create(nueva)) {
+                                        spnIdReserva.setValue(nueva.getId());
+                                        JOptionPane.showMessageDialog(this,
+                                                        "Reserva creada con ID: " + nueva.getId(),
+                                                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                                }
+                        } catch (RentexpresException ex) {
+                                SwingUtils.showError(this, "Error creando reserva: " + ex.getMessage());
                         }
                 }
         }
