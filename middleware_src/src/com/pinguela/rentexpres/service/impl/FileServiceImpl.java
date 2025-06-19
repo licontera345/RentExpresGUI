@@ -108,8 +108,39 @@ public class FileServiceImpl implements FileService {
 		return nombreArchivo + "_" + timestamp;
 	}
 
-	public void uploadImages(List<File> imagenes, Integer id, Integer id2) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void uploadImages(List<File> imagenes, Integer idUsuario, Integer unused) {
+        if (imagenes == null || imagenes.isEmpty()) {
+            return;
+        }
+
+        String carpetaImagenes = BASE_IMAGE_PATH + File.separator + "usuarios" + File.separator + idUsuario;
+        Path directorioDestino = Paths.get(carpetaImagenes);
+        try {
+            if (!Files.exists(directorioDestino)) {
+                Files.createDirectories(directorioDestino);
+            }
+
+            for (File imagen : imagenes) {
+                if (imagen == null || !imagen.exists()) {
+                    logger.warn("La imagen {} no existe", imagen);
+                    continue;
+                }
+
+                String nombreArchivo = imagen.getName();
+                if (!validarNombreArchivo(nombreArchivo)) {
+                    logger.warn("Nombre de archivo inválido: {}", nombreArchivo);
+                    continue;
+                }
+
+                String nombreUnico = generarNombreUnico(nombreArchivo);
+                Path destino = directorioDestino.resolve(nombreUnico);
+                Files.copy(imagen.toPath(), destino);
+                logger.info("Imagen de usuario guardada en {}", destino.toString());
+            }
+
+        } catch (IOException e) {
+            logger.error("Error subiendo imágenes para el usuario {}", idUsuario, e);
+        }
+
+    }
 }
