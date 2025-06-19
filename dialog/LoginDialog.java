@@ -22,13 +22,12 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.pinguela.rentexpres.desktop.util.AppIcons;
-import com.pinguela.rentexpres.desktop.util.AuthService;
-import com.pinguela.rentexpres.desktop.util.AuthServiceImpl;
-import com.pinguela.rentexpres.desktop.util.AppContext;
+import com.pinguela.rentexpres.desktop.controller.AuthController;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.desktop.util.GradientPanel;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.desktop.view.LoginFormPanel;
+import com.pinguela.rentexpres.desktop.util.AppContext;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 import net.miginfocom.swing.MigLayout;
 
@@ -41,7 +40,7 @@ public class LoginDialog extends JDialog {
 
         private UsuarioDTO authenticatedUser = null;
         private boolean rememberUser = false;
-	private final AuthService authService = new AuthServiceImpl();
+        private final AuthController authController = new AuthController();
 
 	public LoginDialog(Frame parent) {
 		super(parent, "Bienvenido a RentExpres", true);
@@ -135,20 +134,14 @@ public class LoginDialog extends JDialog {
                }
 
                try {
-                       UsuarioDTO user = authService.authenticate(username, password);
+                       rememberUser = formPanel.isRememberSelected();
+                       UsuarioDTO user = authController.login(username, password, rememberUser);
                        if (user == null) {
                                SwingUtils.showError(this, "Credenciales incorrectas.");
                                formPanel.clearPassword();
                                return;
                        }
                        authenticatedUser = user;
-                       AppContext.setCurrentUser(user);
-                       rememberUser = formPanel.isRememberSelected();
-                       if (rememberUser) {
-                               AppContext.setRememberedUser(username);
-                       } else {
-                               AppContext.setRememberedUser(null);
-                       }
                        dispose();
                } catch (Exception ex) {
                        SwingUtils.showError(this, "Error al autenticar: " + ex.getMessage());

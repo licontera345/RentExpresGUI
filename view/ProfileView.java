@@ -25,7 +25,7 @@ import com.pinguela.rentexpres.desktop.util.AppIcons;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.desktop.util.AppConfig;
 import com.pinguela.rentexpres.desktop.dialog.UsuarioEditDialog;
-import com.pinguela.rentexpres.service.UsuarioService;
+import com.pinguela.rentexpres.desktop.controller.ProfileController;
 import com.pinguela.rentexpres.service.impl.UsuarioServiceImpl;
 
 import java.nio.file.Files;
@@ -52,7 +52,7 @@ public class ProfileView extends JDialog {
         private final JButton btnClose = new JButton("Cerrar", AppIcons.CLEAR);
 
         private final Frame parent;
-        private final UsuarioService usuarioService = new UsuarioServiceImpl();
+        private final ProfileController controller = new ProfileController(new UsuarioServiceImpl());
 
         public ProfileView(Frame parent) {
                 super(parent, "Perfil de Usuario", true);
@@ -168,17 +168,17 @@ public class ProfileView extends JDialog {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 
-	private void loadUserData() {
-                UsuarioDTO u = AppContext.getCurrentUser();
-                if (u != null) {
-                        lblNombre.setText(u.getNombre() + " " + u.getApellido1() + " " + u.getApellido2());
-                        lblEmail.setText(u.getEmail());
-                        lblUsuario.setText(u.getNombreUsuario());
-                        lblTelefono.setText(u.getTelefono());
-                        lblTipo.setText(String.valueOf(u.getIdTipoUsuario()));
+        private void loadUserData() {
+                try {
+                        UsuarioDTO u = controller.getCurrentUser();
+                        if (u != null) {
+                                lblNombre.setText(u.getNombre() + " " + u.getApellido1() + " " + u.getApellido2());
+                                lblEmail.setText(u.getEmail());
+                                lblUsuario.setText(u.getNombreUsuario());
+                                lblTelefono.setText(u.getTelefono());
+                                lblTipo.setText(String.valueOf(u.getIdTipoUsuario()));
 
-                        try {
-                                List<String> imgs = usuarioService.getUsuarioImages(u.getId());
+                                List<String> imgs = controller.getUsuarioImages(u.getId());
                                 if (imgs != null && !imgs.isEmpty()) {
                                         Path imgFile = AppConfig.getImageDir().resolve(imgs.get(0));
                                         if (Files.exists(imgFile)) {
@@ -186,17 +186,17 @@ public class ProfileView extends JDialog {
                                                 lblAvatar.setIcon(avatarIcon);
                                         }
                                 }
-                        } catch (Exception ex) {
-                                // ignore, keep default icon
+                        } else {
+                                lblNombre.setText("-");
+                                lblEmail.setText("-");
+                                lblUsuario.setText("-");
+                                lblTelefono.setText("-");
+                                lblTipo.setText("-");
                         }
-                } else {
-                        lblNombre.setText("-");
-                        lblEmail.setText("-");
-                        lblUsuario.setText("-");
-                        lblTelefono.setText("-");
-                        lblTipo.setText("-");
+                } catch (Exception ex) {
+                        SwingUtils.showError(this, "Error cargando usuario: " + ex.getMessage());
                 }
-	}
+        }
 
         private void onClose(ActionEvent e) {
                 dispose();
@@ -212,9 +212,7 @@ public class ProfileView extends JDialog {
                 if (dlg.isConfirmed()) {
                         try {
                                 UsuarioDTO updated = dlg.getUsuario();
-                                usuarioService.update(updated);
-                                UsuarioDTO refreshed = usuarioService.findById(updated.getId());
-                                AppContext.setCurrentUser(refreshed);
+                                controller.updateUsuario(updated);
                                 loadUserData();
                         } catch (Exception ex) {
                                 SwingUtils.showError(this, "No se pudo actualizar el usuario.");

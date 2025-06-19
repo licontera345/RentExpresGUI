@@ -5,25 +5,21 @@ import java.awt.Frame;
 import java.util.EventObject;
 import java.util.function.Supplier;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 import com.pinguela.rentexpres.desktop.renderer.AbstractActionsCellEditor;
 
-import com.pinguela.rentexpres.desktop.dialog.ClienteDetailDialog;
-import com.pinguela.rentexpres.desktop.dialog.ClienteEditDialog;
 import com.pinguela.rentexpres.desktop.model.ClienteSearchTableModel;
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
-import com.pinguela.rentexpres.desktop.util.SwingUtils;
-import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.ClienteDTO;
 import com.pinguela.rentexpres.service.ClienteService;
+import com.pinguela.rentexpres.desktop.controller.ClienteRowController;
 
 public class ClienteActionsCellEditor extends AbstractActionsCellEditor {
 	private static final long serialVersionUID = 1L;
 
         private final Frame frame;
-        private final ClienteService service;
+        private final ClienteRowController controller;
         private final ActionCallback reload;
         private final Supplier<ClienteDTO> rowSupplier;
         private ClienteDTO clienteActual;
@@ -32,53 +28,27 @@ public class ClienteActionsCellEditor extends AbstractActionsCellEditor {
                         Supplier<ClienteDTO> rowSupplier) {
                 super();
                 this.frame = owner;
-                this.service = service;
                 this.reload = reload;
                 this.rowSupplier = rowSupplier;
+                this.controller = new ClienteRowController(owner, service, reload);
 
-		btnView.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-                                if (clienteActual != null) {
-                                        new ClienteDetailDialog(frame, clienteActual).setVisible(true);
-                                }
+                btnView.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent e) {
+                                controller.showDetail(clienteActual);
                                 fireEditingStopped();
                         }
                 });
 
-		btnEdit.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-                                if (clienteActual != null) {
-                                        ClienteEditDialog dlg = new ClienteEditDialog(frame, clienteActual);
-                                        dlg.setVisible(true);
-                                        if (dlg.isConfirmed()) {
-                                                try {
-                                                        service.update(dlg.getCliente());
-                                                        if (reload != null) {
-                                                                reload.execute();
-                                                        }
-                                                } catch (RentexpresException ex) {
-                                                        SwingUtils.showError(frame, ex.getMessage());
-                                                }
-                                        }
-                                }
+                btnEdit.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent e) {
+                                controller.edit(clienteActual);
                                 fireEditingStopped();
                         }
                 });
 
-		btnDel.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-                                if (clienteActual != null
-                                                && SwingUtils.showConfirm(frame, "¿Eliminar cliente " + clienteActual.getId() + "?",
-                                                                "Confirmar borrado") == JOptionPane.YES_OPTION) {
-                                        try {
-                                                service.delete(clienteActual.getId());
-                                                if (reload != null) {
-                                                        reload.execute();
-                                                }
-                                        } catch (RentexpresException ex) {
-                                                SwingUtils.showError(frame, ex.getMessage());
-                                        }
-                                }
+                btnDel.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent e) {
+                                controller.delete(clienteActual);
                                 fireEditingStopped();
                         }
                 });
