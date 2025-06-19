@@ -24,7 +24,7 @@ public final class AppTheme {
     public static final Color NAV_BTN_FG = new Color(45, 52, 70);
 
     /** Colores utilizados en el diálogo de inicio de sesión */
-    public static final Color LOGIN_GRADIENT_START = new Color(240, 247, 255);
+    public static final Color LOGIN_GRADIENT_START = new Color(225, 242, 254);
     public static final Color LOGIN_GRADIENT_END = Color.WHITE;
 
     /** Color de texto para etiquetas en paneles */
@@ -38,6 +38,10 @@ public final class AppTheme {
 
     /** Color acento para botones primarios. */
     public static final Color PRIMARY = new Color(33, 150, 243);
+
+    /** Color para botones secundarios/cancelar. */
+    public static final Color CANCEL = new Color(238, 238, 238);
+    public static final Color CANCEL_FG = new Color(55, 71, 79);
 
     /** Configura FlatLaf y algunos colores por defecto. */
     public static void setup() {

@@ -41,7 +41,8 @@ public class LoginDialog extends JDialog {
 	private final JButton btnIngresar = new JButton("Ingresar");
 	private final JButton btnCancelar = new JButton("Cancelar");
 
-	private UsuarioDTO authenticatedUser = null;
+        private UsuarioDTO authenticatedUser = null;
+        private boolean rememberUser = false;
 	private final AuthService authService = new AuthServiceImpl();
 
 	public LoginDialog(Frame parent) {
@@ -93,15 +94,15 @@ public class LoginDialog extends JDialog {
 		btnIngresar.setPreferredSize(new Dimension(120, 40));
 		btnIngresar.setFont(btnIngresar.getFont().deriveFont(Font.PLAIN, 14f));
 		btnIngresar.setFocusPainted(false);
-		btnIngresar.setBackground(new Color(33, 150, 243));
+                btnIngresar.setBackground(AppTheme.PRIMARY);
                 btnIngresar.setForeground(Color.WHITE);
                 btnIngresar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		btnCancelar.setPreferredSize(new Dimension(120, 40));
 		btnCancelar.setFont(btnCancelar.getFont().deriveFont(Font.PLAIN, 14f));
 		btnCancelar.setFocusPainted(false);
-		btnCancelar.setBackground(new Color(238, 238, 238));
-		btnCancelar.setForeground(new Color(55, 71, 79));
+                btnCancelar.setBackground(AppTheme.CANCEL);
+                btnCancelar.setForeground(AppTheme.CANCEL_FG);
 		btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                btnCancelar.addActionListener(new ActionListener() {
                        @Override
@@ -148,17 +149,6 @@ public class LoginDialog extends JDialog {
 			return;
 		}
 
-                try {
-                        UsuarioDTO user = authService.authenticate(username, password);
-                        if (user != null) {
-                                authenticatedUser = user;
-                                if (formPanel.isRememberSelected()) {
-                                        AppContext.setRememberedUser(username);
-                                } else {
-                                        AppContext.setRememberedUser(null);
-                                }
-                                dispose();
-			} else {
 				SwingUtils.showError(this, "Credenciales incorrectas.");
 				formPanel.clear();
 			}
@@ -169,12 +159,6 @@ public class LoginDialog extends JDialog {
 
         public UsuarioDTO showDialog() {
                 formPanel.clear();
-                String remembered = AppContext.getRememberedUser();
-                if (remembered != null) {
-                        formPanel.getUsernameField().setText(remembered);
-                        formPanel.getRememberCheckBox().setSelected(true);
-                }
-                setVisible(true);
-                return authenticatedUser;
         }
+}
 }
