@@ -27,6 +27,7 @@ import javax.swing.border.EmptyBorder;
 import com.pinguela.rentexpres.desktop.util.AppIcons;
 import com.pinguela.rentexpres.desktop.util.AuthService;
 import com.pinguela.rentexpres.desktop.util.AuthServiceImpl;
+import com.pinguela.rentexpres.desktop.util.AppContext;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.desktop.util.GradientPanel;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
@@ -147,11 +148,16 @@ public class LoginDialog extends JDialog {
 			return;
 		}
 
-		try {
-			UsuarioDTO user = authService.authenticate(username, password);
-			if (user != null) {
-				authenticatedUser = user;
-				dispose();
+                try {
+                        UsuarioDTO user = authService.authenticate(username, password);
+                        if (user != null) {
+                                authenticatedUser = user;
+                                if (formPanel.isRememberSelected()) {
+                                        AppContext.setRememberedUser(username);
+                                } else {
+                                        AppContext.setRememberedUser(null);
+                                }
+                                dispose();
 			} else {
 				SwingUtils.showError(this, "Credenciales incorrectas.");
 				formPanel.clear();
@@ -161,9 +167,14 @@ public class LoginDialog extends JDialog {
 		}
 	}
 
-	public UsuarioDTO showDialog() {
-		formPanel.clear();
-		setVisible(true);
-		return authenticatedUser;
-	}
+        public UsuarioDTO showDialog() {
+                formPanel.clear();
+                String remembered = AppContext.getRememberedUser();
+                if (remembered != null) {
+                        formPanel.getUsernameField().setText(remembered);
+                        formPanel.getRememberCheckBox().setSelected(true);
+                }
+                setVisible(true);
+                return authenticatedUser;
+        }
 }

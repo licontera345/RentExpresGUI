@@ -12,6 +12,7 @@ public class LoginFormPanel extends JPanel {
 
         private final JTextField txtUsername = new JTextField(20);
         private final JPasswordField txtPassword = new JPasswordField(20);
+       private final JCheckBox chkRemember = new JCheckBox("Recordar usuario");
 
 	public LoginFormPanel() {
 		setLayout(new GridBagLayout());
@@ -48,18 +49,37 @@ public class LoginFormPanel extends JPanel {
                 gbc.gridx = 0;
                 gbc.gridy = 3;
                 add(txtPassword, gbc);
+
+                chkRemember.setOpaque(false);
+                chkRemember.setFont(chkRemember.getFont().deriveFont(Font.PLAIN, 12f));
+                gbc.gridx = 0;
+                gbc.gridy = 4;
+                add(chkRemember, gbc);
 	}
 
 	public String getUsername() {
 		return txtUsername.getText().trim();
 	}
 
-	public String getPassword() {
-		return new String(txtPassword.getPassword());
-	}
+        public String getPassword() {
+                return new String(txtPassword.getPassword());
+        }
 
-	public void clear() {
-		txtUsername.setText("");
-		txtPassword.setText("");
-	}
+       public boolean isRememberSelected() {
+               return chkRemember.isSelected();
+       }
+
+       public JTextField getUsernameField() {
+               return txtUsername;
+       }
+
+       public JCheckBox getRememberCheckBox() {
+               return chkRemember;
+       }
+
+       public void clear() {
+               txtUsername.setText("");
+               txtPassword.setText("");
+               chkRemember.setSelected(false);
+       }
 }
