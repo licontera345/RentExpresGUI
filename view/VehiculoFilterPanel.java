@@ -59,15 +59,10 @@ public class VehiculoFilterPanel extends JPanel {
                 ftfPrecioMax = new JFormattedTextField(doubleFormat);
 
                 txtMarca.putClientProperty("JTextField.placeholderText", "Marca");
-                txtMarca.putClientProperty("JTextField.leadingIcon", AppIcons.VEHICULO);
                 txtModelo.putClientProperty("JTextField.placeholderText", "Modelo");
-                txtModelo.putClientProperty("JTextField.leadingIcon", AppIcons.VEHICULO);
                 ftfAnioDesde.putClientProperty("JTextField.placeholderText", "Desde");
                 ftfAnioHasta.putClientProperty("JTextField.placeholderText", "Hasta");
                 ftfPrecioMax.putClientProperty("JTextField.placeholderText", "Máximo");
-                ftfAnioDesde.putClientProperty("JTextField.leadingIcon", AppIcons.VEHICULO);
-                ftfAnioHasta.putClientProperty("JTextField.leadingIcon", AppIcons.VEHICULO);
-                ftfPrecioMax.putClientProperty("JTextField.leadingIcon", AppIcons.VEHICULO);
 
 		// Fila 0: Marca | Modelo
                 add(lbl("Marca:"), "cell 0 0");

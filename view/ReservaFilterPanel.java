@@ -69,11 +69,8 @@ public class ReservaFilterPanel extends JPanel {
                 dcFin.setDateFormatString("yyyy-MM-dd");
 
                 txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
-                txtNombre.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtApellido1.putClientProperty("JTextField.placeholderText", "Apellido");
-                txtApellido1.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtTelefono.putClientProperty("JTextField.placeholderText", "Teléfono");
-                txtTelefono.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
 
                 sldPrecioDia.setMajorTickSpacing(100);
                 sldPrecioDia.setPaintTicks(true);

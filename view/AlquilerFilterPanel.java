@@ -74,31 +74,21 @@ public class AlquilerFilterPanel extends JPanel {
                 NumberFormat intFormat = NumberFormat.getIntegerInstance();
                 ftfKmInicial = new JFormattedTextField(intFormat);
                 ftfKmInicial.putClientProperty("JTextField.placeholderText", "Inicial");
-                ftfKmInicial.putClientProperty("JTextField.leadingIcon", AppIcons.ALQUILER);
                 ftfKmFinal = new JFormattedTextField(intFormat);
                 ftfKmFinal.putClientProperty("JTextField.placeholderText", "Final");
-                ftfKmFinal.putClientProperty("JTextField.leadingIcon", AppIcons.ALQUILER);
 
                 NumberFormat doubleFormat = NumberFormat.getNumberInstance();
                 ftfCosteTotal = new JFormattedTextField(doubleFormat);
                 ftfCosteTotal.putClientProperty("JTextField.placeholderText", "Total");
-                ftfCosteTotal.putClientProperty("JTextField.leadingIcon", AppIcons.ALQUILER);
                 ftfPrecioDia = new JFormattedTextField(doubleFormat);
                 ftfPrecioDia.putClientProperty("JTextField.placeholderText", "€/día");
-                ftfPrecioDia.putClientProperty("JTextField.leadingIcon", AppIcons.ALQUILER);
 
                 txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
-                txtNombre.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtApellido.putClientProperty("JTextField.placeholderText", "Apellido");
-                txtApellido.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtTelefono.putClientProperty("JTextField.placeholderText", "Teléfono");
-                txtTelefono.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtPlaca.putClientProperty("JTextField.placeholderText", "Placa");
-                txtPlaca.putClientProperty("JTextField.leadingIcon", AppIcons.VEHICULO);
                 txtMarca.putClientProperty("JTextField.placeholderText", "Marca");
-                txtMarca.putClientProperty("JTextField.leadingIcon", AppIcons.VEHICULO);
                 txtModelo.putClientProperty("JTextField.placeholderText", "Modelo");
-                txtModelo.putClientProperty("JTextField.leadingIcon", AppIcons.VEHICULO);
 
                 dcInicio.setDateFormatString("yyyy-MM-dd");
                 dcFin.setDateFormatString("yyyy-MM-dd");
