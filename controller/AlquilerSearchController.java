@@ -77,7 +77,7 @@ public class AlquilerSearchController {
 	private void wireListeners() {
 
 		/* a) Filter – cambios */
-		view.getFilterPanel().setOnChange(new AlquilerFilterPanel.OnChangeListener() {
+                view.getFilter().setOnChange(new AlquilerFilterPanel.OnChangeListener() {
 			public void onChange() {
 				if (!initializing && !loading)
 					goFirstPage();
@@ -85,7 +85,7 @@ public class AlquilerSearchController {
 		});
 
 		/* b) Filter – toggle columna seleccionar */
-		view.getFilterPanel().setToggleListener(new AlquilerFilterPanel.ToggleListener() {
+                view.getFilter().setToggleListener(new AlquilerFilterPanel.ToggleListener() {
 			public void onToggle() {
 				view.getTable().toggleSelectColumn();
 			}
@@ -164,7 +164,7 @@ public class AlquilerSearchController {
 	/* ──────────────────────── Combos de Estado ─────────────────────── */
 	private void cargarEstados() {
 		try {
-			JComboBox<EstadoAlquilerDTO> cmb = view.getFilterPanel().getCmbEstado();
+                        JComboBox<EstadoAlquilerDTO> cmb = view.getFilter().getCmbEstado();
 			cmb.removeAllItems();
 
 			EstadoAlquilerDTO todos = new EstadoAlquilerDTO();
@@ -227,7 +227,7 @@ public class AlquilerSearchController {
 	}
 
 	private AlquilerCriteria buildCriteria() {
-		AlquilerFilterPanel f = view.getFilterPanel();
+                AlquilerFilterPanel f = view.getFilter();
 		AlquilerCriteria c = new AlquilerCriteria();
 
 		if (f.getIdAlquiler() != null && f.getIdAlquiler() > 0)
