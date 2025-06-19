@@ -35,6 +35,7 @@ import com.pinguela.rentexpres.desktop.view.ClienteSearchView;
 import com.pinguela.rentexpres.desktop.view.ProfileView;
 import com.pinguela.rentexpres.desktop.view.ReservaSearchView;
 import com.pinguela.rentexpres.desktop.view.VehiculoSearchView;
+import com.pinguela.rentexpres.desktop.view.CalendarView;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.service.AlquilerService;
 import com.pinguela.rentexpres.service.CategoriaVehiculoService;
@@ -169,10 +170,12 @@ public class RentExpresMainWindow extends JFrame {
 		navPanel.add(Box.createVerticalStrut(10));
 		navPanel.add(createNavButton("Reservas", AppIcons.RESERVA, btnBg, btnHoverBg, btnFg));
 		navPanel.add(Box.createVerticalStrut(10));
-		navPanel.add(createNavButton("Alquileres", AppIcons.ALQUILER, btnBg, btnHoverBg, btnFg));
-		navPanel.add(Box.createVerticalStrut(10));
-		navPanel.add(createNavButton("Clientes", AppIcons.CLIENTE, btnBg, btnHoverBg, btnFg));
-		navPanel.add(Box.createVerticalStrut(10));
+                navPanel.add(createNavButton("Alquileres", AppIcons.ALQUILER, btnBg, btnHoverBg, btnFg));
+                navPanel.add(Box.createVerticalStrut(10));
+                navPanel.add(createNavButton("Calendario", AppIcons.RESERVA, btnBg, btnHoverBg, btnFg));
+                navPanel.add(Box.createVerticalStrut(10));
+                navPanel.add(createNavButton("Clientes", AppIcons.CLIENTE, btnBg, btnHoverBg, btnFg));
+                navPanel.add(Box.createVerticalStrut(10));
 
 		if (AppContext.getCurrentUser().getIdTipoUsuario() == 1) {
 			navPanel.add(createNavButton("Vehículos", AppIcons.VEHICULO, btnBg, btnHoverBg, btnFg));
@@ -242,6 +245,9 @@ public class RentExpresMainWindow extends JFrame {
                 AlquilerSearchView asv = new AlquilerSearchView(alquilerService, estadoAlqService(), vehiculoService, this);
                 asv.initIfNeeded();
                 contentPanel.add(asv, "Alquileres");
+
+                CalendarView calView = new CalendarView();
+                contentPanel.add(calView, "Calendario");
 
 		ClienteSearchView csv = new ClienteSearchView(clienteService, provinciaService, localidadService, this);
 		csv.initIfNeeded();
