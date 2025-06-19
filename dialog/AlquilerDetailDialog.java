@@ -30,8 +30,10 @@ public class AlquilerDetailDialog extends JDialog {
 		super(owner, "Detalle del Alquiler", true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-		JPanel content = new JPanel(
-				new MigLayout("wrap 2", "[right][grow,fill]", "[]10[]10[]10[]10[]10[]10[]10[]10[]10[]10[]20[]"));
+                JPanel content = new JPanel(
+                                new MigLayout("wrap 4",
+                                                "[right]10[grow,fill]20[right]10[grow,fill]",
+                                                "[]10[]10[]10[]10[]10[]10[]10[]10[]10[]10[]20[]"));
 		content.setBorder(new EmptyBorder(15, 20, 15, 20));
 		ClienteDTO cliente;
 		EstadoAlquilerDTO estado;

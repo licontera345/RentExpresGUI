@@ -28,7 +28,9 @@ public class ReservaDetailDialog extends JDialog {
 
 	private void initComponents(ReservaDTO r) {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setLayout(new MigLayout("wrap 2", "[right][grow,fill]", "[]10[]10[]10[]10[]20[]"));
+                setLayout(new MigLayout("wrap 4",
+                                "[right]10[grow,fill]20[right]10[grow,fill]",
+                                "[]10[]10[]10[]10[]20[]"));
 
 		ClienteServiceImpl clienteService = new ClienteServiceImpl();
 		EstadoReservaServiceImpl estadoService = new EstadoReservaServiceImpl();
