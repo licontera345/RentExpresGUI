@@ -9,6 +9,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.desktop.util.AppIcons;
+import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
@@ -48,8 +49,8 @@ public class ReservaFilterPanel extends JPanel {
         private final JTextField txtTelefono = new JTextField();
 
 	/* callbacks */
-        private com.pinguela.rentexpres.desktop.util.ActionCallback onChange;
-        private com.pinguela.rentexpres.desktop.util.ActionCallback toggleListener;
+        private ActionCallback onChange;
+        private ActionCallback toggleListener;
         private Consumer<String> onMarcaChange;
 
 	/** Nueva bandera para suprimir eventos mientras se limpia el panel */
@@ -120,7 +121,7 @@ public class ReservaFilterPanel extends JPanel {
 		// Séptima línea: Teléfono y botón Seleccionar
                 add(lbl("Teléfono:"), "cell 0 " + r);
                 add(txtTelefono, "cell 1 " + r);
-                JButton btnSel = SwingUtils.button("Seleccionar", new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                JButton btnSel = SwingUtils.button("Seleccionar", new ActionCallback() {
                         @Override
                         public void execute() {
                                 fireToggleSelect();
@@ -132,7 +133,7 @@ public class ReservaFilterPanel extends JPanel {
 
 		/* ───── listeners genéricos ───── */
 		// Cada vez que un JTextField cambie, invocamos fire()
-                SwingUtils.addDocumentListener(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                SwingUtils.addDocumentListener(new ActionCallback() {
                         @Override
                         public void execute() {
                                 fire();
@@ -258,11 +259,11 @@ public class ReservaFilterPanel extends JPanel {
 	}
 
 	/* ───── control externo (el controlador conecta aquí) ───── */
-        public void setOnChange(com.pinguela.rentexpres.desktop.util.ActionCallback r) {
+        public void setOnChange(ActionCallback r) {
                 this.onChange = r;
        }
 
-        public void setToggleListener(com.pinguela.rentexpres.desktop.util.ActionCallback r) {
+        public void setToggleListener(ActionCallback r) {
                 this.toggleListener = r;
        }
 
