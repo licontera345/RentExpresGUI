@@ -52,27 +52,31 @@ public class AlquilerCreateDialog extends JDialog implements ConfirmDialog<Alqui
 	}
 
 	private void initComponents() {
-		setLayout(new MigLayout("wrap 2", "[right]10[grow,fill]", "[][][][][][][][]"));
-		dcInicio.setDateFormatString("yyyy-MM-dd");
-		dcFin.setDateFormatString("yyyy-MM-dd");
+                setLayout(new MigLayout("wrap 4,insets 15", "[right]10[120:150:grow]20[right]10[120:150:grow]", "[]10[]10[]10[]10[]"));
+                dcInicio.setDateFormatString("yyyy-MM-dd");
+                dcFin.setDateFormatString("yyyy-MM-dd");
 
-		add(new JLabel("ID Reserva:"));
-		add(spnIdReserva);
-		add(btnNuevaReserva, "span, align right");
-		add(new JLabel("Fecha Inicio:"));
-		add(dcInicio);
-		add(new JLabel("Fecha Fin:"));
-		add(dcFin);
-		add(new JLabel("KM Inicio:"));
-		add(txtKmInicio);
-		add(new JLabel("KM Fin:"));
-		add(txtKmFin);
-		add(new JLabel("Coste Total:"));
-		add(txtCosteTotal);
-		add(new JLabel("Estado:"));
-		add(cmbEstado);
-		add(btnCrear, "split 2");
-		add(btnCancelar);
+                add(new JLabel("ID Reserva:"), "cell 0 0");
+                add(spnIdReserva, "cell 1 0");
+                add(btnNuevaReserva, "cell 2 0 2 1, right, wrap");
+
+                add(new JLabel("Fecha Inicio:"), "cell 0 1");
+                add(dcInicio, "cell 1 1");
+                add(new JLabel("Fecha Fin:"), "cell 2 1");
+                add(dcFin, "cell 3 1, wrap");
+
+                add(new JLabel("KM Inicio:"), "cell 0 2");
+                add(txtKmInicio, "cell 1 2");
+                add(new JLabel("KM Fin:"), "cell 2 2");
+                add(txtKmFin, "cell 3 2, wrap");
+
+                add(new JLabel("Coste Total:"), "cell 0 3");
+                add(txtCosteTotal, "cell 1 3");
+                add(new JLabel("Estado:"), "cell 2 3");
+                add(cmbEstado, "cell 3 3, wrap");
+
+                add(btnCrear, "cell 2 4");
+                add(btnCancelar, "cell 3 4");
 
 		// --- listeners ---
 		btnCrear.addActionListener(new ActionListener() {

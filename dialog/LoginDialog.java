@@ -1,11 +1,9 @@
 package com.pinguela.rentexpres.desktop.dialog;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Image;
@@ -32,6 +30,7 @@ import com.pinguela.rentexpres.desktop.util.GradientPanel;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.desktop.view.LoginFormPanel;
 import com.pinguela.rentexpres.model.UsuarioDTO;
+import net.miginfocom.swing.MigLayout;
 
 public class LoginDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -55,32 +54,24 @@ public class LoginDialog extends JDialog {
 	private void initComponents() {
                 GradientPanel container = new GradientPanel(AppTheme.LOGIN_GRADIENT_START,
                                 AppTheme.LOGIN_GRADIENT_END);
-                container.setLayout(new BorderLayout());
-                container.setBorder(new EmptyBorder(20, 20, 20, 20));
+                container.setLayout(new MigLayout("wrap 2,insets 20", "[grow 0][grow]", "[]20[]20[]"));
                 getContentPane().add(container);
-
-                JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-                topPanel.setOpaque(false);
 
                 JLabel lblTitle = new JLabel("¡Bienvenido a RentExpres!");
                 lblTitle.setFont(lblTitle.getFont().deriveFont(Font.BOLD, 22f));
                 lblTitle.setForeground(new Color(45, 45, 45));
+                container.add(lblTitle, "span 2, center, wrap");
 
+                JLabel lblIcon = null;
                 if (AppIcons.ALQUILER != null) {
                         ImageIcon vehicleIcon = AppIcons.ALQUILER;
                         Image scaled = vehicleIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-                        JLabel lblIcon = new JLabel(new ImageIcon(scaled));
-                        topPanel.add(lblIcon);
+                        lblIcon = new JLabel(new ImageIcon(scaled));
+                } else {
+                        lblIcon = new JLabel();
                 }
-
-                topPanel.add(lblTitle);
-                container.add(topPanel, BorderLayout.NORTH);
-
-                JPanel centerPanel = new JPanel(new BorderLayout());
-                centerPanel.setOpaque(false);
-                centerPanel.setBorder(new EmptyBorder(20, 0, 20, 0));
-                centerPanel.add(formPanel, BorderLayout.CENTER);
-                container.add(centerPanel, BorderLayout.CENTER);
+                container.add(lblIcon, "grow 0, gapright 20");
+                container.add(formPanel, "growx, wrap");
 
                 JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
                 btnPanel.setOpaque(false);
@@ -118,7 +109,7 @@ public class LoginDialog extends JDialog {
                btnPanel.add(btnIngresar);
                btnPanel.add(btnCancelar);
 
-		container.add(btnPanel, BorderLayout.SOUTH);
+                container.add(btnPanel, "span 2, center");
 
 		for (Component comp : formPanel.getComponents()) {
 			comp.addKeyListener(new KeyAdapter() {
