@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.pinguela.rentexpres.desktop.controller.LogoutAction;
+import com.pinguela.rentexpres.desktop.controller.RoleController;
 import com.pinguela.rentexpres.desktop.dialog.LoginDialog;
 import com.pinguela.rentexpres.desktop.util.AppContext;
 import com.pinguela.rentexpres.desktop.util.AppIcons;
@@ -180,7 +181,7 @@ public class RentExpresMainWindow extends JFrame {
                 navPanel.add(createNavButton("Clientes", AppIcons.CLIENTE, btnBg, btnHoverBg, btnFg));
                 navPanel.add(Box.createVerticalStrut(10));
 
-                if (AppContext.getCurrentUser().getIdTipoUsuario() == 1) {
+                if (RoleController.isAdmin()) {
                         navPanel.add(createNavButton("Usuarios", AppIcons.USUARIO, btnBg, btnHoverBg, btnFg));
                         navPanel.add(Box.createVerticalStrut(10));
                         navPanel.add(createNavButton("Vehículos", AppIcons.VEHICULO, btnBg, btnHoverBg, btnFg));
@@ -259,7 +260,7 @@ public class RentExpresMainWindow extends JFrame {
                 contentPanel.add(csv, "Clientes");
 
                 // Solo administradores
-                if (AppContext.getCurrentUser().getIdTipoUsuario() == 1) {
+                if (RoleController.isAdmin()) {
                         UsuarioSearchView usv = new UsuarioSearchView(usuarioService, this);
                         usv.initIfNeeded();
                         contentPanel.add(usv, "Usuarios");
