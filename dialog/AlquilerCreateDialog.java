@@ -22,8 +22,13 @@ import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.model.EstadoAlquilerDTO;
 import com.pinguela.rentexpres.model.ReservaDTO;
+import com.pinguela.rentexpres.model.ClienteDTO;
 import com.pinguela.rentexpres.service.EstadoAlquilerService;
+import com.pinguela.rentexpres.service.ClienteService;
 import com.pinguela.rentexpres.service.impl.EstadoAlquilerServiceImpl;
+import com.pinguela.rentexpres.service.impl.ClienteServiceImpl;
+import com.pinguela.rentexpres.exception.RentexpresException;
+import com.pinguela.rentexpres.desktop.dialog.ClienteCreateDialog;
 import com.toedter.calendar.JDateChooser;
 
 import net.miginfocom.swing.MigLayout;
@@ -40,7 +45,11 @@ public class AlquilerCreateDialog extends JDialog implements ConfirmDialog<Alqui
 	private final JComboBox<EstadoAlquilerDTO> cmbEstado = new JComboBox<>();
 	private final JButton btnCrear = new JButton("Crear");
 	private final JButton btnCancelar = new JButton("Cancelar");
-	private final JButton btnNuevaReserva = new JButton("Nueva Reserva");
+       private final JButton btnNuevaReserva = new JButton("Nueva Reserva");
+       private final JButton btnNuevoCliente = new JButton("Nuevo Cliente");
+
+       private final ClienteService clienteService = new ClienteServiceImpl();
+       private Integer ultimoClienteId = null;
 
 	private final EstadoAlquilerService estadoService = new EstadoAlquilerServiceImpl();
 	private boolean confirmed = false;
@@ -56,9 +65,10 @@ public class AlquilerCreateDialog extends JDialog implements ConfirmDialog<Alqui
                 dcInicio.setDateFormatString("yyyy-MM-dd");
                 dcFin.setDateFormatString("yyyy-MM-dd");
 
-                add(new JLabel("ID Reserva:"), "cell 0 0");
-                add(spnIdReserva, "cell 1 0");
-                add(btnNuevaReserva, "cell 2 0 2 1, right, wrap");
+               add(new JLabel("ID Reserva:"), "cell 0 0");
+               add(spnIdReserva, "cell 1 0");
+               add(btnNuevaReserva, "cell 2 0");
+               add(btnNuevoCliente, "cell 3 0, right, wrap");
 
                 add(new JLabel("Fecha Inicio:"), "cell 0 1");
                 add(dcInicio, "cell 1 1");
@@ -91,15 +101,21 @@ public class AlquilerCreateDialog extends JDialog implements ConfirmDialog<Alqui
 				dispose();
 			}
 		});
-		btnNuevaReserva.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				abrirNuevaReserva();
-			}
-		});
-		pack();
-		setLocationRelativeTo(getOwner());
-	}
+                btnNuevaReserva.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                                abrirNuevaReserva();
+                        }
+                });
+               btnNuevoCliente.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               abrirNuevoCliente();
+                       }
+               });
+                pack();
+                setLocationRelativeTo(getOwner());
+        }
 
 	private void loadEstados() {
 		try {
@@ -148,18 +164,38 @@ public class AlquilerCreateDialog extends JDialog implements ConfirmDialog<Alqui
                 dispose();
         }
 
-	private void abrirNuevaReserva() {
-		ReservaCreateDialog dlg = new ReservaCreateDialog((Frame) getOwner());
-		dlg.setVisible(true);
-		if (dlg.isConfirmed()) {
-			ReservaDTO nueva = dlg.getReserva();
-			if (nueva != null && nueva.getId() != null) {
-				spnIdReserva.setValue(nueva.getId());
-				JOptionPane.showMessageDialog(this, "Reserva creada con ID: " + nueva.getId(), "Éxito",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-		}
-	}
+        private void abrirNuevaReserva() {
+                ReservaCreateDialog dlg = new ReservaCreateDialog((Frame) getOwner());
+               if (ultimoClienteId != null) {
+                       dlg.txtCli.setText(String.valueOf(ultimoClienteId));
+               }
+                dlg.setVisible(true);
+                if (dlg.isConfirmed()) {
+                        ReservaDTO nueva = dlg.getReserva();
+                        if (nueva != null && nueva.getId() != null) {
+                                spnIdReserva.setValue(nueva.getId());
+                                JOptionPane.showMessageDialog(this, "Reserva creada con ID: " + nueva.getId(), "Éxito",
+                                                JOptionPane.INFORMATION_MESSAGE);
+                        }
+                }
+        }
+
+       private void abrirNuevoCliente() {
+               ClienteCreateDialog dlg = new ClienteCreateDialog((Frame) getOwner());
+               dlg.setVisible(true);
+               if (dlg.isConfirmed()) {
+                       try {
+                               ClienteDTO nuevo = dlg.getCliente();
+                               if (clienteService.create(nuevo)) {
+                                       ultimoClienteId = nuevo.getId();
+                                       JOptionPane.showMessageDialog(this, "Cliente creado con ID: " + nuevo.getId(), "Éxito",
+                                                       JOptionPane.INFORMATION_MESSAGE);
+                               }
+                       } catch (RentexpresException ex) {
+                               SwingUtils.showError(this, "Error creando cliente: " + ex.getMessage());
+                       }
+               }
+       }
 
 	public boolean isConfirmed() {
 		return confirmed;
