@@ -23,4 +23,9 @@ public class TipoUsuarioDTO extends ValueObject {
     public void setNombreTipo(String nombreTipo) {
         this.nombreTipo = nombreTipo;
     }
+
+    @Override
+    public String toString() {
+        return nombreTipo != null ? nombreTipo : "";
+    }
 }

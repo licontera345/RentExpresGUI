@@ -16,6 +16,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import com.pinguela.rentexpres.desktop.util.CatalogCache;
+import com.pinguela.rentexpres.service.VehiculoService;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.pinguela.rentexpres.desktop.util.FileService;
@@ -29,8 +31,8 @@ import com.pinguela.rentexpres.model.VehiculoDTO;
 public class VehiculoCreateDialog extends JDialog implements ConfirmDialog<VehiculoDTO> {
 	private static final long serialVersionUID = 1L;
 
-	private JTextField txtMarca;
-	private JTextField txtModelo;
+        private JComboBox<String> cmbMarca;
+        private JComboBox<String> cmbModelo;
 	private JTextField txtAnio;
 	private JTextField txtPrecioDia;
 	private JTextField txtPlaca;
@@ -44,17 +46,20 @@ public class VehiculoCreateDialog extends JDialog implements ConfirmDialog<Vehic
 	private boolean confirmed = false;
 	private String imagenSeleccionada = null;
 
-	private final FileService fileService;
+        private final FileService fileService;
+        private final VehiculoService vehiculoService;
 
-	public VehiculoCreateDialog(Frame owner, List<CategoriaVehiculoDTO> categorias, List<EstadoVehiculoDTO> estados)
-			throws RentexpresException {
-		super(owner, "Crear Vehículo", true);
+        public VehiculoCreateDialog(Frame owner, List<CategoriaVehiculoDTO> categorias,
+                        List<EstadoVehiculoDTO> estados, VehiculoService vehiculoService)
+                        throws RentexpresException {
+                super(owner, "Crear Vehículo", true);
                 try {
                         fileService = new FileService(AppConfig.getImageDir("vehiculos"));
+                        this.vehiculoService = vehiculoService;
                 } catch (IOException e) {
                         throw new RentexpresException("No se pudo inicializar FileService: " + e.getMessage(), e);
                 }
-		initComponents(categorias, estados);
+                initComponents(categorias, estados);
 		pack();
 		setLocationRelativeTo(owner);
 	}
@@ -63,8 +68,8 @@ public class VehiculoCreateDialog extends JDialog implements ConfirmDialog<Vehic
                 JPanel panel = new JPanel(new net.miginfocom.swing.MigLayout(
                                 "wrap 4", "[right]10[200:200:200]20[right]10[200:200:200]", ""));
 
-                txtMarca = new JTextField(20);
-                txtModelo = new JTextField(20);
+                cmbMarca = new JComboBox<>();
+                cmbModelo = new JComboBox<>();
                 txtAnio = new JTextField(6);
                 txtPrecioDia = new JTextField(10);
                 txtPlaca = new JTextField(12);
@@ -76,10 +81,28 @@ public class VehiculoCreateDialog extends JDialog implements ConfirmDialog<Vehic
                 lblImagenPreview = new JLabel();
                 lblImagenPreview.setPreferredSize(new java.awt.Dimension(120, 90));
 
+                try {
+                        cargarMarcas();
+                        cargarModelosPorMarca(null);
+                } catch (Exception ex) {
+                        // ignore
+                }
+
+                cmbMarca.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                                try {
+                                        cargarModelosPorMarca((String) cmbMarca.getSelectedItem());
+                                } catch (Exception ex) {
+                                        // ignore
+                                }
+                        }
+                });
+
                 panel.add(new JLabel("Marca:"));
-                panel.add(txtMarca, "growx");
+                panel.add(cmbMarca, "growx");
                 panel.add(new JLabel("Modelo:"));
-                panel.add(txtModelo, "growx");
+                panel.add(cmbModelo, "growx");
 
                 panel.add(new JLabel("Año Fabricación:"));
                 panel.add(txtAnio, "growx");
@@ -148,15 +171,15 @@ public class VehiculoCreateDialog extends JDialog implements ConfirmDialog<Vehic
                 getContentPane().add(panel, BorderLayout.CENTER);
         }
 
-	private void onOk() {
-		if (txtMarca.getText().trim().isEmpty()) {
-			SwingUtils.showError(this, "La marca es obligatoria.");
-			return;
-		}
-		if (txtModelo.getText().trim().isEmpty()) {
-			SwingUtils.showError(this, "El modelo es obligatorio.");
-			return;
-		}
+        private void onOk() {
+                if (cmbMarca.getSelectedItem() == null || ((String)cmbMarca.getSelectedItem()).trim().isEmpty()) {
+                        SwingUtils.showError(this, "La marca es obligatoria.");
+                        return;
+                }
+                if (cmbModelo.getSelectedItem() == null || ((String)cmbModelo.getSelectedItem()).trim().isEmpty()) {
+                        SwingUtils.showError(this, "El modelo es obligatorio.");
+                        return;
+                }
 		try {
 			Integer.parseInt(txtAnio.getText().trim());
 		} catch (NumberFormatException e) {
@@ -205,8 +228,8 @@ public class VehiculoCreateDialog extends JDialog implements ConfirmDialog<Vehic
                         return null;
 
 		VehiculoDTO dto = new VehiculoDTO();
-		dto.setMarca(txtMarca.getText().trim());
-		dto.setModelo(txtModelo.getText().trim());
+                dto.setMarca((String) cmbMarca.getSelectedItem());
+                dto.setModelo((String) cmbModelo.getSelectedItem());
 		dto.setAnioFabricacion(Integer.parseInt(txtAnio.getText().trim()));
 		dto.setPrecioDia(Double.parseDouble(txtPrecioDia.getText().trim()));
 		dto.setPlaca(txtPlaca.getText().trim());
@@ -219,6 +242,36 @@ public class VehiculoCreateDialog extends JDialog implements ConfirmDialog<Vehic
                 dto.setImagenPath(imagenSeleccionada);
 
                 return dto;
+        }
+
+        private void cargarMarcas() throws RentexpresException {
+                cmbMarca.removeAllItems();
+                java.util.Set<String> marcas = new java.util.HashSet<>();
+                for (VehiculoDTO v : CatalogCache.getVehiculos(vehiculoService)) {
+                        marcas.add(v.getMarca());
+                }
+                java.util.List<String> lista = new java.util.ArrayList<>(marcas);
+                java.util.Collections.sort(lista);
+                for (String m : lista) {
+                        cmbMarca.addItem(m);
+                }
+                cmbMarca.setSelectedIndex(-1);
+        }
+
+        private void cargarModelosPorMarca(String marca) throws RentexpresException {
+                cmbModelo.removeAllItems();
+                java.util.Set<String> modelos = new java.util.HashSet<>();
+                for (VehiculoDTO v : CatalogCache.getVehiculos(vehiculoService)) {
+                        if (marca == null || marca.equals(v.getMarca())) {
+                                modelos.add(v.getModelo());
+                        }
+                }
+                java.util.List<String> lista = new java.util.ArrayList<>(modelos);
+                java.util.Collections.sort(lista);
+                for (String m : lista) {
+                        cmbModelo.addItem(m);
+                }
+                cmbModelo.setSelectedIndex(-1);
         }
 
         @Override

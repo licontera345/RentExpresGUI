@@ -239,8 +239,8 @@ public class VehiculoSearchController {
 
 	public void onNuevoVehiculo() {
 		try {
-			VehiculoCreateDialog dlg = new VehiculoCreateDialog(frame, categoriaService.findAll(),
-					estadoService.findAll());
+                        VehiculoCreateDialog dlg = new VehiculoCreateDialog(frame, categoriaService.findAll(),
+                                        estadoService.findAll(), vehiculoService);
 			dlg.setVisible(true);
 			if (!dlg.isConfirmed()) {
 				return;

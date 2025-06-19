@@ -41,7 +41,8 @@ public class SearchVehiculoAction {
 	}
 
         public void showCreate(ActionCallback onReload) throws RentexpresException {
-		VehiculoCreateDialog dlg = new VehiculoCreateDialog(frame, categoriaService.findAll(), estadoService.findAll());
+                VehiculoCreateDialog dlg = new VehiculoCreateDialog(frame, categoriaService.findAll(),
+                                estadoService.findAll(), vehiculoService);
 		dlg.setVisible(true);
 		if (!dlg.isConfirmed()) {
 			return;
@@ -69,8 +70,8 @@ public class SearchVehiculoAction {
 		if (dto == null) {
 			return;
 		}
-		VehiculoEditDialog dlg = new VehiculoEditDialog(frame, dto, categoriaService.findAll(),
-				estadoService.findAll());
+                VehiculoEditDialog dlg = new VehiculoEditDialog(frame, dto, categoriaService.findAll(),
+                                estadoService.findAll(), vehiculoService);
 		dlg.setVisible(true);
 		if (!dlg.isConfirmed()) {
 			return;

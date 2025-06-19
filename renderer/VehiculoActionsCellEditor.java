@@ -54,7 +54,7 @@ public class VehiculoActionsCellEditor extends AbstractActionsCellEditor {
                                                 List<EstadoVehiculoDTO> estados = searchAction != null ? searchAction.getEstadoService().findAll() : java.util.Collections.emptyList();
                                                 List<CategoriaVehiculoDTO> categorias = searchAction != null ? searchAction.getCategoriaService().findAll() : java.util.Collections.emptyList();
 
-						VehiculoEditDialog dlg = new VehiculoEditDialog(frame, vehiculoActual, categorias, estados);
+                                                VehiculoEditDialog dlg = new VehiculoEditDialog(frame, vehiculoActual, categorias, estados, service);
 						dlg.setVisible(true);
 
 						if (dlg.isConfirmed()) {

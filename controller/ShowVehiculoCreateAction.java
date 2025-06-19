@@ -24,7 +24,8 @@ public class ShowVehiculoCreateAction extends AbstractCreateAction<VehiculoDTO, 
 
         @Override
         protected VehiculoCreateDialog createDialog() {
-                return new VehiculoCreateDialog(frame, categoriaService.findAll(), estadoService.findAll());
+                return new VehiculoCreateDialog(frame, categoriaService.findAll(),
+                                estadoService.findAll(), vehiculoService);
         }
 
         @Override
