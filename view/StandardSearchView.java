@@ -3,7 +3,7 @@ package com.pinguela.rentexpres.desktop.view;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JToolBar;
+import net.miginfocom.swing.MigLayout;
 import com.pinguela.rentexpres.desktop.util.PaginationPanel;
 
 /**
@@ -26,17 +26,16 @@ public class StandardSearchView<F extends JPanel, A extends AbstractSearchAction
         this.table = table;
         this.pager = new PaginationPanel();
 
-        JToolBar bar = new JToolBar();
-        bar.setFloatable(false);
-        bar.add(actions);
+        JPanel top = new JPanel(new MigLayout("fillx", "[grow][]", "[]"));
+        top.add(filter, "growx");
+        top.add(actions, "wrap");
 
         JPanel main = new JPanel(new BorderLayout());
-        main.add(filter, BorderLayout.NORTH);
         main.add(new JScrollPane(table), BorderLayout.CENTER);
         main.add(pager, BorderLayout.SOUTH);
 
         setLayout(new BorderLayout(8, 8));
-        add(bar, BorderLayout.NORTH);
+        add(top, BorderLayout.NORTH);
         add(main, BorderLayout.CENTER);
     }
 
