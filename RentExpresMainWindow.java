@@ -9,10 +9,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -161,34 +161,26 @@ public class RentExpresMainWindow extends JFrame {
         Color btnHoverBg = AppTheme.NAV_BTN_HOVER_BG;
         Color btnFg = AppTheme.NAV_BTN_FG;
 
-		navPanel.setBackground(navBg);
-		navPanel.setPreferredSize(new Dimension(200, getHeight()));
-		navPanel.setLayout(new BoxLayout(navPanel, BoxLayout.Y_AXIS));
+                navPanel.setBackground(navBg);
+                navPanel.setPreferredSize(new Dimension(260, getHeight()));
+                navPanel.setLayout(new GridLayout(0, 2, 10, 10));
 
-		navPanel.add(Box.createVerticalStrut(20));
-		navPanel.add(createNavButton("Inicio", AppIcons.INICIO, btnBg, btnHoverBg, btnFg));
-		navPanel.add(Box.createVerticalStrut(10));
-		navPanel.add(createNavButton("Reservas", AppIcons.RESERVA, btnBg, btnHoverBg, btnFg));
-		navPanel.add(Box.createVerticalStrut(10));
+                navPanel.add(createNavButton("Inicio", AppIcons.INICIO, btnBg, btnHoverBg, btnFg));
+                navPanel.add(createNavButton("Reservas", AppIcons.RESERVA, btnBg, btnHoverBg, btnFg));
                 navPanel.add(createNavButton("Alquileres", AppIcons.ALQUILER, btnBg, btnHoverBg, btnFg));
-                navPanel.add(Box.createVerticalStrut(10));
                 navPanel.add(createNavButton("Calendario", AppIcons.RESERVA, btnBg, btnHoverBg, btnFg));
-                navPanel.add(Box.createVerticalStrut(10));
                 navPanel.add(createNavButton("Clientes", AppIcons.CLIENTE, btnBg, btnHoverBg, btnFg));
-                navPanel.add(Box.createVerticalStrut(10));
 
-		if (AppContext.getCurrentUser().getIdTipoUsuario() == 1) {
-			navPanel.add(createNavButton("Vehículos", AppIcons.VEHICULO, btnBg, btnHoverBg, btnFg));
-		}
-		navPanel.add(Box.createVerticalGlue());
+                if (AppContext.getCurrentUser().getIdTipoUsuario() == 1) {
+                        navPanel.add(createNavButton("Vehículos", AppIcons.VEHICULO, btnBg, btnHoverBg, btnFg));
+                }
 	}
 
 	private JButton createNavButton(String text, ImageIcon icon, Color bg, Color hoverBg, Color fg) {
 		JButton btn = new JButton(text, icon);
-		btn.setHorizontalAlignment(SwingConstants.LEFT);
-		btn.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btn.setMaximumSize(new Dimension(180, 50));
-		btn.setPreferredSize(new Dimension(180, 50));
+                btn.setHorizontalAlignment(SwingConstants.CENTER);
+                btn.setMaximumSize(new Dimension(120, 50));
+                btn.setPreferredSize(new Dimension(120, 50));
 		btn.setFocusPainted(false);
 		btn.setBackground(bg);
 		btn.setForeground(fg);
