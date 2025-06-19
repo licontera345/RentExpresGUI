@@ -31,7 +31,9 @@ public class UsuarioCreateDialog extends JDialog implements ConfirmDialog<Usuari
 	private static final long serialVersionUID = 1L;
 
 	private JTextField txtNombre;
-	private JTextField txtApellidos;
+        private JTextField txtApellido1;
+        private JTextField txtApellido2;
+        private JTextField txtTelefono;
 	private JTextField txtEmail;
 	private JTextField txtUsuario; // nombreUsuario
 	private JPasswordField txtContrasena; // contraseña en claro
@@ -65,10 +67,20 @@ public class UsuarioCreateDialog extends JDialog implements ConfirmDialog<Usuari
 		txtNombre = new JTextField(25);
 		getContentPane().add(txtNombre, "growx");
 
-		// Apellidos
-		getContentPane().add(new JLabel("Apellidos:"), "align label");
-		txtApellidos = new JTextField(25);
-		getContentPane().add(txtApellidos, "growx");
+                // Apellido1
+                getContentPane().add(new JLabel("1.º Apellido:"), "align label");
+                txtApellido1 = new JTextField(25);
+                getContentPane().add(txtApellido1, "growx, wrap");
+
+                // Apellido2
+                getContentPane().add(new JLabel("2.º Apellido:"), "align label");
+                txtApellido2 = new JTextField(25);
+                getContentPane().add(txtApellido2, "growx");
+
+                // Teléfono
+                getContentPane().add(new JLabel("Teléfono:"), "align label");
+                txtTelefono = new JTextField(15);
+                getContentPane().add(txtTelefono, "growx");
 
 		// Email
 		getContentPane().add(new JLabel("Email:"), "align label");
@@ -127,18 +139,19 @@ public class UsuarioCreateDialog extends JDialog implements ConfirmDialog<Usuari
 
 	private void onGuardar() {
 		// Validaciones básicas
-		if (txtNombre.getText().trim().isEmpty() || txtApellidos.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty()
-				|| txtUsuario.getText().trim().isEmpty() || txtContrasena.getPassword().length == 0
-				|| cmbTipoUsuario.getSelectedItem() == null) {
-			SwingUtils.showWarning(this, "Todos los campos obligatorios deben estar completos.");
-			return;
-		}
+                if (txtNombre.getText().trim().isEmpty() || txtApellido1.getText().trim().isEmpty()
+                                || txtEmail.getText().trim().isEmpty() || txtUsuario.getText().trim().isEmpty()
+                                || txtContrasena.getPassword().length == 0 || cmbTipoUsuario.getSelectedItem() == null) {
+                        SwingUtils.showWarning(this, "Todos los campos obligatorios deben estar completos.");
+                        return;
+                }
 
                 UsuarioDTO dto = new UsuarioDTO();
                 dto.setNombre(txtNombre.getText().trim());
-                dto.setApellido1(txtApellidos.getText().trim());
-                dto.setApellido2(txtApellidos.getText().trim());
+                dto.setApellido1(txtApellido1.getText().trim());
+                dto.setApellido2(txtApellido2.getText().trim());
                 dto.setEmail(txtEmail.getText().trim());
+                dto.setTelefono(txtTelefono.getText().trim());
                 dto.setNombreUsuario(txtUsuario.getText().trim());
                 dto.setContrasena(new String(txtContrasena.getPassword()));
                 dto.setIdTipoUsuario(((TipoUsuarioDTO) cmbTipoUsuario.getSelectedItem()).getId());
