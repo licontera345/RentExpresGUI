@@ -52,7 +52,7 @@ public class AlquilerCreateDialog extends JDialog implements ConfirmDialog<Alqui
 	}
 
 	private void initComponents() {
-                setLayout(new MigLayout("wrap 4,insets 15", "[right]10[120:150:grow]20[right]10[120:150:grow]", "[]10[]10[]10[]10[]"));
+                setLayout(new MigLayout("wrap 4,insets 15", "[right]10[120:150,grow]20[right]10[120:150,grow]", "[]10[]10[]10[]10[]"));
                 dcInicio.setDateFormatString("yyyy-MM-dd");
                 dcFin.setDateFormatString("yyyy-MM-dd");
 
