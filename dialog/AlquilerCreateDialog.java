@@ -23,7 +23,9 @@ import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.model.EstadoAlquilerDTO;
 import com.pinguela.rentexpres.model.ReservaDTO;
 import com.pinguela.rentexpres.service.EstadoAlquilerService;
+import com.pinguela.rentexpres.service.ReservaService;
 import com.pinguela.rentexpres.service.impl.EstadoAlquilerServiceImpl;
+import com.pinguela.rentexpres.service.impl.ReservaServiceImpl;
 import com.toedter.calendar.JDateChooser;
 
 import net.miginfocom.swing.MigLayout;
@@ -42,7 +44,8 @@ public class AlquilerCreateDialog extends JDialog implements ConfirmDialog<Alqui
 	private final JButton btnCancelar = new JButton("Cancelar");
 	private final JButton btnNuevaReserva = new JButton("Nueva Reserva");
 
-	private final EstadoAlquilerService estadoService = new EstadoAlquilerServiceImpl();
+        private final EstadoAlquilerService estadoService = new EstadoAlquilerServiceImpl();
+        private final ReservaService reservaService = new ReservaServiceImpl();
 	private boolean confirmed = false;
 
 	public AlquilerCreateDialog(Frame owner) {
@@ -152,18 +155,26 @@ public class AlquilerCreateDialog extends JDialog implements ConfirmDialog<Alqui
                 dispose();
         }
 
-	private void abrirNuevaReserva() {
-		ReservaCreateDialog dlg = new ReservaCreateDialog((Frame) getOwner());
-		dlg.setVisible(true);
-		if (dlg.isConfirmed()) {
-			ReservaDTO nueva = dlg.getReserva();
-			if (nueva != null && nueva.getId() != null) {
-				spnIdReserva.setValue(nueva.getId());
-				JOptionPane.showMessageDialog(this, "Reserva creada con ID: " + nueva.getId(), "Éxito",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-		}
-	}
+        private void abrirNuevaReserva() {
+                ReservaCreateDialog dlg = new ReservaCreateDialog((Frame) getOwner());
+                dlg.setVisible(true);
+                if (dlg.isConfirmed()) {
+                        ReservaDTO nueva = dlg.getReserva();
+                        if (nueva != null) {
+                                try {
+                                        reservaService.create(nueva);
+                                        if (nueva.getId() != null) {
+                                                spnIdReserva.setValue(nueva.getId());
+                                                JOptionPane.showMessageDialog(this,
+                                                                "Reserva creada con ID: " + nueva.getId(), "Éxito",
+                                                                JOptionPane.INFORMATION_MESSAGE);
+                                        }
+                                } catch (Exception ex) {
+                                        SwingUtils.showError(this, "Error creando reserva: " + ex.getMessage());
+                                }
+                        }
+                }
+        }
 
 	public boolean isConfirmed() {
 		return confirmed;
