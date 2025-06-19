@@ -120,14 +120,16 @@ public class UsuarioCreateDialog extends JDialog implements ConfirmDialog<Usuari
                 imgPanel.add(lblImagenPreview, java.awt.BorderLayout.CENTER);
                 getContentPane().add(imgPanel, "growx, wrap");
 
-                btnSeleccionarImagen.addActionListener(e -> {
-                        JFileChooser chooser = new JFileChooser();
-                        chooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
-                        int resp = chooser.showOpenDialog(UsuarioCreateDialog.this);
-                        if (resp == JFileChooser.APPROVE_OPTION) {
-                                imagenSeleccionada = chooser.getSelectedFile();
-                                javax.swing.ImageIcon ico = new javax.swing.ImageIcon(new javax.swing.ImageIcon(imagenSeleccionada.getAbsolutePath()).getImage().getScaledInstance(120, 90, java.awt.Image.SCALE_SMOOTH));
-                                lblImagenPreview.setIcon(ico);
+                btnSeleccionarImagen.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent e) {
+                                JFileChooser chooser = new JFileChooser();
+                                chooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
+                                int resp = chooser.showOpenDialog(UsuarioCreateDialog.this);
+                                if (resp == JFileChooser.APPROVE_OPTION) {
+                                        imagenSeleccionada = chooser.getSelectedFile();
+                                        javax.swing.ImageIcon ico = new javax.swing.ImageIcon(new javax.swing.ImageIcon(imagenSeleccionada.getAbsolutePath()).getImage().getScaledInstance(120, 90, java.awt.Image.SCALE_SMOOTH));
+                                        lblImagenPreview.setIcon(ico);
+                                }
                         }
                 });
 

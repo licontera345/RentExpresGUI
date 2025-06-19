@@ -39,32 +39,71 @@ public class UsuarioSearchController {
 
     private void wireActions() {
         UsuarioSearchActionsView actions = view.getActions();
-        actions.onNuevo(() -> {
-            new ShowUsuarioCreateAction(frame, service, () -> goFirstPage()).actionPerformed(null);
+        actions.onNuevo(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+            @Override
+            public void execute() {
+                new ShowUsuarioCreateAction(frame, service, new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+                    @Override
+                    public void execute() {
+                        goFirstPage();
+                    }
+                }).actionPerformed(null);
+            }
         });
-        actions.onBuscar(() -> goFirstPage());
-        actions.onLimpiar(() -> onLimpiar());
-        actions.onBorrarSeleccionados(() -> onDeleteSelected());
+        actions.onBuscar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+            @Override
+            public void execute() {
+                goFirstPage();
+            }
+        });
+        actions.onLimpiar(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+            @Override
+            public void execute() {
+                onLimpiar();
+            }
+        });
+        actions.onBorrarSeleccionados(new com.pinguela.rentexpres.desktop.util.ActionCallback() {
+            @Override
+            public void execute() {
+                onDeleteSelected();
+            }
+        });
     }
 
     private void wirePager() {
-        view.getPager().onFirst(() -> { if (!loading) goFirstPage(); });
-        view.getPager().onPrev(() -> {
-            if (!loading && currentPage > 1) {
-                currentPage--;
-                buscar();
+        view.getPager().onFirst(new com.pinguela.rentexpres.desktop.util.PaginationPanel.OnPagerListener() {
+            @Override
+            public void onAction() {
+                if (!loading) {
+                    goFirstPage();
+                }
             }
         });
-        view.getPager().onNext(() -> {
-            if (!loading && currentPage < totalPages) {
-                currentPage++;
-                buscar();
+        view.getPager().onPrev(new com.pinguela.rentexpres.desktop.util.PaginationPanel.OnPagerListener() {
+            @Override
+            public void onAction() {
+                if (!loading && currentPage > 1) {
+                    currentPage--;
+                    buscar();
+                }
             }
         });
-        view.getPager().onLast(() -> {
-            if (!loading && currentPage < totalPages) {
-                currentPage = totalPages;
-                buscar();
+        view.getPager().onNext(new com.pinguela.rentexpres.desktop.util.PaginationPanel.OnPagerListener() {
+            @Override
+            public void onAction() {
+                if (!loading && currentPage < totalPages) {
+                    currentPage++;
+                    buscar();
+                }
+            }
+        });
+        view.getPager().onLast(new com.pinguela.rentexpres.desktop.util.PaginationPanel.OnPagerListener() {
+            @Override
+            public void onAction() {
+                if (!loading && currentPage < totalPages) {
+                    currentPage = totalPages;
+                    buscar();
+                }
             }
         });
     }

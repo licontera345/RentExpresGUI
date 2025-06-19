@@ -29,8 +29,16 @@ public class CalendarView extends JPanel {
         JButton btnPrev = new JButton("<");
         JButton btnNext = new JButton(">");
 
-        btnPrev.addActionListener(e -> shiftMonth(-1));
-        btnNext.addActionListener(e -> shiftMonth(1));
+        btnPrev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                shiftMonth(-1);
+            }
+        });
+        btnNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                shiftMonth(1);
+            }
+        });
 
         header.add(btnPrev);
         header.add(lblMonth);
@@ -68,8 +76,12 @@ public class CalendarView extends JPanel {
             final LocalDate date = currentMonth.atDay(day);
             JButton b = new JButton(String.valueOf(day));
             b.setMargin(new Insets(2, 2, 2, 2));
-            b.addActionListener(e -> JOptionPane.showMessageDialog(this,
-                    "Seleccionaste " + date));
+            b.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    JOptionPane.showMessageDialog(CalendarView.this,
+                            "Seleccionaste " + date);
+                }
+            });
             daysPanel.add(b);
         }
 

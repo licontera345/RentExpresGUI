@@ -33,7 +33,12 @@ public class UsuarioSearchView
             }
         });
 
-        filter.addPropertyChangeListener("filtrosCambio", e -> controller.goFirstPage());
+        filter.addPropertyChangeListener("filtrosCambio", new java.beans.PropertyChangeListener() {
+            @Override
+            public void propertyChange(java.beans.PropertyChangeEvent e) {
+                controller.goFirstPage();
+            }
+        });
     }
 
     public void initIfNeeded() {

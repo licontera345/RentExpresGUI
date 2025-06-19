@@ -158,14 +158,17 @@ public class VehiculoSearchController {
                                 view.getTable().toggleSelectColumn();
                         }
                 });
-                filtro.setOnMarcaChange(marca -> {
-                        if (!initializing && !loading) {
-                                try {
-                                        cargarModelosPorMarca(marca);
-                                } catch (RentexpresException ex) {
-                                        SwingUtils.showError(view, "Error al cargar modelos: " + ex.getMessage());
+                filtro.setOnMarcaChange(new java.util.function.Consumer<String>() {
+                        @Override
+                        public void accept(String marca) {
+                                if (!initializing && !loading) {
+                                        try {
+                                                cargarModelosPorMarca(marca);
+                                        } catch (RentexpresException ex) {
+                                                SwingUtils.showError(view, "Error al cargar modelos: " + ex.getMessage());
+                                        }
+                                        goFirstPage();
                                 }
-                                goFirstPage();
                         }
                 });
 

@@ -47,7 +47,12 @@ public class VehiculoTablePanel extends JPanel {
                 configureColumns();
 
                 // Cuando alguien cambie el modelo, volver a configurar columnas
-                tableVehiculo.addPropertyChangeListener("model", evt -> configureColumns());
+                tableVehiculo.addPropertyChangeListener("model", new java.beans.PropertyChangeListener() {
+                        @Override
+                        public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                                configureColumns();
+                        }
+                });
         }
 
         private void configureColumns() {
