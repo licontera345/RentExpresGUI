@@ -86,11 +86,27 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			logger.warn("update called with null Usuario or id.");
 			return false;
 		}
-		String sql = "UPDATE usuario SET nombre_usuario = ?, contrasena = ?, id_tipo_usuario = ?, nombre = ?, apellido1 = ?, apellido2 = ?, telefono = ?, email = ? WHERE id_usuario = ?";
-		PreparedStatement ps = null;
-		try {
-			ps = connection.prepareStatement(sql);
-			setUsuarioParameters(ps, usuario, true);
+                StringBuilder sql = new StringBuilder("UPDATE usuario SET nombre_usuario = ?,");
+                boolean updatePassword = usuario.getContrasena() != null && !usuario.getContrasena().isEmpty();
+                if (updatePassword) {
+                        sql.append(" contrasena = ?,");
+                }
+                sql.append(" id_tipo_usuario = ?, nombre = ?, apellido1 = ?, apellido2 = ?, telefono = ?, email = ? WHERE id_usuario = ?");
+                PreparedStatement ps = null;
+                try {
+                        ps = connection.prepareStatement(sql.toString());
+                        int idx = 1;
+                        ps.setString(idx++, usuario.getNombreUsuario());
+                        if (updatePassword) {
+                                ps.setString(idx++, passwordEncryptor.encryptPassword(usuario.getContrasena()));
+                        }
+                        ps.setInt(idx++, usuario.getIdTipoUsuario());
+                        ps.setString(idx++, usuario.getNombre());
+                        ps.setString(idx++, usuario.getApellido1());
+                        ps.setString(idx++, usuario.getApellido2());
+                        ps.setString(idx++, usuario.getTelefono());
+                        ps.setString(idx++, usuario.getEmail());
+                        ps.setInt(idx++, usuario.getId());
 			if (ps.executeUpdate() > 0) {
 				logger.info("Usuario actualizado exitosamente, id: {}", usuario.getId());
 				return true;
