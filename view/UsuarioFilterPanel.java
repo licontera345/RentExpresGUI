@@ -83,7 +83,8 @@ public class UsuarioFilterPanel extends JPanel {
                 add(lbl("Tipo Usuario:"), "cell 0 3");
                 add(cmbTipoUsuario, "cell 1 3 3 1,growx");
 
-		cargarTipos();
+                cargarTipos();
+                cmbTipoUsuario.setRenderer(new com.pinguela.rentexpres.desktop.renderer.TipoUsuarioRenderer());
 
 		// Listeners para disparar evento de filtro en cada cambio
                spnIdUsuario.addChangeListener(new ChangeListener() {

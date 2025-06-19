@@ -46,10 +46,11 @@ public class UsuarioTablePanel extends JPanel {
 
     public void setModel(UsuarioSearchTableModel m) {
         table.setModel(m);
-        int[] widths = { 40, 120, 120, 120, 200, 120, 120, 150 };
+        int[] widths = { 60, 150, 150, 150, 240, 150, 120, 150 };
         for (int i = 0; i < widths.length && i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
         }
+        table.getTableHeader().resizeAndRepaint();
 
         try {
             table.getColumn("Acciones").setCellRenderer(new UsuarioActionsCellRenderer());

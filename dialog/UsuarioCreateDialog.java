@@ -108,6 +108,7 @@ public class UsuarioCreateDialog extends JDialog implements ConfirmDialog<Usuari
                 // Tipo de Usuario
                 getContentPane().add(new JLabel("Tipo Usuario:"), "align label");
                 cmbTipoUsuario = new JComboBox<>();
+                cmbTipoUsuario.setRenderer(new com.pinguela.rentexpres.desktop.renderer.TipoUsuarioRenderer());
                 getContentPane().add(cmbTipoUsuario, "growx");
 
                 // Imagen de perfil
