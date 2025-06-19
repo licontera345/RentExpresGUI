@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
+import com.pinguela.rentexpres.desktop.util.AppIcons;
 
 import com.pinguela.rentexpres.model.TipoUsuarioDTO;
 import com.pinguela.rentexpres.service.TipoUsuarioService;
@@ -39,7 +40,13 @@ public class UsuarioFilterPanel extends JPanel {
 	private final JTextField txtUsuario = new JTextField(10);
 	private final JComboBox<TipoUsuarioDTO> cmbTipoUsuario = new JComboBox<>();
 
-	private final TipoUsuarioService motivoService = new TipoUsuarioServiceImpl();
+        private final TipoUsuarioService motivoService = new TipoUsuarioServiceImpl();
+
+        private JLabel lbl(String t) {
+                JLabel l = new JLabel(t);
+                l.setForeground(AppTheme.LABEL_FG);
+                return l;
+        }
 
 	public UsuarioFilterPanel() {
                 setBorder(new TitledBorder("Filtros Usuarios"));
@@ -47,32 +54,37 @@ public class UsuarioFilterPanel extends JPanel {
                 setBackground(AppTheme.FILTER_BG);
 
                 txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
+                txtNombre.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtApellido1.putClientProperty("JTextField.placeholderText", "Apellido 1");
+                txtApellido1.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtApellido2.putClientProperty("JTextField.placeholderText", "Apellido 2");
+                txtApellido2.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtEmail.putClientProperty("JTextField.placeholderText", "Email");
+                txtEmail.putClientProperty("JTextField.leadingIcon", AppIcons.VER);
                 txtUsuario.putClientProperty("JTextField.placeholderText", "Usuario");
+                txtUsuario.putClientProperty("JTextField.leadingIcon", AppIcons.USUARIO);
 
 		// Fila 1: ID y Nombre
-		add(new JLabel("ID:"), "right");
-		add(spnIdUsuario, "growx");
-		add(new JLabel("Nombre:"), "right");
-		add(txtNombre, "growx, wrap");
+                add(lbl("ID:"), "right");
+                add(spnIdUsuario, "growx");
+                add(lbl("Nombre:"), "right");
+                add(txtNombre, "growx, wrap");
 
 		// Fila 2: Apellido1 y Apellido2
-		add(new JLabel("Apellido1:"), "right");
-		add(txtApellido1, "growx");
-		add(new JLabel("Apellido2:"), "right");
-		add(txtApellido2, "growx, wrap");
+                add(lbl("Apellido1:"), "right");
+                add(txtApellido1, "growx");
+                add(lbl("Apellido2:"), "right");
+                add(txtApellido2, "growx, wrap");
 
 		// Fila 3: Email y Usuario (login)
-		add(new JLabel("Email:"), "right");
-		add(txtEmail, "growx");
-		add(new JLabel("Usuario (login):"), "right");
-		add(txtUsuario, "growx, wrap");
+                add(lbl("Email:"), "right");
+                add(txtEmail, "growx");
+                add(lbl("Usuario (login):"), "right");
+                add(txtUsuario, "growx, wrap");
 
 		// Fila 4: TipoUsuario
-		add(new JLabel("Tipo Usuario:"), "right");
-		add(cmbTipoUsuario, "span 3, growx");
+                add(lbl("Tipo Usuario:"), "right");
+                add(cmbTipoUsuario, "span 3, growx");
 
 		cargarTipos();
 

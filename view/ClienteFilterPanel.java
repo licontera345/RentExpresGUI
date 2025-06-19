@@ -2,6 +2,8 @@ package com.pinguela.rentexpres.desktop.view;
 
 import net.miginfocom.swing.MigLayout;
 
+import java.awt.Color;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -15,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
+import com.pinguela.rentexpres.desktop.util.AppIcons;
 
 /**
  * Panel que permite filtrar Clientes por: - ID - Nombre / Apellido1 / Apellido2
@@ -46,7 +49,13 @@ public class ClienteFilterPanel extends JPanel {
 	// Callbacks
         private ActionCallback onChange = null;
         private ActionCallback toggleListener = null;
-	private java.util.function.Consumer<String> onProvinciaChange = null;
+       private java.util.function.Consumer<String> onProvinciaChange = null;
+
+       private JLabel lbl(String t) {
+               JLabel l = new JLabel(t);
+               l.setForeground(AppTheme.LABEL_FG);
+               return l;
+       }
 
        public ClienteFilterPanel() {
                super(new MigLayout("wrap 4", "[right]10[150!]20[right]10[150!]", "[]8[]8[]8[]8[]"));
@@ -54,11 +63,17 @@ public class ClienteFilterPanel extends JPanel {
                setBackground(AppTheme.FILTER_BG);
 
                txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
+               txtNombre.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                txtApellido1.putClientProperty("JTextField.placeholderText", "Apellido 1");
+               txtApellido1.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                txtApellido2.putClientProperty("JTextField.placeholderText", "Apellido 2");
+               txtApellido2.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                txtEmail.putClientProperty("JTextField.placeholderText", "Email");
+               txtEmail.putClientProperty("JTextField.leadingIcon", AppIcons.VER);
                txtTelefono.putClientProperty("JTextField.placeholderText", "Teléfono");
+               txtTelefono.putClientProperty("JTextField.leadingIcon", AppIcons.VER);
                txtCalle.putClientProperty("JTextField.placeholderText", "Calle");
+               txtCalle.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                txtNumero.putClientProperty("JTextField.placeholderText", "Nº");
 
                initLayout();
@@ -66,31 +81,33 @@ public class ClienteFilterPanel extends JPanel {
        }
 
        private void initLayout() {
-               add(new JLabel("ID:"), "cell 0 0");
+               add(lbl("ID:"), "cell 0 0");
                add(spnId, "cell 1 0");
-               add(new JLabel("Nombre:"), "cell 2 0");
+               add(lbl("Nombre:"), "cell 2 0");
                add(txtNombre, "cell 3 0, growx");
 
-               add(new JLabel("Apellido 1:"), "cell 0 1");
+               add(lbl("Apellido 1:"), "cell 0 1");
                add(txtApellido1, "cell 1 1, growx");
-               add(new JLabel("Apellido 2:"), "cell 2 1");
+               add(lbl("Apellido 2:"), "cell 2 1");
                add(txtApellido2, "cell 3 1, growx");
 
-               add(new JLabel("Email:"), "cell 0 2");
+               add(lbl("Email:"), "cell 0 2");
                add(txtEmail, "cell 1 2, growx");
-               add(new JLabel("Teléfono:"), "cell 2 2");
+               add(lbl("Teléfono:"), "cell 2 2");
                add(txtTelefono, "cell 3 2, growx");
 
-               add(new JLabel("Calle:"), "cell 0 3");
+               add(lbl("Calle:"), "cell 0 3");
                add(txtCalle, "cell 1 3, growx");
-               add(new JLabel("Nº:"), "cell 2 3");
+               add(lbl("Nº:"), "cell 2 3");
                add(txtNumero, "cell 3 3, growx");
 
-               add(new JLabel("Provincia:"), "cell 0 4");
+               add(lbl("Provincia:"), "cell 0 4");
                add(cmbProvincia, "cell 1 4, growx");
-               add(new JLabel("Localidad:"), "cell 2 4");
+               add(lbl("Localidad:"), "cell 2 4");
                add(cmbLocalidad, "cell 3 4, growx");
 
+               btnToggle.setBackground(AppTheme.PRIMARY);
+               btnToggle.setForeground(Color.WHITE);
                add(btnToggle, "cell 0 5 4 1, alignx right");
        }
 
