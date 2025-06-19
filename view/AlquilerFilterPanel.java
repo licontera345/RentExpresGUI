@@ -15,6 +15,8 @@ import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.desktop.util.AppIcons;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -67,8 +69,8 @@ public class AlquilerFilterPanel extends JPanel {
         }
 
         public AlquilerFilterPanel() {
-                setBorder(new TitledBorder("Filtros de Alquiler"));
-                setLayout(new MigLayout("wrap 4", "[right]10[150!]20[right]10[150!]", "[]8[]8[]8[]8[]"));
+                setBorder(new CompoundBorder(new TitledBorder("Filtros de Alquiler"), new EmptyBorder(10,10,10,10)));
+                setLayout(new MigLayout("wrap 4,fillx", "[right]10[grow,fill]20[right]10[grow,fill]", "[]8[]8[]8[]8[]"));
                 setBackground(AppTheme.FILTER_BG);
 
                 NumberFormat intFormat = NumberFormat.getIntegerInstance();

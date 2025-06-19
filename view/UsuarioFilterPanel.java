@@ -15,6 +15,8 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.desktop.util.AppIcons;
 
@@ -48,9 +50,9 @@ public class UsuarioFilterPanel extends JPanel {
                 return l;
         }
 
-	public UsuarioFilterPanel() {
-                setBorder(new TitledBorder("Filtros Usuarios"));
-                setLayout(new MigLayout("wrap 4", "[right][grow,fill][right][grow,fill]", "[]10[]10[]"));
+        public UsuarioFilterPanel() {
+                setBorder(new CompoundBorder(new TitledBorder("Filtros Usuarios"), new EmptyBorder(10,10,10,10)));
+                setLayout(new MigLayout("wrap 4,fillx", "[right][grow,fill][right][grow,fill]", "[]10[]10[]"));
                 setBackground(AppTheme.FILTER_BG);
 
                 txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");

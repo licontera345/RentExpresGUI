@@ -1,6 +1,8 @@
 package com.pinguela.rentexpres.desktop.view;
 
 import net.miginfocom.swing.MigLayout;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 
 import java.awt.Color;
 
@@ -58,8 +60,8 @@ public class ClienteFilterPanel extends JPanel {
        }
 
        public ClienteFilterPanel() {
-               super(new MigLayout("wrap 4", "[right]10[150!]20[right]10[150!]", "[]8[]8[]8[]8[]"));
-               setBorder(javax.swing.BorderFactory.createTitledBorder("Filtros de Cliente"));
+               super(new MigLayout("wrap 4,fillx", "[right]10[grow,fill]20[right]10[grow,fill]", "[]8[]8[]8[]8[]"));
+               setBorder(new CompoundBorder(new TitledBorder("Filtros de Cliente"), new EmptyBorder(10,10,10,10)));
                setBackground(AppTheme.FILTER_BG);
 
                txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
