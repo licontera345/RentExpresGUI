@@ -14,23 +14,24 @@ public class UsuarioSearchView
         extends StandardSearchView<UsuarioFilterPanel, UsuarioSearchActionsView, UsuarioTablePanel> {
     private static final long serialVersionUID = 1L;
 
-    private static UsuarioSearchController controller;
+    private final UsuarioSearchController controller;
     private boolean initialized = false;
 
     public  UsuarioSearchView(UsuarioService service, Frame owner) throws RentexpresException {
         super(new UsuarioFilterPanel(), new UsuarioSearchActionsView(),
-              new UsuarioTablePanel(service, owner, new ActionCallback() {
-                  @Override
-                  public void execute() {
-                      controller.buscar();
-                  }
-              }));
+              new UsuarioTablePanel(service, owner, null));
 
         UsuarioFilterPanel filter = getFilter();
-        UsuarioSearchActionsView actions = getActions();
         UsuarioTablePanel table = getTable();
 
         controller = new UsuarioSearchController(this, service, owner);
+
+        table.setReloadCallback(new ActionCallback() {
+            @Override
+            public void execute() {
+                controller.buscar();
+            }
+        });
 
         filter.addPropertyChangeListener("filtrosCambio", e -> controller.goFirstPage());
     }

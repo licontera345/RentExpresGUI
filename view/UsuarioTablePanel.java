@@ -22,7 +22,7 @@ public class UsuarioTablePanel extends JPanel {
     private final JTable table = new JTable();
     private final UsuarioService service;
     private final Frame owner;
-    private final ActionCallback reload;
+    private ActionCallback reload;
 
     public UsuarioTablePanel(UsuarioService service, Frame owner, ActionCallback reload) {
         this.service = service;
@@ -33,6 +33,10 @@ public class UsuarioTablePanel extends JPanel {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.getTableHeader().setReorderingAllowed(false);
         add(new JScrollPane(table), BorderLayout.CENTER);
+    }
+
+    public void setReloadCallback(ActionCallback reload) {
+        this.reload = reload;
     }
 
     public JTable getTable() {
