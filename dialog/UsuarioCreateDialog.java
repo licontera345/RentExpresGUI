@@ -43,9 +43,10 @@ public class UsuarioCreateDialog extends JDialog implements ConfirmDialog<Usuari
         private boolean confirmed = false;
         private UsuarioDTO usuario;
 
-	public UsuarioCreateDialog(Frame parent) {
-		super(parent, "Crear Usuario", true);
-		initComponents();
+        public UsuarioCreateDialog(Frame parent) {
+                super(parent, "Crear Usuario", true);
+                setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                initComponents();
 		cargarTiposUsuario();
 		pack();
 		setLocationRelativeTo(parent);

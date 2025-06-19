@@ -36,9 +36,10 @@ public class UsuarioDetailDialog extends JDialog {
 	private UsuarioService usuarioService = new UsuarioServiceImpl();
 	private TipoUsuarioService tipoUsuarioService = new TipoUsuarioServiceImpl();
 
-	public UsuarioDetailDialog(Frame parent, Integer idUsuario) {
-		super(parent, "Detalle Usuario", true);
-		initComponents();
+        public UsuarioDetailDialog(Frame parent, Integer idUsuario) {
+                super(parent, "Detalle Usuario", true);
+                setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                initComponents();
 		cargarUsuario(idUsuario);
 		pack();
 		setLocationRelativeTo(parent);
