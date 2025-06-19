@@ -63,8 +63,10 @@ public class LoginFormPanel extends JPanel {
                 add(chkRemember, gbc);
 
                 chkShowPass.setOpaque(false);
-                chkShowPass.addActionListener(e -> {
-                        txtPassword.setEchoChar(chkShowPass.isSelected() ? (char)0 : defaultEcho);
+                chkShowPass.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent e) {
+                                txtPassword.setEchoChar(chkShowPass.isSelected() ? (char)0 : defaultEcho);
+                        }
                 });
                 gbc.gridx = 0;
                 gbc.gridy = 3;

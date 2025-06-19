@@ -111,22 +111,24 @@ public class VehiculoCreateDialog extends JDialog implements ConfirmDialog<Vehic
                 pnlButtons.add(btnCancel);
                 panel.add(pnlButtons, "span, center, gaptop 10");
 
-                btnSeleccionarImagen.addActionListener(e -> {
-                        JFileChooser chooser = new JFileChooser();
-                        chooser.setFileFilter(new FileNameExtensionFilter("Imágenes (*.jpg, *.jpeg, *.png, *.gif)",
-                                        "jpg", "jpeg", "png", "gif"));
-                        int resp = chooser.showOpenDialog(VehiculoCreateDialog.this);
-                        if (resp == JFileChooser.APPROVE_OPTION) {
-                                File seleccionado = chooser.getSelectedFile();
-                                try {
-                                        String rutaRel = fileService.store(seleccionado);
-                                        imagenSeleccionada = rutaRel;
-                                        ImageIcon ico = new ImageIcon(new ImageIcon(seleccionado.getAbsolutePath()).getImage()
-                                                        .getScaledInstance(120, 90, java.awt.Image.SCALE_SMOOTH));
-                                        lblImagenPreview.setIcon(ico);
-                                } catch (IOException ex) {
-                                        SwingUtils.showError(VehiculoCreateDialog.this,
-                                                        "No se pudo guardar la imagen: " + ex.getMessage());
+                btnSeleccionarImagen.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent e) {
+                                JFileChooser chooser = new JFileChooser();
+                                chooser.setFileFilter(new FileNameExtensionFilter("Imágenes (*.jpg, *.jpeg, *.png, *.gif)",
+                                                "jpg", "jpeg", "png", "gif"));
+                                int resp = chooser.showOpenDialog(VehiculoCreateDialog.this);
+                                if (resp == JFileChooser.APPROVE_OPTION) {
+                                        File seleccionado = chooser.getSelectedFile();
+                                        try {
+                                                String rutaRel = fileService.store(seleccionado);
+                                                imagenSeleccionada = rutaRel;
+                                                ImageIcon ico = new ImageIcon(new ImageIcon(seleccionado.getAbsolutePath()).getImage()
+                                                                .getScaledInstance(120, 90, java.awt.Image.SCALE_SMOOTH));
+                                                lblImagenPreview.setIcon(ico);
+                                        } catch (IOException ex) {
+                                                SwingUtils.showError(VehiculoCreateDialog.this,
+                                                                "No se pudo guardar la imagen: " + ex.getMessage());
+                                        }
                                 }
                         }
                 });
