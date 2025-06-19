@@ -63,17 +63,11 @@ public class ClienteFilterPanel extends JPanel {
                setBackground(AppTheme.FILTER_BG);
 
                txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
-               txtNombre.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                txtApellido1.putClientProperty("JTextField.placeholderText", "Apellido 1");
-               txtApellido1.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                txtApellido2.putClientProperty("JTextField.placeholderText", "Apellido 2");
-               txtApellido2.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                txtEmail.putClientProperty("JTextField.placeholderText", "Email");
-               txtEmail.putClientProperty("JTextField.leadingIcon", AppIcons.VER);
                txtTelefono.putClientProperty("JTextField.placeholderText", "Teléfono");
-               txtTelefono.putClientProperty("JTextField.leadingIcon", AppIcons.VER);
                txtCalle.putClientProperty("JTextField.placeholderText", "Calle");
-               txtCalle.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                txtNumero.putClientProperty("JTextField.placeholderText", "Nº");
 
                initLayout();

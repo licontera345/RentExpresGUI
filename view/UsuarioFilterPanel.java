@@ -54,15 +54,10 @@ public class UsuarioFilterPanel extends JPanel {
                 setBackground(AppTheme.FILTER_BG);
 
                 txtNombre.putClientProperty("JTextField.placeholderText", "Nombre");
-                txtNombre.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtApellido1.putClientProperty("JTextField.placeholderText", "Apellido 1");
-                txtApellido1.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtApellido2.putClientProperty("JTextField.placeholderText", "Apellido 2");
-                txtApellido2.putClientProperty("JTextField.leadingIcon", AppIcons.CLIENTE);
                 txtEmail.putClientProperty("JTextField.placeholderText", "Email");
-                txtEmail.putClientProperty("JTextField.leadingIcon", AppIcons.VER);
                 txtUsuario.putClientProperty("JTextField.placeholderText", "Usuario");
-                txtUsuario.putClientProperty("JTextField.leadingIcon", AppIcons.USUARIO);
 
 		// Fila 1: ID y Nombre
                 add(lbl("ID:"), "right");

@@ -23,6 +23,10 @@ import javax.swing.border.EmptyBorder;
 
 import com.pinguela.rentexpres.desktop.util.AppContext;
 import com.pinguela.rentexpres.desktop.util.AppIcons;
+import com.pinguela.rentexpres.desktop.util.SwingUtils;
+import com.pinguela.rentexpres.desktop.dialog.UsuarioEditDialog;
+import com.pinguela.rentexpres.service.UsuarioService;
+import com.pinguela.rentexpres.service.impl.UsuarioServiceImpl;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 
 /**
@@ -34,13 +38,20 @@ public class ProfileView extends JDialog {
 
 	private final JLabel lblAvatar = new JLabel();
 	private final JLabel lblNombre = new JLabel();
-	private final JLabel lblEmail = new JLabel();
-	private final JLabel lblTipo = new JLabel();
-	private final JButton btnClose = new JButton("Cerrar", AppIcons.CLEAR);
+        private final JLabel lblEmail = new JLabel();
+        private final JLabel lblUsuario = new JLabel();
+        private final JLabel lblTelefono = new JLabel();
+        private final JLabel lblTipo = new JLabel();
+        private final JButton btnEdit = new JButton("Editar", AppIcons.EDIT);
+        private final JButton btnClose = new JButton("Cerrar", AppIcons.CLEAR);
 
-	public ProfileView(Frame parent) {
-		super(parent, "Perfil de Usuario", true);
-		initComponents();
+        private final Frame parent;
+        private final UsuarioService usuarioService = new UsuarioServiceImpl();
+
+        public ProfileView(Frame parent) {
+                super(parent, "Perfil de Usuario", true);
+                this.parent = parent;
+                initComponents();
 		loadUserData();
 		pack();
 		setResizable(false);
@@ -79,10 +90,20 @@ public class ProfileView extends JDialog {
 		lblNombre.setBorder(new EmptyBorder(10, 0, 5, 0));
 		infoPanel.add(lblNombre);
 
-		lblEmail.setFont(lblEmail.getFont().deriveFont(Font.PLAIN, 16f));
-		lblEmail.setForeground(new Color(30, 30, 30));
-		lblEmail.setBorder(new EmptyBorder(5, 0, 5, 0));
-		infoPanel.add(lblEmail);
+                lblEmail.setFont(lblEmail.getFont().deriveFont(Font.PLAIN, 16f));
+                lblEmail.setForeground(new Color(30, 30, 30));
+                lblEmail.setBorder(new EmptyBorder(5, 0, 5, 0));
+                infoPanel.add(lblEmail);
+
+                lblUsuario.setFont(lblUsuario.getFont().deriveFont(Font.PLAIN, 16f));
+                lblUsuario.setForeground(new Color(30, 30, 30));
+                lblUsuario.setBorder(new EmptyBorder(5, 0, 5, 0));
+                infoPanel.add(lblUsuario);
+
+                lblTelefono.setFont(lblTelefono.getFont().deriveFont(Font.PLAIN, 16f));
+                lblTelefono.setForeground(new Color(30, 30, 30));
+                lblTelefono.setBorder(new EmptyBorder(5, 0, 5, 0));
+                infoPanel.add(lblTelefono);
 
 		lblTipo.setFont(lblTipo.getFont().deriveFont(Font.PLAIN, 16f));
 		lblTipo.setForeground(new Color(30, 30, 30));
@@ -114,8 +135,23 @@ public class ProfileView extends JDialog {
                         }
                 });
 
-		btnPanel.add(btnClose);
-		container.add(btnPanel, BorderLayout.SOUTH);
+                btnEdit.setPreferredSize(new Dimension(120, 40));
+                btnEdit.setFont(btnEdit.getFont().deriveFont(Font.PLAIN, 14f));
+                btnEdit.setFocusPainted(false);
+                btnEdit.setBackground(new Color(180, 180, 180));
+                btnEdit.setForeground(Color.DARK_GRAY);
+                btnEdit.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                btnEdit.setToolTipText("Modificar datos");
+                btnEdit.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                                onEdit();
+                        }
+                });
+
+                btnPanel.add(btnEdit);
+                btnPanel.add(btnClose);
+                container.add(btnPanel, BorderLayout.SOUTH);
 
 		// Cerrar con la X sin logout
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -123,18 +159,42 @@ public class ProfileView extends JDialog {
 
 	private void loadUserData() {
 		UsuarioDTO u = AppContext.getCurrentUser();
-		if (u != null) {
-			lblNombre.setText("Nombre: " + u.getNombre() + " " + u.getApellido1() + " " + u.getApellido2());
-			lblEmail.setText("Email: " + u.getEmail());
-			lblTipo.setText("Tipo: " + u.getIdTipoUsuario());
-		} else {
-			lblNombre.setText("No hay usuario autenticado.");
-			lblEmail.setText("");
-			lblTipo.setText("");
-		}
+                if (u != null) {
+                        lblNombre.setText("Nombre: " + u.getNombre() + " " + u.getApellido1() + " " + u.getApellido2());
+                        lblEmail.setText("Email: " + u.getEmail());
+                        lblUsuario.setText("Usuario: " + u.getNombreUsuario());
+                        lblTelefono.setText("Teléfono: " + u.getTelefono());
+                        lblTipo.setText("Tipo: " + u.getIdTipoUsuario());
+                } else {
+                        lblNombre.setText("No hay usuario autenticado.");
+                        lblEmail.setText("");
+                        lblUsuario.setText("");
+                        lblTelefono.setText("");
+                        lblTipo.setText("");
+                }
 	}
 
-	private void onClose(ActionEvent e) {
-		dispose();
-	}
+        private void onClose(ActionEvent e) {
+                dispose();
+        }
+
+        private void onEdit() {
+                UsuarioDTO current = AppContext.getCurrentUser();
+                if (current == null) {
+                        return;
+                }
+                UsuarioEditDialog dlg = new UsuarioEditDialog(parent, current.getId());
+                dlg.setVisible(true);
+                if (dlg.isConfirmed()) {
+                        try {
+                                UsuarioDTO updated = dlg.getUsuario();
+                                usuarioService.update(updated);
+                                UsuarioDTO refreshed = usuarioService.findById(updated.getId());
+                                AppContext.setCurrentUser(refreshed);
+                                loadUserData();
+                        } catch (Exception ex) {
+                                SwingUtils.showError(this, "No se pudo actualizar el usuario.");
+                        }
+                }
+        }
 }
