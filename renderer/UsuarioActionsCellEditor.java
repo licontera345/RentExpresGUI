@@ -6,15 +6,12 @@ import java.util.function.Supplier;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 import com.pinguela.rentexpres.desktop.renderer.AbstractActionsCellEditor;
 
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
-import com.pinguela.rentexpres.desktop.util.SwingUtils;
-import com.pinguela.rentexpres.desktop.dialog.UsuarioDetailDialog;
-import com.pinguela.rentexpres.desktop.dialog.UsuarioEditDialog;
+import com.pinguela.rentexpres.desktop.controller.UsuarioRowController;
 
 import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.service.UsuarioService;
@@ -25,7 +22,7 @@ public class UsuarioActionsCellEditor extends AbstractActionsCellEditor {
         private static final long serialVersionUID = 1L;
 
         private final Frame owner;
-        private final UsuarioService usuarioService;
+        private final UsuarioRowController controller;
         private final ActionCallback reload;
         private final Supplier<UsuarioDTO> rowSupplier;
         private UsuarioDTO usuarioActual;
@@ -34,16 +31,14 @@ public class UsuarioActionsCellEditor extends AbstractActionsCellEditor {
                         Supplier<UsuarioDTO> rowSupplier) {
                 super();
                 this.owner = owner;
-                this.usuarioService = usuarioService;
                 this.reload = reload;
                 this.rowSupplier = rowSupplier;
+                this.controller = new UsuarioRowController(owner, usuarioService, reload);
 
                btnView.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
-                               if (usuarioActual != null) {
-                                       new UsuarioDetailDialog(owner, usuarioActual.getId()).setVisible(true);
-                               }
+                               controller.showDetail(usuarioActual);
                                fireEditingStopped();
                        }
                });
@@ -51,20 +46,7 @@ public class UsuarioActionsCellEditor extends AbstractActionsCellEditor {
                btnEdit.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
-                               if (usuarioActual != null) {
-                                       UsuarioEditDialog dlg = new UsuarioEditDialog(owner, usuarioActual.getId());
-                                       dlg.setVisible(true);
-                                       if (dlg.isConfirmed()) {
-                                               try {
-                                                       usuarioService.update(dlg.getUsuario());
-                                                       if (reload != null) {
-                                                               reload.execute();
-                                                       }
-                                               } catch (Exception ex) {
-                                                       SwingUtils.showError(owner, ex.getMessage());
-                                               }
-                                       }
-                               }
+                               controller.edit(usuarioActual);
                                fireEditingStopped();
                        }
                });
@@ -72,21 +54,7 @@ public class UsuarioActionsCellEditor extends AbstractActionsCellEditor {
                btnDel.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
-                               if (usuarioActual != null) {
-                                       int resp = JOptionPane.showConfirmDialog(owner,
-                                                       "¿Seguro que deseas eliminar al usuario " + usuarioActual.getNombre() + "?", "Eliminar Usuario",
-                                                       JOptionPane.YES_NO_OPTION);
-                                       if (resp == JOptionPane.YES_OPTION) {
-                                               try {
-                                                       usuarioService.delete(usuarioActual, usuarioActual.getId());
-                                                       if (reload != null) {
-                                                               reload.execute();
-                                                       }
-                                               } catch (Exception ex) {
-                                                       SwingUtils.showError(owner, ex.getMessage());
-                                               }
-                                       }
-                               }
+                               controller.delete(usuarioActual);
                                fireEditingStopped();
                        }
                });
@@ -118,11 +86,7 @@ public class UsuarioActionsCellEditor extends AbstractActionsCellEditor {
                 return reload;
         }
 
-	public UsuarioService getUsuarioService() {
-		return usuarioService;
-	}
-
-	public Frame getOwner() {
-		return owner;
-	}
+        public Frame getOwner() {
+                return owner;
+        }
 }
