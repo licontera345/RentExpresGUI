@@ -46,7 +46,7 @@ public class UsuarioTablePanel extends JPanel {
 
     public void setModel(UsuarioSearchTableModel m) {
         table.setModel(m);
-        int[] widths = { 40, 100, 100, 100, 150, 100, 100, 120 };
+        int[] widths = { 40, 120, 120, 120, 200, 120, 120, 150 };
         for (int i = 0; i < widths.length && i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
         }

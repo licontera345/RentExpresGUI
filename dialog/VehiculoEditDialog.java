@@ -18,9 +18,11 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JTextField;
+import com.pinguela.rentexpres.desktop.util.CatalogCache;
+import com.pinguela.rentexpres.service.VehiculoService;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import com.pinguela.rentexpres.desktop.util.FileService;
 import com.pinguela.rentexpres.desktop.util.AppConfig;
@@ -33,9 +35,9 @@ import com.pinguela.rentexpres.model.VehiculoDTO;
 public class VehiculoEditDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-	private JTextField txtMarca;
-	private JTextField txtModelo;
-	private JTextField txtAnio;
+        private JComboBox<String> cmbMarca;
+        private JComboBox<String> cmbModelo;
+        private JTextField txtAnio;
 	private JTextField txtPrecioDia;
 	private JTextField txtPlaca;
 	private JTextField txtNumeroBastidor;
@@ -48,13 +50,15 @@ public class VehiculoEditDialog extends JDialog {
 	private boolean confirmed = false;
 	private String imagenSeleccionada;
 
-	private final FileService fileService;
+        private final FileService fileService;
+        private final VehiculoService vehiculoService;
 	private final VehiculoDTO originalDto;
 
-	public VehiculoEditDialog(Frame owner, VehiculoDTO dto, List<CategoriaVehiculoDTO> categorias,
-			List<EstadoVehiculoDTO> estados) throws RentexpresException {
-		super(owner, "Editar Vehículo #" + dto.getId(), true);
-		this.originalDto = dto;
+        public VehiculoEditDialog(Frame owner, VehiculoDTO dto, List<CategoriaVehiculoDTO> categorias,
+                        List<EstadoVehiculoDTO> estados, VehiculoService vehiculoService) throws RentexpresException {
+                super(owner, "Editar Vehículo #" + dto.getId(), true);
+                this.originalDto = dto;
+                this.vehiculoService = vehiculoService;
 
                 try {
                         fileService = new FileService(AppConfig.getImageDir("vehiculos"));
@@ -74,19 +78,37 @@ public class VehiculoEditDialog extends JDialog {
 		gbc.insets = new Insets(4, 4, 4, 4);
 		gbc.anchor = GridBagConstraints.WEST;
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		panel.add(new JLabel("Marca:"), gbc);
-		txtMarca = new JTextField(20);
-		gbc.gridx = 1;
-		panel.add(txtMarca, gbc);
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                panel.add(new JLabel("Marca:"), gbc);
+                cmbMarca = new JComboBox<>();
+                gbc.gridx = 1;
+                panel.add(cmbMarca, gbc);
 
 		gbc.gridx = 0;
 		gbc.gridy++;
-		panel.add(new JLabel("Modelo:"), gbc);
-		txtModelo = new JTextField(20);
-		gbc.gridx = 1;
-		panel.add(txtModelo, gbc);
+                panel.add(new JLabel("Modelo:"), gbc);
+                cmbModelo = new JComboBox<>();
+                gbc.gridx = 1;
+                panel.add(cmbModelo, gbc);
+
+                try {
+                        cargarMarcas();
+                        cargarModelosPorMarca(null);
+                } catch (Exception ex) {
+                        // ignore
+                }
+
+                cmbMarca.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                                try {
+                                        cargarModelosPorMarca((String) cmbMarca.getSelectedItem());
+                                } catch (Exception ex) {
+                                        // ignore
+                                }
+                        }
+                });
 
 		gbc.gridx = 0;
 		gbc.gridy++;
@@ -198,9 +220,16 @@ public class VehiculoEditDialog extends JDialog {
 	}
 
 	private void rellenarCamposConDto(VehiculoDTO dto) {
-		txtMarca.setText(dto.getMarca());
-		txtModelo.setText(dto.getModelo());
-		txtAnio.setText(dto.getAnioFabricacion() != null ? dto.getAnioFabricacion().toString() : "");
+                try {
+                        cargarMarcas();
+                        cargarModelosPorMarca(dto.getMarca());
+                        cmbMarca.setSelectedItem(dto.getMarca());
+                        cmbModelo.setSelectedItem(dto.getModelo());
+                } catch (Exception ex) {
+                        cmbMarca.setSelectedItem(dto.getMarca());
+                        cmbModelo.setSelectedItem(dto.getModelo());
+                }
+                txtAnio.setText(dto.getAnioFabricacion() != null ? dto.getAnioFabricacion().toString() : "");
 		txtPrecioDia.setText(dto.getPrecioDia() != null ? dto.getPrecioDia().toString() : "");
 		txtPlaca.setText(dto.getPlaca());
 		txtNumeroBastidor.setText(dto.getNumeroBastidor());
@@ -232,14 +261,14 @@ public class VehiculoEditDialog extends JDialog {
 	}
 
 	private void onOk() {
-		if (txtMarca.getText().trim().isEmpty()) {
-			SwingUtils.showError(this, "La marca es obligatoria.");
-			return;
-		}
-		if (txtModelo.getText().trim().isEmpty()) {
-			SwingUtils.showError(this, "El modelo es obligatorio.");
-			return;
-		}
+                if (cmbMarca.getSelectedItem() == null || ((String)cmbMarca.getSelectedItem()).trim().isEmpty()) {
+                        SwingUtils.showError(this, "La marca es obligatoria.");
+                        return;
+                }
+                if (cmbModelo.getSelectedItem() == null || ((String)cmbModelo.getSelectedItem()).trim().isEmpty()) {
+                        SwingUtils.showError(this, "El modelo es obligatorio.");
+                        return;
+                }
 		try {
 			Integer.parseInt(txtAnio.getText().trim());
 		} catch (NumberFormatException e) {
@@ -283,14 +312,14 @@ public class VehiculoEditDialog extends JDialog {
 		return confirmed;
 	}
 
-	public VehiculoDTO getVehiculo() {
-		if (!confirmed)
-			return null;
+        public VehiculoDTO getVehiculo() {
+                if (!confirmed)
+                        return null;
 
 		VehiculoDTO dto = new VehiculoDTO();
 		dto.setId(originalDto.getId());
-		dto.setMarca(txtMarca.getText().trim());
-		dto.setModelo(txtModelo.getText().trim());
+                dto.setMarca((String) cmbMarca.getSelectedItem());
+                dto.setModelo((String) cmbModelo.getSelectedItem());
 		dto.setAnioFabricacion(Integer.parseInt(txtAnio.getText().trim()));
 		dto.setPrecioDia(Double.parseDouble(txtPrecioDia.getText().trim()));
 		dto.setPlaca(txtPlaca.getText().trim());
@@ -300,8 +329,38 @@ public class VehiculoEditDialog extends JDialog {
 		dto.setIdEstadoVehiculo(estado.getId());
 		CategoriaVehiculoDTO categoria = (CategoriaVehiculoDTO) cbCategoria.getSelectedItem();
 		dto.setIdCategoria(categoria.getId());
-		dto.setImagenPath(imagenSeleccionada);
+                dto.setImagenPath(imagenSeleccionada);
 
-		return dto;
-	}
+                return dto;
+        }
+
+        private void cargarMarcas() throws RentexpresException {
+                cmbMarca.removeAllItems();
+                java.util.Set<String> marcas = new java.util.HashSet<>();
+                for (VehiculoDTO v : CatalogCache.getVehiculos(vehiculoService)) {
+                        marcas.add(v.getMarca());
+                }
+                java.util.List<String> lista = new java.util.ArrayList<>(marcas);
+                java.util.Collections.sort(lista);
+                for (String m : lista) {
+                        cmbMarca.addItem(m);
+                }
+                cmbMarca.setSelectedIndex(-1);
+        }
+
+        private void cargarModelosPorMarca(String marca) throws RentexpresException {
+                cmbModelo.removeAllItems();
+                java.util.Set<String> modelos = new java.util.HashSet<>();
+                for (VehiculoDTO v : CatalogCache.getVehiculos(vehiculoService)) {
+                        if (marca == null || marca.equals(v.getMarca())) {
+                                modelos.add(v.getModelo());
+                        }
+                }
+                java.util.List<String> lista = new java.util.ArrayList<>(modelos);
+                java.util.Collections.sort(lista);
+                for (String m : lista) {
+                        cmbModelo.addItem(m);
+                }
+                cmbModelo.setSelectedIndex(-1);
+        }
 }

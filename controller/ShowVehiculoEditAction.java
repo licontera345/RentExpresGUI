@@ -27,8 +27,8 @@ public class ShowVehiculoEditAction {
 		if (dto == null) {
 			return;
 		}
-		VehiculoEditDialog dlg = new VehiculoEditDialog(frame, dto, categoriaService.findAll(),
-				estadoService.findAll());
+                VehiculoEditDialog dlg = new VehiculoEditDialog(frame, dto, categoriaService.findAll(),
+                                estadoService.findAll(), vehiculoService);
 		dlg.setVisible(true);
 		if (dlg.isConfirmed()) {
 			vehiculoService.update(dlg.getVehiculo(), null);
