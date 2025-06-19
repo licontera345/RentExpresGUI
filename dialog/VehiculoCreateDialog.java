@@ -2,9 +2,6 @@ package com.pinguela.rentexpres.desktop.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -62,134 +59,92 @@ public class VehiculoCreateDialog extends JDialog implements ConfirmDialog<Vehic
 		setLocationRelativeTo(owner);
 	}
 
-	private void initComponents(List<CategoriaVehiculoDTO> categorias, List<EstadoVehiculoDTO> estados) {
-		JPanel panel = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(4, 4, 4, 4);
-		gbc.anchor = GridBagConstraints.WEST;
+        private void initComponents(List<CategoriaVehiculoDTO> categorias, List<EstadoVehiculoDTO> estados) {
+                JPanel panel = new JPanel(new net.miginfocom.swing.MigLayout(
+                                "wrap 4", "[right]10[200:200:200]20[right]10[200:200:200]", ""));
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		panel.add(new JLabel("Marca:"), gbc);
-		txtMarca = new JTextField(20);
-		gbc.gridx = 1;
-		panel.add(txtMarca, gbc);
+                txtMarca = new JTextField(20);
+                txtModelo = new JTextField(20);
+                txtAnio = new JTextField(6);
+                txtPrecioDia = new JTextField(10);
+                txtPlaca = new JTextField(12);
+                txtNumeroBastidor = new JTextField(20);
+                txtKilometraje = new JTextField(10);
+                cbEstado = new JComboBox<>(estados.toArray(new EstadoVehiculoDTO[0]));
+                cbCategoria = new JComboBox<>(categorias.toArray(new CategoriaVehiculoDTO[0]));
+                btnSeleccionarImagen = new JButton("Seleccionar Imagen");
+                lblImagenPreview = new JLabel();
+                lblImagenPreview.setPreferredSize(new java.awt.Dimension(120, 90));
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Modelo:"), gbc);
-		txtModelo = new JTextField(20);
-		gbc.gridx = 1;
-		panel.add(txtModelo, gbc);
+                panel.add(new JLabel("Marca:"));
+                panel.add(txtMarca, "growx");
+                panel.add(new JLabel("Modelo:"));
+                panel.add(txtModelo, "growx");
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Año Fabricación:"), gbc);
-		txtAnio = new JTextField(6);
-		gbc.gridx = 1;
-		panel.add(txtAnio, gbc);
+                panel.add(new JLabel("Año Fabricación:"));
+                panel.add(txtAnio, "growx");
+                panel.add(new JLabel("Precio/Día:"));
+                panel.add(txtPrecioDia, "growx");
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Precio/Día:"), gbc);
-		txtPrecioDia = new JTextField(10);
-		gbc.gridx = 1;
-		panel.add(txtPrecioDia, gbc);
+                panel.add(new JLabel("Placa:"));
+                panel.add(txtPlaca, "growx");
+                panel.add(new JLabel("Nº Bastidor:"));
+                panel.add(txtNumeroBastidor, "growx");
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Placa:"), gbc);
-		txtPlaca = new JTextField(12);
-		gbc.gridx = 1;
-		panel.add(txtPlaca, gbc);
+                panel.add(new JLabel("Kilometraje Actual:"));
+                panel.add(txtKilometraje, "growx");
+                panel.add(new JLabel("Estado Vehículo:"));
+                panel.add(cbEstado, "growx");
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Nº Bastidor:"), gbc);
-		txtNumeroBastidor = new JTextField(20);
-		gbc.gridx = 1;
-		panel.add(txtNumeroBastidor, gbc);
+                panel.add(new JLabel("Categoría Vehículo:"));
+                panel.add(cbCategoria, "growx");
+                panel.add(new JLabel("Imagen:"));
+                JPanel imgPanel = new JPanel(new BorderLayout());
+                imgPanel.add(btnSeleccionarImagen, BorderLayout.WEST);
+                imgPanel.add(lblImagenPreview, BorderLayout.CENTER);
+                panel.add(imgPanel, "span 3, growx");
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Kilometraje Actual:"), gbc);
-		txtKilometraje = new JTextField(10);
-		gbc.gridx = 1;
-		panel.add(txtKilometraje, gbc);
+                JPanel pnlButtons = new JPanel();
+                JButton btnOk = new JButton("Aceptar");
+                JButton btnCancel = new JButton("Cancelar");
+                pnlButtons.add(btnOk);
+                pnlButtons.add(btnCancel);
+                panel.add(pnlButtons, "span, center, gaptop 10");
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Estado Vehículo:"), gbc);
-		cbEstado = new JComboBox<EstadoVehiculoDTO>(estados.toArray(new EstadoVehiculoDTO[0]));
-		gbc.gridx = 1;
-		panel.add(cbEstado, gbc);
+                btnSeleccionarImagen.addActionListener(e -> {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.setFileFilter(new FileNameExtensionFilter("Imágenes (*.jpg, *.jpeg, *.png, *.gif)",
+                                        "jpg", "jpeg", "png", "gif"));
+                        int resp = chooser.showOpenDialog(VehiculoCreateDialog.this);
+                        if (resp == JFileChooser.APPROVE_OPTION) {
+                                File seleccionado = chooser.getSelectedFile();
+                                try {
+                                        String rutaRel = fileService.store(seleccionado);
+                                        imagenSeleccionada = rutaRel;
+                                        ImageIcon ico = new ImageIcon(new ImageIcon(seleccionado.getAbsolutePath()).getImage()
+                                                        .getScaledInstance(120, 90, java.awt.Image.SCALE_SMOOTH));
+                                        lblImagenPreview.setIcon(ico);
+                                } catch (IOException ex) {
+                                        SwingUtils.showError(VehiculoCreateDialog.this,
+                                                        "No se pudo guardar la imagen: " + ex.getMessage());
+                                }
+                        }
+                });
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Categoría Vehículo:"), gbc);
-		cbCategoria = new JComboBox<CategoriaVehiculoDTO>(categorias.toArray(new CategoriaVehiculoDTO[0]));
-		gbc.gridx = 1;
-		panel.add(cbCategoria, gbc);
+                btnOk.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                                onOk();
+                        }
+                });
+                btnCancel.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                                confirmed = false;
+                                setVisible(false);
+                        }
+                });
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Imagen:"), gbc);
-		btnSeleccionarImagen = new JButton("Seleccionar Imagen");
-		lblImagenPreview = new JLabel();
-		lblImagenPreview.setPreferredSize(new java.awt.Dimension(120, 90));
-
-		btnSeleccionarImagen.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new JFileChooser();
-				chooser.setFileFilter(new FileNameExtensionFilter("Imágenes (*.jpg, *.jpeg, *.png, *.gif)", "jpg",
-						"jpeg", "png", "gif"));
-				int resp = chooser.showOpenDialog(VehiculoCreateDialog.this);
-				if (resp == JFileChooser.APPROVE_OPTION) {
-					File seleccionado = chooser.getSelectedFile();
-					try {
-						String rutaRel = fileService.store(seleccionado);
-						imagenSeleccionada = rutaRel;
-						ImageIcon ico = new ImageIcon(new ImageIcon(seleccionado.getAbsolutePath()).getImage()
-								.getScaledInstance(120, 90, java.awt.Image.SCALE_SMOOTH));
-						lblImagenPreview.setIcon(ico);
-					} catch (IOException ex) {
-						SwingUtils.showError(VehiculoCreateDialog.this,
-								"No se pudo guardar la imagen: " + ex.getMessage());
-					}
-				}
-			}
-		});
-
-		JPanel imgPanel = new JPanel(new BorderLayout());
-		imgPanel.add(btnSeleccionarImagen, BorderLayout.WEST);
-		imgPanel.add(lblImagenPreview, BorderLayout.CENTER);
-		gbc.gridx = 1;
-		panel.add(imgPanel, gbc);
-
-		JPanel pnlButtons = new JPanel();
-		JButton btnOk = new JButton("Aceptar");
-		JButton btnCancel = new JButton("Cancelar");
-		pnlButtons.add(btnOk);
-		pnlButtons.add(btnCancel);
-		gbc.gridx = 0;
-		gbc.gridy++;
-		gbc.gridwidth = 2;
-		panel.add(pnlButtons, gbc);
-
-		btnOk.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				onOk();
-			}
-		});
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				confirmed = false;
-				setVisible(false);
-			}
-		});
-
-		getContentPane().add(panel, BorderLayout.CENTER);
-	}
+                getContentPane().add(panel, BorderLayout.CENTER);
+        }
 
 	private void onOk() {
 		if (txtMarca.getText().trim().isEmpty()) {
