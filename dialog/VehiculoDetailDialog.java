@@ -2,9 +2,6 @@ package com.pinguela.rentexpres.desktop.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.pinguela.rentexpres.model.VehiculoDTO;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Diálogo de sólo lectura para mostrar los datos de un Vehículo existente.
@@ -29,78 +28,44 @@ public class VehiculoDetailDialog extends JDialog {
 		setLocationRelativeTo(owner);
 	}
 
-	private void initComponents(VehiculoDTO v) {
-		JPanel panel = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(4, 4, 4, 4);
-		gbc.anchor = GridBagConstraints.WEST;
+        private void initComponents(VehiculoDTO v) {
+                JPanel panel = new JPanel(new MigLayout("wrap 2", "[right]10[grow]", "[]10[]10[]10[]10[]10[]10[]10[]20[]"));
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		panel.add(new JLabel("Marca:"), gbc);
-		gbc.gridx = 1;
-		panel.add(new JLabel(v.getMarca()), gbc);
+                panel.add(new JLabel("Marca:"));
+                panel.add(new JLabel(v.getMarca()));
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Modelo:"), gbc);
-		gbc.gridx = 1;
-		panel.add(new JLabel(v.getModelo()), gbc);
+                panel.add(new JLabel("Modelo:"));
+                panel.add(new JLabel(v.getModelo()));
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Año fabricación:"), gbc);
-		gbc.gridx = 1;
-		panel.add(new JLabel(String.valueOf(v.getAnioFabricacion())), gbc);
+                panel.add(new JLabel("Año fabricación:"));
+                panel.add(new JLabel(String.valueOf(v.getAnioFabricacion())));
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Precio/Día:"), gbc);
-		gbc.gridx = 1;
-		panel.add(new JLabel(String.valueOf(v.getPrecioDia())), gbc);
+                panel.add(new JLabel("Precio/Día:"));
+                panel.add(new JLabel(String.valueOf(v.getPrecioDia())));
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Placa:"), gbc);
-		gbc.gridx = 1;
-		panel.add(new JLabel(v.getPlaca()), gbc);
+                panel.add(new JLabel("Placa:"));
+                panel.add(new JLabel(v.getPlaca()));
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Nº Bastidor:"), gbc);
-		gbc.gridx = 1;
-		panel.add(new JLabel(v.getNumeroBastidor()), gbc);
+                panel.add(new JLabel("Nº Bastidor:"));
+                panel.add(new JLabel(v.getNumeroBastidor()));
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Kilometraje Actual:"), gbc);
-		gbc.gridx = 1;
-		panel.add(new JLabel(String.valueOf(v.getKilometrajeActual())), gbc);
+                panel.add(new JLabel("Kilometraje Actual:"));
+                panel.add(new JLabel(String.valueOf(v.getKilometrajeActual())));
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Estado:"), gbc);
-		gbc.gridx = 1;
-		panel.add(new JLabel(v.getNombreEstadoVehiculo()), gbc);
+                panel.add(new JLabel("Estado:"));
+                panel.add(new JLabel(v.getNombreEstadoVehiculo()));
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		panel.add(new JLabel("Categoría:"), gbc);
-		gbc.gridx = 1;
-		panel.add(new JLabel(v.getNombreCategoria()), gbc);
+                panel.add(new JLabel("Categoría:"));
+                panel.add(new JLabel(v.getNombreCategoria()));
 
-		JButton btnCerrar = new JButton("Cerrar");
-		btnCerrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
-		gbc.gridx = 0;
-		gbc.gridy++;
-		gbc.gridwidth = 2;
-		gbc.anchor = GridBagConstraints.CENTER;
-		panel.add(btnCerrar, gbc);
+                JButton btnCerrar = new JButton("Cerrar");
+                btnCerrar.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                                dispose();
+                        }
+                });
+                panel.add(btnCerrar, "span, center, gaptop 10");
 
-		getContentPane().add(panel, BorderLayout.CENTER);
-	}
+                getContentPane().add(panel, BorderLayout.CENTER);
+        }
 }
