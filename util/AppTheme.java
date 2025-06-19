@@ -56,7 +56,9 @@ public final class AppTheme {
 
         UIManager.put("Panel.background", DIALOG_BG);
         UIManager.put("Button.background", PRIMARY);
-        UIManager.put("Button.foreground", Color.WHITE);
+        // Establecer un color de texto oscuro por defecto para botones.
+        // Los botones primarios se colorean individualmente en blanco donde corresponde.
+        UIManager.put("Button.foreground", NAV_BTN_FG);
     }
 }
 
