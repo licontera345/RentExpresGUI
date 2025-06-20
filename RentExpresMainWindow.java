@@ -39,8 +39,10 @@ import com.pinguela.rentexpres.desktop.view.ReservaSearchView;
 import com.pinguela.rentexpres.desktop.view.VehiculoSearchView;
 import com.pinguela.rentexpres.desktop.view.CalendarView;
 import com.pinguela.rentexpres.desktop.view.UsuarioSearchView;
+import com.pinguela.rentexpres.desktop.view.EstadisticasView;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.service.AlquilerService;
+import com.pinguela.rentexpres.service.EstadisticaService;
 import com.pinguela.rentexpres.service.CategoriaVehiculoService;
 import com.pinguela.rentexpres.service.ClienteService;
 import com.pinguela.rentexpres.service.EstadoAlquilerService;
@@ -60,6 +62,7 @@ import com.pinguela.rentexpres.service.impl.ProvinciaServiceImpl;
 import com.pinguela.rentexpres.service.impl.ReservaServiceImpl;
 import com.pinguela.rentexpres.service.impl.UsuarioServiceImpl;
 import com.pinguela.rentexpres.service.impl.VehiculoServiceImpl;
+import com.pinguela.rentexpres.service.impl.EstadisticaServiceImpl;
 
 public class RentExpresMainWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -70,6 +73,7 @@ public class RentExpresMainWindow extends JFrame {
         private final LocalidadService localidadService = new LocalidadServiceImpl();
         private final ProvinciaService provinciaService = new ProvinciaServiceImpl();
         private final UsuarioService usuarioService = new UsuarioServiceImpl();
+        private final EstadisticaService estadisticaService = new EstadisticaServiceImpl();
 
 	private final JPanel navPanel = new JPanel();
 	private final JPanel contentPanel = new JPanel(new CardLayout());
@@ -179,6 +183,8 @@ public class RentExpresMainWindow extends JFrame {
                 navPanel.add(Box.createVerticalStrut(10));
                 navPanel.add(createNavButton("Calendario", AppIcons.RESERVA, btnBg, btnHoverBg, btnFg));
                 navPanel.add(Box.createVerticalStrut(10));
+                navPanel.add(createNavButton("Estadísticas", AppIcons.SEARCH, btnBg, btnHoverBg, btnFg));
+                navPanel.add(Box.createVerticalStrut(10));
                 navPanel.add(createNavButton("Clientes", AppIcons.CLIENTE, btnBg, btnHoverBg, btnFg));
                 navPanel.add(Box.createVerticalStrut(10));
 
@@ -255,6 +261,9 @@ public class RentExpresMainWindow extends JFrame {
 
                 CalendarView calView = new CalendarView();
                 contentPanel.add(calView, "Calendario");
+
+                EstadisticasView estView = new EstadisticasView(estadisticaService);
+                contentPanel.add(estView, "Estadísticas");
 
                 ClienteSearchView csv = new ClienteSearchView(clienteService, provinciaService, localidadService, this);
                 csv.initIfNeeded();
