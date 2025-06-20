@@ -1,4 +1,4 @@
-package com.davidmoodie.SwingCalendar;
+package com.pinguela.rentexpres.desktop.calendar;
 
 import java.awt.*;
 

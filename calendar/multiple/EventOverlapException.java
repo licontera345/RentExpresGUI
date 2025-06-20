@@ -1,4 +1,4 @@
-package com.pinguela.SwingMultipleCalendar;
+package com.pinguela.rentexpres.desktop.calendar.multiple;
 
 public class EventOverlapException extends Exception{
 

@@ -1,4 +1,4 @@
-package com.pinguela.SwingMultipleCalendar.dialog;
+package com.pinguela.rentexpres.desktop.calendar.multiple.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,10 +22,10 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.border.EmptyBorder;
 
-import com.davidmoodie.SwingCalendar.Calendar;
-import com.davidmoodie.SwingCalendar.CalendarEvent;
-import com.pinguela.SwingMultipleCalendar.MultipleCalendar;
-import com.pinguela.SwingMultipleCalendar.MultipleCalendarEvent;
+import com.pinguela.rentexpres.desktop.calendar.Calendar;
+import com.pinguela.rentexpres.desktop.calendar.CalendarEvent;
+import com.pinguela.rentexpres.desktop.calendar.multiple.MultipleCalendar;
+import com.pinguela.rentexpres.desktop.calendar.multiple.MultipleCalendarEvent;
 import com.toedter.calendar.JDateChooser;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;

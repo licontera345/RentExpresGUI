@@ -9,8 +9,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import com.davidmoodie.SwingCalendar.CalendarEvent;
-import com.davidmoodie.SwingCalendar.WeekCalendar;
+import com.pinguela.rentexpres.desktop.calendar.CalendarEvent;
+import com.pinguela.rentexpres.desktop.calendar.WeekCalendar;
 import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.model.ReservaDTO;
 import com.pinguela.rentexpres.service.AlquilerService;

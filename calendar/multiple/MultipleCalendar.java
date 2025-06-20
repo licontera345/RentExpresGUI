@@ -1,4 +1,4 @@
-package com.davidmoodie.SwingCalendar;
+package com.pinguela.rentexpres.desktop.calendar.multiple;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
@@ -16,31 +16,34 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public abstract class Calendar extends JComponent {
+public abstract class MultipleCalendar extends JComponent {
     protected static final LocalTime START_TIME = LocalTime.of(9, 0);
-    protected static final LocalTime END_TIME = LocalTime.of(21, 0);
+    protected static final LocalTime END_TIME = LocalTime.of(17, 0);
 
     protected static final int MIN_WIDTH = 600;
     protected static final int MIN_HEIGHT = MIN_WIDTH;
 
     protected static final int HEADER_HEIGHT = 30;
     protected static final int TIME_COL_WIDTH = 100;
+    
+    protected static final int MAX_SIMUL_EVENTS=3;
 
     // An estimate of the width of a single character (not exact but good
     // enough)
     private static final int FONT_LETTER_PIXEL_WIDTH = 7;
-    private ArrayList<CalendarEvent> events;
+    private ArrayList<MultipleCalendarEvent> events;
     private double timeScale;
     private double dayWidth;
+    private double eventWidth;
     private Graphics2D g2;
 
     private EventListenerList listenerList = new EventListenerList();
 
-    public Calendar() {
+    public MultipleCalendar() {
         this(new ArrayList<>());
     }
 
-    Calendar(ArrayList<CalendarEvent> events) {
+    MultipleCalendar(ArrayList<MultipleCalendarEvent> events) {
         this.events = events;
         setupEventListeners();
         setupTimer();
@@ -74,12 +77,13 @@ public abstract class Calendar extends JComponent {
 
     private boolean checkCalendarEventClick(Point p) {
         double x0, x1, y0, y1;
-        for (CalendarEvent event : events) {
+        for (MultipleCalendarEvent event : events) {
             if (!dateInRange(event.getDate())) continue;
 
-            x0 = dayToPixel(event.getDate().getDayOfWeek());
+            x0 = dayToPixel(event.getDate().getDayOfWeek()) + (eventWidth*event.getIndex());
             y0 = timeToPixel(event.getStart());
-            x1 = dayToPixel(event.getDate().getDayOfWeek()) + dayWidth;
+            //x1 = dayToPixel(event.getDate().getDayOfWeek()) + dayWidth;
+            x1 = dayToPixel(event.getDate().getDayOfWeek()) + (eventWidth*(event.getIndex()+1));
             y1 = timeToPixel(event.getEnd());
 
             if (p.getX() >= x0 && p.getX() <= x1 && p.getY() >= y0 && p.getY() <= y1) {
@@ -118,7 +122,7 @@ public abstract class Calendar extends JComponent {
 
     // Notify all listeners that have registered interest for
     // notification on this event type.
-    private void fireCalendarEventClick(CalendarEvent calendarEvent) {
+    private void fireCalendarEventClick(MultipleCalendarEvent calendarEvent) {
         // Guaranteed to return a non-null array
         Object[] listeners = listenerList.getListenerList();
         // Process the listeners last to first, notifying
@@ -175,6 +179,8 @@ public abstract class Calendar extends JComponent {
         timeScale = (double) (height - HEADER_HEIGHT) / (END_TIME.toSecondOfDay() - START_TIME.toSecondOfDay());
        //  dayWidth = (width - TIME_COL_WIDTH) / numDaysToShow();
         dayWidth = (width - TIME_COL_WIDTH) / numDaysToShow();
+       // eventWidth
+        eventWidth = dayWidth / MAX_SIMUL_EVENTS;
     }
 
     protected abstract int numDaysToShow();
@@ -332,14 +338,17 @@ public abstract class Calendar extends JComponent {
         double x;
         double y0;
 
-        for (CalendarEvent event : events) {
+        for (MultipleCalendarEvent event : events) {
             if (!dateInRange(event.getDate())) continue;
 
-            x = dayToPixel(event.getDate().getDayOfWeek());
+            //x = dayToPixel(event.getDate().getDayOfWeek());
+            x = dayToPixel(event.getDate().getDayOfWeek())+eventWidth*event.getIndex();
             y0 = timeToPixel(event.getStart());
+           
 
-            Rectangle2D rect = new Rectangle2D.Double(x, y0, dayWidth, (timeToPixel(event.getEnd()) - timeToPixel(event.getStart())));
-           // Rectangle2D rect = new Rectangle2D.Double(x, y0, dayWidth/2, (timeToPixel(event.getEnd()) - timeToPixel(event.getStart())));
+            //Rectangle2D rect = new Rectangle2D.Double(x, y0, dayWidth, (timeToPixel(event.getEnd()) - timeToPixel(event.getStart())));
+            Rectangle2D rect = new Rectangle2D.Double(x, y0, eventWidth, (timeToPixel(event.getEnd()) - timeToPixel(event.getStart())));
+           
             Color origColor = g2.getColor();
             g2.setColor(event.getColor());
             g2.fill(rect);
@@ -356,13 +365,14 @@ public abstract class Calendar extends JComponent {
             Font newFont = origFont.deriveFont(Font.BOLD, fontSize);
             g2.setFont(newFont);
 
-            g2.drawString(event.getStart() + " - " + event.getEnd(), (int) x + 5, (int) y0 + 11);
+            // Draw the event´s times
+            // g2.drawString(event.getStart() + " - " + event.getEnd(), (int) x + 5, (int) y0 + 11);
 
             // Unbolden
             g2.setFont(origFont.deriveFont(fontSize));
 
             // Draw the event's text
-            g2.drawString(event.getText(), (int) x + 5, (int) y0 + 23);
+            // g2.drawString(event.getText(), (int) x + 5, (int) y0 + 23);
 
             // Reset font
             g2.setFont(origFont);
@@ -386,19 +396,26 @@ public abstract class Calendar extends JComponent {
         repaint();
     }
 
-    public void addEvent(CalendarEvent event) {
+    public void addEvent(MultipleCalendarEvent event) throws EventOverlapException {
+    	if (events.contains(event)) throw new EventOverlapException("Slot non dispoñible");
+    	
         events.add(event);
         repaint();
     }
 
-    public boolean removeEvent(CalendarEvent event) {
+    public boolean removeEvent(MultipleCalendarEvent event) {
         boolean removed = events.remove(event);
         repaint();
         return removed;
     }
 
-    public void setEvents(ArrayList<CalendarEvent> events) {
+    public void setEvents(ArrayList<MultipleCalendarEvent> events) {
         this.events = events;
         repaint();
     }
+
+	public static int getMaxSimulEvents() {
+		return MAX_SIMUL_EVENTS;
+	}
+    
 }
