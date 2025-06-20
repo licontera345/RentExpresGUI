@@ -1,97 +1,76 @@
 package com.pinguela.rentexpres.desktop.view;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.FlowLayout;
-import java.awt.Insets;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.format.TextStyle;
-import java.util.Locale;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.davidmoodie.SwingCalendar.CalendarEvent;
+import com.davidmoodie.SwingCalendar.WeekCalendar;
+import com.pinguela.rentexpres.model.AlquilerDTO;
+import com.pinguela.rentexpres.model.ReservaDTO;
+import com.pinguela.rentexpres.service.AlquilerService;
+import com.pinguela.rentexpres.service.ReservaService;
+import com.pinguela.rentexpres.service.impl.AlquilerServiceImpl;
+import com.pinguela.rentexpres.service.impl.ReservaServiceImpl;
+
+/**
+ * Weekly calendar view showing reservas and alquileres using the SwingCalendar
+ * component provided by the professor.
+ */
 public class CalendarView extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    private YearMonth currentMonth;
-    private final JLabel lblMonth = new JLabel();
-    private final JPanel daysPanel = new JPanel(new GridLayout(0, 7));
+    private final WeekCalendar calendar;
+    private final ReservaService reservaService = new ReservaServiceImpl();
+    private final AlquilerService alquilerService = new AlquilerServiceImpl();
 
     public CalendarView() {
         setLayout(new BorderLayout());
+        calendar = new WeekCalendar(loadEvents());
+        add(calendar, BorderLayout.CENTER);
 
-        JPanel header = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton btnPrev = new JButton("<");
-        JButton btnNext = new JButton(">");
-
-        btnPrev.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                shiftMonth(-1);
-            }
-        });
-        btnNext.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                shiftMonth(1);
-            }
-        });
-
-        header.add(btnPrev);
-        header.add(lblMonth);
-        header.add(btnNext);
-
-        add(header, BorderLayout.NORTH);
-        add(daysPanel, BorderLayout.CENTER);
-
-        updateMonth(YearMonth.now());
+        calendar.addCalendarEventClickListener(e -> JOptionPane.showMessageDialog(
+                CalendarView.this,
+                e.getCalendarEvent().getText(),
+                "Evento",
+                JOptionPane.INFORMATION_MESSAGE));
     }
 
-    private void shiftMonth(int delta) {
-        updateMonth(currentMonth.plusMonths(delta));
-    }
-
-    private void updateMonth(YearMonth month) {
-        currentMonth = month;
-        lblMonth.setText(currentMonth.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault())
-                + " " + currentMonth.getYear());
-
-        daysPanel.removeAll();
-
-        for (DayOfWeek d : DayOfWeek.values()) {
-            JLabel lbl = new JLabel(d.getDisplayName(TextStyle.SHORT, Locale.getDefault()), JLabel.CENTER);
-            daysPanel.add(lbl);
-        }
-
-        int first = currentMonth.atDay(1).getDayOfWeek().getValue() % 7;
-        for (int i = 0; i < first; i++) {
-            daysPanel.add(new JLabel(""));
-        }
-
-        int length = currentMonth.lengthOfMonth();
-        for (int day = 1; day <= length; day++) {
-            final LocalDate date = currentMonth.atDay(day);
-            JButton b = new JButton(String.valueOf(day));
-            b.setMargin(new Insets(2, 2, 2, 2));
-            b.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    JOptionPane.showMessageDialog(CalendarView.this,
-                            "Seleccionaste " + date);
+    private ArrayList<CalendarEvent> loadEvents() {
+        ArrayList<CalendarEvent> events = new ArrayList<>();
+        try {
+            List<ReservaDTO> reservas = reservaService.findAll();
+            for (ReservaDTO r : reservas) {
+                LocalDate start = LocalDate.parse(r.getFechaInicio());
+                LocalDate end = LocalDate.parse(r.getFechaFin());
+                for (LocalDate d = start; !d.isAfter(end); d = d.plusDays(1)) {
+                    events.add(new CalendarEvent(d,
+                            LocalTime.of(9, 0),
+                            LocalTime.of(10, 0),
+                            "Reserva " + r.getId()));
                 }
-            });
-            daysPanel.add(b);
+            }
+            List<AlquilerDTO> alquileres = alquilerService.findAll();
+            for (AlquilerDTO a : alquileres) {
+                LocalDate start = LocalDate.parse(a.getFechaInicioEfectivo());
+                LocalDate end = LocalDate.parse(a.getFechaFinEfectivo());
+                for (LocalDate d = start; !d.isAfter(end); d = d.plusDays(1)) {
+                    events.add(new CalendarEvent(d,
+                            LocalTime.of(10, 0),
+                            LocalTime.of(11, 0),
+                            "Alquiler " + a.getId(),
+                            java.awt.Color.CYAN));
+                }
+            }
+        } catch (Exception ex) {
+            // In case of errors just print stack trace; calendar will show no events
+            ex.printStackTrace();
         }
-
-        int cells = first + length;
-        int total = ((cells + 6) / 7) * 7;
-        for (int i = cells; i < total; i++) {
-            daysPanel.add(new JLabel(""));
-        }
-
-        revalidate();
-        repaint();
+        return events;
     }
 }
