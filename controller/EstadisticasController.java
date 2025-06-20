@@ -36,6 +36,8 @@ public class EstadisticasController {
                         public void execute() {
                             ((AlquilerStatsTableModel) view.getTablaAlquiler().getModel()).setData(aStats);
                             ((ReservaStatsTableModel) view.getTablaReserva().getModel()).setData(rStats);
+                            view.getGraficaAlquiler().setData(toValuesA(aStats), toLabelsA(aStats));
+                            view.getGraficaReserva().setData(toValuesR(rStats), toLabelsR(rStats));
                         }
                     });
                 } catch (final RentexpresException ex) {
@@ -48,5 +50,45 @@ public class EstadisticasController {
                 }
             }
         }.start();
+    }
+
+    private List<Integer> toValuesA(List<AlquilerStatsDTO> list) {
+        java.util.List<Integer> vals = new java.util.ArrayList<>();
+        if (list != null) {
+            for (AlquilerStatsDTO dto : list) {
+                vals.add(dto.getTotalAlquileres());
+            }
+        }
+        return vals;
+    }
+
+    private List<String> toLabelsA(List<AlquilerStatsDTO> list) {
+        java.util.List<String> labels = new java.util.ArrayList<>();
+        if (list != null) {
+            for (AlquilerStatsDTO dto : list) {
+                labels.add(dto.getMonth() + "/" + dto.getYear());
+            }
+        }
+        return labels;
+    }
+
+    private List<Integer> toValuesR(List<ReservaStatsDTO> list) {
+        java.util.List<Integer> vals = new java.util.ArrayList<>();
+        if (list != null) {
+            for (ReservaStatsDTO dto : list) {
+                vals.add(dto.getTotalReservas());
+            }
+        }
+        return vals;
+    }
+
+    private List<String> toLabelsR(List<ReservaStatsDTO> list) {
+        java.util.List<String> labels = new java.util.ArrayList<>();
+        if (list != null) {
+            for (ReservaStatsDTO dto : list) {
+                labels.add(dto.getMonth() + "/" + dto.getYear());
+            }
+        }
+        return labels;
     }
 }
