@@ -16,6 +16,11 @@ Run the following command from the project root:
 This compiles the sources under `middleware_src/src` and creates
 `lib/middleware/RentExpres.jar`.
 
+If you notice that features such as the automatic reservation ID
+assignment are not working, verify that you have built the middleware JAR
+with this script. Using the old prebuilt JAR may cause certain functions
+to fail.
+
 ## Running
 
 After building, compile and run the GUI as usual with your IDE or `javac`.
