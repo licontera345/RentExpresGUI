@@ -1,4 +1,4 @@
-package com.davidmoodie.SwingCalendar.dialog;
+package com.pinguela.rentexpres.desktop.calendar.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -20,8 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.border.EmptyBorder;
 
-import com.davidmoodie.SwingCalendar.Calendar;
-import com.davidmoodie.SwingCalendar.CalendarEvent;
+import com.pinguela.rentexpres.desktop.calendar.Calendar;
+import com.pinguela.rentexpres.desktop.calendar.CalendarEvent;
 import com.toedter.calendar.JDateChooser;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;

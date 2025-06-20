@@ -1,4 +1,4 @@
-package com.pinguela.SwingMultipleCalendar;
+package com.pinguela.rentexpres.desktop.calendar.multiple;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package com.davidmoodie.SwingCalendar;
+package com.pinguela.rentexpres.desktop.calendar.multiple;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -9,22 +9,22 @@ public class Week {
     private ArrayList<LocalDate> days;
 
     // Gets week variables from any date (can be within week)
-    public Week(LocalDate date) {
-        days = new ArrayList<>();
-        LocalDate monday = getStartOfWeek(date);
-        days.add(monday);
-        for (int i = 1; i < 5; i++) {
-            days.add(monday.plusDays(i));
-        }
-    }
 //    public Week(LocalDate date) {
 //        days = new ArrayList<>();
 //        LocalDate monday = getStartOfWeek(date);
 //        days.add(monday);
-//        for (int i = 1; i < 7; i++) {
+//        for (int i = 1; i < 5; i++) {
 //            days.add(monday.plusDays(i));
 //        }
 //    }
+    public Week(LocalDate date) {
+        days = new ArrayList<>();
+        LocalDate monday = getStartOfWeek(date);
+        days.add(monday);
+        for (int i = 1; i < 7; i++) {
+            days.add(monday.plusDays(i));
+        }
+    }
 
     public static LocalDate getStartOfWeek(LocalDate date) {
         LocalDate day = date;

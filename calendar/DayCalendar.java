@@ -1,16 +1,14 @@
-package com.pinguela.SwingMultipleCalendar;
+package com.pinguela.rentexpres.desktop.calendar;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import com.davidmoodie.SwingCalendar.CalendarEvent;
-
-public class DayMultipleCalendar extends MultipleCalendar {
+public class DayCalendar extends Calendar {
 
     private LocalDate calDate;
 
-    public DayMultipleCalendar(ArrayList<MultipleCalendarEvent> events) {
+    public DayCalendar(ArrayList<CalendarEvent> events) {
         super(events);
         calDate = LocalDate.now();
     }
@@ -59,5 +57,4 @@ public class DayMultipleCalendar extends MultipleCalendar {
         calDate = calDate.minusDays(1);
         repaint();
     }
-
 }
