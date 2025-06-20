@@ -4,13 +4,18 @@ import java.awt.BorderLayout;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import com.pinguela.rentexpres.desktop.calendar.CalendarEvent;
 import com.pinguela.rentexpres.desktop.calendar.WeekCalendar;
+import com.pinguela.rentexpres.desktop.dialog.AlquilerDetailDialog;
+import com.pinguela.rentexpres.desktop.dialog.ReservaDetailDialog;
 import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.model.ReservaDTO;
 import com.pinguela.rentexpres.service.AlquilerService;
@@ -28,17 +33,32 @@ public class CalendarView extends JPanel {
     private final WeekCalendar calendar;
     private final ReservaService reservaService = new ReservaServiceImpl();
     private final AlquilerService alquilerService = new AlquilerServiceImpl();
+    private final Map<CalendarEvent, ReservaDTO> reservaMap = new HashMap<>();
+    private final Map<CalendarEvent, AlquilerDTO> alquilerMap = new HashMap<>();
 
     public CalendarView() {
         setLayout(new BorderLayout());
         calendar = new WeekCalendar(loadEvents());
         add(calendar, BorderLayout.CENTER);
 
-        calendar.addCalendarEventClickListener(e -> JOptionPane.showMessageDialog(
-                CalendarView.this,
-                e.getCalendarEvent().getText(),
-                "Evento",
-                JOptionPane.INFORMATION_MESSAGE));
+        calendar.addCalendarEventClickListener(e -> {
+            CalendarEvent evt = e.getCalendarEvent();
+            if (reservaMap.containsKey(evt)) {
+                new ReservaDetailDialog(
+                        (java.awt.Frame) SwingUtilities.getWindowAncestor(CalendarView.this),
+                        reservaMap.get(evt)).setVisible(true);
+            } else if (alquilerMap.containsKey(evt)) {
+                new AlquilerDetailDialog(
+                        (java.awt.Frame) SwingUtilities.getWindowAncestor(CalendarView.this),
+                        alquilerMap.get(evt)).setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(
+                        CalendarView.this,
+                        evt.getText(),
+                        "Evento",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
     }
 
     private ArrayList<CalendarEvent> loadEvents() {
@@ -49,10 +69,12 @@ public class CalendarView extends JPanel {
                 LocalDate start = LocalDate.parse(r.getFechaInicio());
                 LocalDate end = LocalDate.parse(r.getFechaFin());
                 for (LocalDate d = start; !d.isAfter(end); d = d.plusDays(1)) {
-                    events.add(new CalendarEvent(d,
+                    CalendarEvent evt = new CalendarEvent(d,
                             LocalTime.of(9, 0),
                             LocalTime.of(10, 0),
-                            "Reserva " + r.getId()));
+                            "Reserva " + r.getId());
+                    events.add(evt);
+                    reservaMap.put(evt, r);
                 }
             }
             List<AlquilerDTO> alquileres = alquilerService.findAll();
@@ -60,11 +82,13 @@ public class CalendarView extends JPanel {
                 LocalDate start = LocalDate.parse(a.getFechaInicioEfectivo());
                 LocalDate end = LocalDate.parse(a.getFechaFinEfectivo());
                 for (LocalDate d = start; !d.isAfter(end); d = d.plusDays(1)) {
-                    events.add(new CalendarEvent(d,
+                    CalendarEvent evt = new CalendarEvent(d,
                             LocalTime.of(10, 0),
                             LocalTime.of(11, 0),
                             "Alquiler " + a.getId(),
-                            java.awt.Color.CYAN));
+                            java.awt.Color.CYAN);
+                    events.add(evt);
+                    alquilerMap.put(evt, a);
                 }
             }
         } catch (Exception ex) {
