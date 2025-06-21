@@ -125,8 +125,9 @@ public class RentExpresMainWindow extends JFrame {
 				JLabel.LEFT);
 		lblUser.setFont(lblUser.getFont().deriveFont(Font.PLAIN, 14f));
 
-		JButton btnProfile = new JButton("Perfil", AppIcons.VIEW);
-		JButton btnLogout = new JButton("Logout", AppIcons.CLEAR);
+                JButton btnProfile = new JButton("Perfil", AppIcons.VIEW);
+                JButton btnLogout = new JButton("Logout", AppIcons.CLEAR);
+                JButton btnTheme = new JButton(AppTheme.isDark() ? "Modo claro" : "Modo oscuro");
 
 		btnProfile.setFocusPainted(false);
 		btnProfile.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -138,9 +139,9 @@ public class RentExpresMainWindow extends JFrame {
                        }
                });
 
-		btnLogout.setFocusPainted(false);
-		btnLogout.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnLogout.setToolTipText("Cerrar sesión");
+                btnLogout.setFocusPainted(false);
+                btnLogout.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                btnLogout.setToolTipText("Cerrar sesión");
                btnLogout.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
@@ -157,11 +158,27 @@ public class RentExpresMainWindow extends JFrame {
                        }
                });
 
-		topBar.add(Box.createHorizontalGlue());
-		topBar.add(lblUser);
-		topBar.add(btnProfile);
-		topBar.add(btnLogout);
-	}
+                btnTheme.setFocusPainted(false);
+                btnTheme.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                btnTheme.setToolTipText("Cambiar tema");
+               btnTheme.addActionListener(new ActionListener() {
+                       @Override
+                       public void actionPerformed(ActionEvent e) {
+                               AppTheme.toggleDarkMode();
+                               topBar.removeAll();
+                               initTopBar();
+                               navPanel.removeAll();
+                               initNavigation();
+                               SwingUtilities.updateComponentTreeUI(RentExpresMainWindow.this);
+                       }
+               });
+
+                topBar.add(Box.createHorizontalGlue());
+                topBar.add(lblUser);
+                topBar.add(btnProfile);
+                topBar.add(btnTheme);
+                topBar.add(btnLogout);
+        }
 
 	private void initNavigation() {
         // Colores para la navegación
