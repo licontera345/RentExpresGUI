@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.pinguela.rentexpres.config.ConfigManager;
 import com.pinguela.rentexpres.service.FileService;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class FileServiceImpl implements FileService {
 
@@ -24,7 +25,7 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public String uploadImage(File imagen, Integer idVehiculo) throws IOException {
 		if (imagen == null || !imagen.exists()) {
-			logger.warn("El archivo de imagen es nulo o no existe");
+			logger.warn(LogUtils.buildMessage(FileServiceImpl.class, "El archivo de imagen es nulo o no existe"));
 			return null;
 		}
 
@@ -37,7 +38,7 @@ public class FileServiceImpl implements FileService {
 
 		String nombreArchivo = imagen.getName();
 		if (!validarNombreArchivo(nombreArchivo)) {
-			logger.warn("El archivo no cumple con el formato requerido: {}", nombreArchivo);
+			logger.warn(LogUtils.buildMessage(FileServiceImpl.class, "El archivo no cumple con el formato requerido: {}"), nombreArchivo);
 			return null;
 		}
 
@@ -46,7 +47,7 @@ public class FileServiceImpl implements FileService {
 		Files.copy(imagen.toPath(), destino);
 
 		String relativePath = "vehiculos" + File.separator + idVehiculo + File.separator + nombreUnico;
-		logger.info("Imagen guardada en: {}", destino.toString());
+		logger.info(LogUtils.buildMessage(FileServiceImpl.class, "Imagen guardada en: {}"), destino.toString());
 
 		return relativePath;
 	}
@@ -72,7 +73,7 @@ public class FileServiceImpl implements FileService {
 				}
 			}
 		} else {
-			logger.info("No se encontraron imágenes para el vehículo ID: {}", idVehiculo);
+			logger.info(LogUtils.buildMessage(FileServiceImpl.class, "No se encontraron imágenes para el vehículo ID: {}"), idVehiculo);
 		}
 
                 return imagePaths;
@@ -98,7 +99,7 @@ public class FileServiceImpl implements FileService {
                                 }
                         }
                 } else {
-                        logger.info("No se encontraron imágenes para el usuario ID: {}", idUsuario);
+                        logger.info(LogUtils.buildMessage(FileServiceImpl.class, "No se encontraron imágenes para el usuario ID: {}"), idUsuario);
                 }
 
                 return imagePaths;
@@ -149,24 +150,24 @@ public class FileServiceImpl implements FileService {
 
             for (File imagen : imagenes) {
                 if (imagen == null || !imagen.exists()) {
-                    logger.warn("La imagen {} no existe", imagen);
+                    logger.warn(LogUtils.buildMessage(FileServiceImpl.class, "La imagen {} no existe"), imagen);
                     continue;
                 }
 
                 String nombreArchivo = imagen.getName();
                 if (!validarNombreArchivo(nombreArchivo)) {
-                    logger.warn("Nombre de archivo inválido: {}", nombreArchivo);
+                    logger.warn(LogUtils.buildMessage(FileServiceImpl.class, "Nombre de archivo inválido: {}"), nombreArchivo);
                     continue;
                 }
 
                 String nombreUnico = generarNombreUnico(nombreArchivo);
                 Path destino = directorioDestino.resolve(nombreUnico);
                 Files.copy(imagen.toPath(), destino);
-                logger.info("Imagen de usuario guardada en {}", destino.toString());
+                logger.info(LogUtils.buildMessage(FileServiceImpl.class, "Imagen de usuario guardada en {}"), destino.toString());
             }
 
         } catch (IOException e) {
-            logger.error("Error subiendo imágenes para el usuario {}", idUsuario, e);
+            logger.error(LogUtils.buildMessage(FileServiceImpl.class, "Error subiendo imágenes para el usuario {}"), idUsuario, e);
         }
 
     }

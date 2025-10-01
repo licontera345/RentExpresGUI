@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import com.pinguela.rentexpres.dao.EstadoAlquilerDAO;
 import com.pinguela.rentexpres.model.EstadoAlquilerDTO;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class EstadoAlquilerDAOImpl implements EstadoAlquilerDAO {
 
@@ -32,10 +33,10 @@ public class EstadoAlquilerDAOImpl implements EstadoAlquilerDAO {
 
             if (rs.next()) {
                 ea = loadEstadoAlquiler(rs);
-                logger.info("EstadoAlquiler encontrado con ID: " + id);
+                logger.info(LogUtils.buildMessage(EstadoAlquilerDAOImpl.class, "EstadoAlquiler encontrado con ID: " + id));
             }
         } catch (SQLException e) {
-            logger.error("Error al buscar EstadoAlquiler por ID: " + e.getMessage(), e);
+            logger.error(LogUtils.buildMessage(EstadoAlquilerDAOImpl.class, "Error al buscar EstadoAlquiler por ID: " + e.getMessage()), e);
         } finally {
 			JDBCUtils.close(ps, rs);
         }
@@ -50,10 +51,10 @@ public class EstadoAlquilerDAOImpl implements EstadoAlquilerDAO {
                 while (rs.next()) {
                     lista.add(loadEstadoAlquiler(rs));
                 }
-                logger.info("Total EstadosAlquiler: " + lista.size());
+                logger.info(LogUtils.buildMessage(EstadoAlquilerDAOImpl.class, "Total EstadosAlquiler: " + lista.size()));
             }
         } catch (SQLException e) {
-            logger.error("Error al obtener todos los EstadoAlquiler: " + e.getMessage(), e);
+            logger.error(LogUtils.buildMessage(EstadoAlquilerDAOImpl.class, "Error al obtener todos los EstadoAlquiler: " + e.getMessage()), e);
         }
         return lista;
     }

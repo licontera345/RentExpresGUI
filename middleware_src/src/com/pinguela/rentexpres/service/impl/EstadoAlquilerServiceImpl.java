@@ -12,6 +12,7 @@ import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.EstadoAlquilerDTO;
 import com.pinguela.rentexpres.service.EstadoAlquilerService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class EstadoAlquilerServiceImpl implements EstadoAlquilerService {
 
@@ -35,10 +36,10 @@ public class EstadoAlquilerServiceImpl implements EstadoAlquilerService {
 				e.printStackTrace();
 			}
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findById de EstadoAlquiler completado. ID: " + id);
+			logger.info(LogUtils.buildMessage(EstadoAlquilerServiceImpl.class, "findById de EstadoAlquiler completado. ID: " + id));
 		} catch (SQLException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findById de EstadoAlquiler: ", e);
+			logger.error(LogUtils.buildMessage(EstadoAlquilerServiceImpl.class, "Error en findById de EstadoAlquiler: "), e);
 			throw new RentexpresException("Error en findById de EstadoAlquiler", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -59,10 +60,10 @@ public class EstadoAlquilerServiceImpl implements EstadoAlquilerService {
 				e.printStackTrace();
 			}
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findAll de EstadoAlquiler completado. Cantidad: " + (lista != null ? lista.size() : 0));
+			logger.info(LogUtils.buildMessage(EstadoAlquilerServiceImpl.class, "findAll de EstadoAlquiler completado. Cantidad: " + (lista != null ? lista.size() : 0)));
 		} catch (SQLException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findAll de EstadoAlquiler: ", e);
+			logger.error(LogUtils.buildMessage(EstadoAlquilerServiceImpl.class, "Error en findAll de EstadoAlquiler: "), e);
 			throw new RentexpresException("Error en findAll de EstadoAlquiler", e);
 		} finally {
 			JDBCUtils.close(connection);

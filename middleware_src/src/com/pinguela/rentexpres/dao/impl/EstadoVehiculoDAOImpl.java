@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import com.pinguela.rentexpres.dao.EstadoVehiculoDAO;
 import com.pinguela.rentexpres.model.EstadoVehiculoDTO;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class EstadoVehiculoDAOImpl implements EstadoVehiculoDAO {
 
@@ -31,10 +32,10 @@ public class EstadoVehiculoDAOImpl implements EstadoVehiculoDAO {
 
             if (rs.next()) {
                 ev = loadEstadoVehiculo(rs);
-                logger.info("EstadoVehiculo encontrado con ID: " + id);
+                logger.info(LogUtils.buildMessage(EstadoVehiculoDAOImpl.class, "EstadoVehiculo encontrado con ID: " + id));
             }
         } catch (SQLException e) {
-            logger.error("Error al buscar EstadoVehiculo por ID: " + e.getMessage(), e);
+            logger.error(LogUtils.buildMessage(EstadoVehiculoDAOImpl.class, "Error al buscar EstadoVehiculo por ID: " + e.getMessage()), e);
         } finally {
 			JDBCUtils.close(ps, rs);
         }
@@ -50,10 +51,10 @@ public class EstadoVehiculoDAOImpl implements EstadoVehiculoDAO {
                 while (rs.next()) {
                     lista.add(loadEstadoVehiculo(rs));
                 }
-                logger.info("Estados de vehículo encontrados: " + lista.size());
+                logger.info(LogUtils.buildMessage(EstadoVehiculoDAOImpl.class, "Estados de vehículo encontrados: " + lista.size()));
             }
         } catch (SQLException e) {
-            logger.error("Error al obtener todos los EstadoVehiculo: " + e.getMessage(), e);
+            logger.error(LogUtils.buildMessage(EstadoVehiculoDAOImpl.class, "Error al obtener todos los EstadoVehiculo: " + e.getMessage()), e);
         }
         return lista;
     }

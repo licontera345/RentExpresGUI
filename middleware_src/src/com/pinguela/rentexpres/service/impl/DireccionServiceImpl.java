@@ -11,6 +11,7 @@ import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.DireccionDTO;
 import com.pinguela.rentexpres.service.DireccionService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class DireccionServiceImpl implements DireccionService {
 
@@ -30,10 +31,10 @@ public class DireccionServiceImpl implements DireccionService {
             JDBCUtils.beginTransaction(connection);
             direccion = direccionDAO.findById(connection, id);
             JDBCUtils.commitTransaction(connection);
-            logger.info("findById de Dirección completado. ID: {}", id);
+            logger.info(LogUtils.buildMessage(DireccionServiceImpl.class, "findById de Dirección completado. ID: {}"), id);
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en findById de Dirección: ", e);
+            logger.error(LogUtils.buildMessage(DireccionServiceImpl.class, "Error en findById de Dirección: "), e);
             throw new RentexpresException("Error en findById de Dirección", e);
         } finally {
             JDBCUtils.close(connection);
@@ -51,14 +52,14 @@ public class DireccionServiceImpl implements DireccionService {
             creado = direccionDAO.create(connection, direccion);
             if (creado) {
                 JDBCUtils.commitTransaction(connection);
-                logger.info("Dirección creada exitosamente. ID: {}", direccion.getId());
+                logger.info(LogUtils.buildMessage(DireccionServiceImpl.class, "Dirección creada exitosamente. ID: {}"), direccion.getId());
             } else {
                 JDBCUtils.rollbackTransaction(connection);
-                logger.warn("No se pudo crear la Dirección.");
+                logger.warn(LogUtils.buildMessage(DireccionServiceImpl.class, "No se pudo crear la Dirección."));
             }
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en create de Dirección: ", e);
+            logger.error(LogUtils.buildMessage(DireccionServiceImpl.class, "Error en create de Dirección: "), e);
             throw new RentexpresException("Error en create de Dirección", e);
         } finally {
             JDBCUtils.close(connection);
@@ -76,14 +77,14 @@ public class DireccionServiceImpl implements DireccionService {
             actualizado = direccionDAO.update(connection, direccion);
             if (actualizado) {
                 JDBCUtils.commitTransaction(connection);
-                logger.info("Dirección actualizada exitosamente. ID: {}", direccion.getId());
+                logger.info(LogUtils.buildMessage(DireccionServiceImpl.class, "Dirección actualizada exitosamente. ID: {}"), direccion.getId());
             } else {
                 JDBCUtils.rollbackTransaction(connection);
-                logger.warn("No se pudo actualizar la Dirección. ID: {}", direccion.getId());
+                logger.warn(LogUtils.buildMessage(DireccionServiceImpl.class, "No se pudo actualizar la Dirección. ID: {}"), direccion.getId());
             }
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en update de Dirección: ", e);
+            logger.error(LogUtils.buildMessage(DireccionServiceImpl.class, "Error en update de Dirección: "), e);
             throw new RentexpresException("Error en update de Dirección", e);
         } finally {
             JDBCUtils.close(connection);
@@ -101,14 +102,14 @@ public class DireccionServiceImpl implements DireccionService {
             eliminado = direccionDAO.delete(connection, direccion, direccion.getId());
             if (eliminado) {
                 JDBCUtils.commitTransaction(connection);
-                logger.info("Dirección eliminada exitosamente. ID: {}", direccion.getId());
+                logger.info(LogUtils.buildMessage(DireccionServiceImpl.class, "Dirección eliminada exitosamente. ID: {}"), direccion.getId());
             } else {
                 JDBCUtils.rollbackTransaction(connection);
-                logger.warn("No se pudo eliminar la Dirección. ID: {}", direccion.getId());
+                logger.warn(LogUtils.buildMessage(DireccionServiceImpl.class, "No se pudo eliminar la Dirección. ID: {}"), direccion.getId());
             }
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en delete de Dirección: ", e);
+            logger.error(LogUtils.buildMessage(DireccionServiceImpl.class, "Error en delete de Dirección: "), e);
             throw new RentexpresException("Error en delete de Dirección", e);
         } finally {
             JDBCUtils.close(connection);

@@ -11,6 +11,7 @@ import com.pinguela.rentexpres.dao.DireccionDAO;
 import com.pinguela.rentexpres.exception.DataException;
 import com.pinguela.rentexpres.model.DireccionDTO;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class DireccionDAOImpl implements DireccionDAO {
 
@@ -31,10 +32,10 @@ public class DireccionDAOImpl implements DireccionDAO {
 			rs = ps.executeQuery();
 			if (rs.next()) {
 				d = loadDireccion(rs);
-				logger.info("Dirección encontrada, id: {}", id);
+				logger.info(LogUtils.buildMessage(DireccionDAOImpl.class, "Dirección encontrada, id: {}"), id);
 			}
 		} catch (SQLException e) {
-			logger.error("Error al buscar la dirección por id: {}", id, e);
+			logger.error(LogUtils.buildMessage(DireccionDAOImpl.class, "Error al buscar la dirección por id: {}"), id, e);
 			throw new DataException("Error al buscar la dirección por id: " + id, e);
 		} finally {
 			JDBCUtils.close(ps, rs);
@@ -45,7 +46,7 @@ public class DireccionDAOImpl implements DireccionDAO {
 	@Override
 	public boolean create(Connection connection, DireccionDTO direccion) throws DataException {
 		if (direccion == null) {
-			logger.warn("create llamado con Direccion nula.");
+			logger.warn(LogUtils.buildMessage(DireccionDAOImpl.class, "create llamado con Direccion nula."));
 			return false;
 		}
 		String sql = "INSERT INTO direccion (id_localidad, calle, numero) VALUES (?, ?, ?)";
@@ -59,11 +60,11 @@ public class DireccionDAOImpl implements DireccionDAO {
 				if (generatedKeys.next()) {
 					direccion.setId(generatedKeys.getInt(1));
 				}
-				logger.info("Dirección creada con éxito, id: {}", direccion.getId());
+				logger.info(LogUtils.buildMessage(DireccionDAOImpl.class, "Dirección creada con éxito, id: {}"), direccion.getId());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error al crear la dirección: {}", e.getMessage(), e);
+			logger.error(LogUtils.buildMessage(DireccionDAOImpl.class, "Error al crear la dirección: {}"), e.getMessage(), e);
 			throw new DataException("Error al crear la dirección", e);
 		} finally {
 			JDBCUtils.close(ps, generatedKeys);
@@ -74,7 +75,7 @@ public class DireccionDAOImpl implements DireccionDAO {
 	@Override
 	public boolean update(Connection connection, DireccionDTO direccion) throws DataException {
 		if (direccion == null || direccion.getId() == null) {
-			logger.warn("update llamado con dirección nula o sin id.");
+			logger.warn(LogUtils.buildMessage(DireccionDAOImpl.class, "update llamado con dirección nula o sin id."));
 			return false;
 		}
 		String sql = "UPDATE direccion SET id_localidad = ?, calle = ?, numero = ? WHERE id_direccion = ?";
@@ -84,11 +85,11 @@ public class DireccionDAOImpl implements DireccionDAO {
 			setDireccionParameters(ps, direccion, true);
 			int rows = ps.executeUpdate();
 			if (rows > 0) {
-				logger.info("Dirección actualizada con éxito, id: {}", direccion.getId());
+				logger.info(LogUtils.buildMessage(DireccionDAOImpl.class, "Dirección actualizada con éxito, id: {}"), direccion.getId());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error al actualizar la dirección: {}", e.getMessage(), e);
+			logger.error(LogUtils.buildMessage(DireccionDAOImpl.class, "Error al actualizar la dirección: {}"), e.getMessage(), e);
 			throw new DataException("Error al actualizar la dirección", e);
 		} finally {
 			JDBCUtils.close(ps, null);
@@ -99,7 +100,7 @@ public class DireccionDAOImpl implements DireccionDAO {
 	@Override
 	public boolean delete(Connection connection, DireccionDTO direccion, Integer id) throws DataException {
 		if (id == null) {
-			logger.warn("delete llamado con id nulo.");
+			logger.warn(LogUtils.buildMessage(DireccionDAOImpl.class, "delete llamado con id nulo."));
 			return false;
 		}
 		String sql = "DELETE FROM direccion WHERE id_direccion = ?";
@@ -108,11 +109,11 @@ public class DireccionDAOImpl implements DireccionDAO {
 			ps = connection.prepareStatement(sql);
 			ps.setInt(1, id);
 			if (ps.executeUpdate() > 0) {
-				logger.info("Dirección eliminada, id: {}", id);
+				logger.info(LogUtils.buildMessage(DireccionDAOImpl.class, "Dirección eliminada, id: {}"), id);
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error al eliminar la dirección: {}", e.getMessage(), e);
+			logger.error(LogUtils.buildMessage(DireccionDAOImpl.class, "Error al eliminar la dirección: {}"), e.getMessage(), e);
 			throw new DataException("Error al eliminar la dirección", e);
 		} finally {
 			JDBCUtils.close(ps, null);

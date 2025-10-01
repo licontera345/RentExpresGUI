@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.pinguela.rentexpres.desktop.util.LogUtils;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.model.ReservaDTO;
 import com.pinguela.rentexpres.service.ReservaService;
@@ -55,8 +56,9 @@ public class DeleteReservaAction implements ActionListener {
 			} else {
 				SwingUtils.showError(parent, "No se pudo eliminar la reserva.");
 			}
-		} catch (Exception ex) {
-			logger.error("Error eliminando reserva id {}", id, ex);
+                } catch (Exception ex) {
+                        logger.error(LogUtils.buildMessage(DeleteReservaAction.class,
+                                        "Error eliminando reserva id {}"), id, ex);
 			SwingUtils.showError(parent, "Error al eliminar la reserva: " + ex.getMessage());
 		}
 	}

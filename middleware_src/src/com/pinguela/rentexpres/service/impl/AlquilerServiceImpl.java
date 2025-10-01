@@ -14,6 +14,7 @@ import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.model.Results;
 import com.pinguela.rentexpres.service.AlquilerService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class AlquilerServiceImpl implements AlquilerService {
 
@@ -33,10 +34,10 @@ public class AlquilerServiceImpl implements AlquilerService {
 			JDBCUtils.beginTransaction(connection);
 			alquiler = alquilerDAO.findById(connection, id);
 			JDBCUtils.commitTransaction(connection);
-			logger.info("Transacción findById de Alquiler completada. ID: {}", id);
+			logger.info(LogUtils.buildMessage(AlquilerServiceImpl.class, "Transacción findById de Alquiler completada. ID: {}"), id);
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findById de Alquiler: ", e);
+			logger.error(LogUtils.buildMessage(AlquilerServiceImpl.class, "Error en findById de Alquiler: "), e);
 			throw new RentexpresException("Error en findById de Alquiler", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -52,10 +53,10 @@ public class AlquilerServiceImpl implements AlquilerService {
 			JDBCUtils.beginTransaction(connection);
 			lista = alquilerDAO.findAll(connection);
 			JDBCUtils.commitTransaction(connection);
-			logger.info("Transacción findAll de Alquiler completada. Cantidad: {}", (lista != null ? lista.size() : 0));
+			logger.info(LogUtils.buildMessage(AlquilerServiceImpl.class, "Transacción findAll de Alquiler completada. Cantidad: {}"), (lista != null ? lista.size() : 0));
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findAll de Alquiler: ", e);
+			logger.error(LogUtils.buildMessage(AlquilerServiceImpl.class, "Error en findAll de Alquiler: "), e);
 			throw new RentexpresException("Error en findAll de Alquiler", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -72,14 +73,14 @@ public class AlquilerServiceImpl implements AlquilerService {
 			creado = alquilerDAO.create(connection, alquiler);
 			if (creado) {
 				JDBCUtils.commitTransaction(connection);
-				logger.info("Alquiler creado exitosamente. ID: {}", alquiler.getId());
+				logger.info(LogUtils.buildMessage(AlquilerServiceImpl.class, "Alquiler creado exitosamente. ID: {}"), alquiler.getId());
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo crear el Alquiler.");
+				logger.warn(LogUtils.buildMessage(AlquilerServiceImpl.class, "No se pudo crear el Alquiler."));
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en create Alquiler: ", e);
+			logger.error(LogUtils.buildMessage(AlquilerServiceImpl.class, "Error en create Alquiler: "), e);
 			throw new RentexpresException("Error en create Alquiler", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -96,14 +97,14 @@ public class AlquilerServiceImpl implements AlquilerService {
 			actualizado = alquilerDAO.update(connection, alquiler);
 			if (actualizado) {
 				JDBCUtils.commitTransaction(connection);
-				logger.info("Alquiler actualizado exitosamente. ID: {}", alquiler.getId());
+				logger.info(LogUtils.buildMessage(AlquilerServiceImpl.class, "Alquiler actualizado exitosamente. ID: {}"), alquiler.getId());
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo actualizar el Alquiler. ID: {}", alquiler.getId());
+				logger.warn(LogUtils.buildMessage(AlquilerServiceImpl.class, "No se pudo actualizar el Alquiler. ID: {}"), alquiler.getId());
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en update Alquiler: ", e);
+			logger.error(LogUtils.buildMessage(AlquilerServiceImpl.class, "Error en update Alquiler: "), e);
 			throw new RentexpresException("Error en update Alquiler", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -120,14 +121,14 @@ public class AlquilerServiceImpl implements AlquilerService {
 			eliminado = alquilerDAO.delete(connection, id);
 			if (eliminado) {
 				JDBCUtils.commitTransaction(connection);
-				logger.info("Alquiler eliminado exitosamente. ID: {}", id);
+				logger.info(LogUtils.buildMessage(AlquilerServiceImpl.class, "Alquiler eliminado exitosamente. ID: {}"), id);
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo eliminar el Alquiler. ID: {}", id);
+				logger.warn(LogUtils.buildMessage(AlquilerServiceImpl.class, "No se pudo eliminar el Alquiler. ID: {}"), id);
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en delete Alquiler: ", e);
+			logger.error(LogUtils.buildMessage(AlquilerServiceImpl.class, "Error en delete Alquiler: "), e);
 			throw new RentexpresException("Error en delete Alquiler", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -143,11 +144,11 @@ public class AlquilerServiceImpl implements AlquilerService {
 			JDBCUtils.beginTransaction(connection);
 			results = alquilerDAO.findByCriteria(connection, criteria);
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findByCriteria de Alquiler completado. Cantidad: {}",
+			logger.info(LogUtils.buildMessage(AlquilerServiceImpl.class, "findByCriteria de Alquiler completado. Cantidad: {}"),
 					(results != null && results.getResults() != null ? results.getResults().size() : 0));
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findByCriteria de Alquiler", e);
+			logger.error(LogUtils.buildMessage(AlquilerServiceImpl.class, "Error en findByCriteria de Alquiler"), e);
 			throw new RentexpresException("Error en findByCriteria de Alquiler", e);
 		} finally {
 			JDBCUtils.close(connection);

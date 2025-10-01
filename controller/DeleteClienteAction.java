@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.pinguela.rentexpres.desktop.util.LogUtils;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.model.ClienteDTO;
 import com.pinguela.rentexpres.service.ClienteService;
@@ -52,7 +53,8 @@ public class DeleteClienteAction implements ActionListener {
                 SwingUtils.showError(parent,"No se pudo eliminar el cliente.");
             }
         } catch (Exception ex) {
-            log.error("Error borrando cliente {}", id, ex);
+            log.error(LogUtils.buildMessage(DeleteClienteAction.class,
+                    "Error borrando cliente {}"), id, ex);
             SwingUtils.showError(parent,"Error al borrar: "+ex.getMessage());
         }
     }

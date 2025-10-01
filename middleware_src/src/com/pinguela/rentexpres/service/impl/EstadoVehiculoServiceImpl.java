@@ -12,6 +12,7 @@ import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.EstadoVehiculoDTO;
 import com.pinguela.rentexpres.service.EstadoVehiculoService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class EstadoVehiculoServiceImpl implements EstadoVehiculoService {
 
@@ -35,10 +36,10 @@ public class EstadoVehiculoServiceImpl implements EstadoVehiculoService {
 				e.printStackTrace();
 			}
             JDBCUtils.commitTransaction(connection);
-            logger.info("findById de EstadoVehiculo completado. ID: " + id);
+            logger.info(LogUtils.buildMessage(EstadoVehiculoServiceImpl.class, "findById de EstadoVehiculo completado. ID: " + id));
         } catch (SQLException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en findById de EstadoVehiculo: ", e);
+            logger.error(LogUtils.buildMessage(EstadoVehiculoServiceImpl.class, "Error en findById de EstadoVehiculo: "), e);
             throw new RentexpresException("Error en findById de EstadoVehiculo", e);
         } finally {
             JDBCUtils.close(connection);
@@ -59,10 +60,10 @@ public class EstadoVehiculoServiceImpl implements EstadoVehiculoService {
 				e.printStackTrace();
 			}
             JDBCUtils.commitTransaction(connection);
-            logger.info("findAll de EstadoVehiculo completado. Cantidad: " + (lista != null ? lista.size() : 0));
+            logger.info(LogUtils.buildMessage(EstadoVehiculoServiceImpl.class, "findAll de EstadoVehiculo completado. Cantidad: " + (lista != null ? lista.size() : 0)));
         } catch (SQLException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en findAll de EstadoVehiculo: ", e);
+            logger.error(LogUtils.buildMessage(EstadoVehiculoServiceImpl.class, "Error en findAll de EstadoVehiculo: "), e);
             throw new RentexpresException("Error en findAll de EstadoVehiculo", e);
         } finally {
             JDBCUtils.close(connection);

@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class VehiculoDAOImpl implements VehiculoDAO {
 
@@ -31,11 +32,11 @@ public class VehiculoDAOImpl implements VehiculoDAO {
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					vehiculo = loadVehiculoDTO(rs);
-					logger.info("Vehículo encontrado con ID: {}", id);
+					logger.info(LogUtils.buildMessage(VehiculoDAOImpl.class, "Vehículo encontrado con ID: {}"), id);
 				}
 			}
 		} catch (SQLException e) {
-			logger.error("Error al buscar Vehículo por ID: {}", id, e);
+			logger.error(LogUtils.buildMessage(VehiculoDAOImpl.class, "Error al buscar Vehículo por ID: {}"), id, e);
 			throw new DataException("Error al buscar Vehículo por ID: " + id, e);
 		}
 		return vehiculo;
@@ -49,9 +50,9 @@ public class VehiculoDAOImpl implements VehiculoDAO {
 			while (rs.next()) {
 				lista.add(loadVehiculoDTO(rs));
 			}
-			logger.info("Total de Vehículos encontrados: {}", lista.size());
+			logger.info(LogUtils.buildMessage(VehiculoDAOImpl.class, "Total de Vehículos encontrados: {}"), lista.size());
 		} catch (SQLException e) {
-			logger.error("Error en findAll de Vehículo", e);
+			logger.error(LogUtils.buildMessage(VehiculoDAOImpl.class, "Error en findAll de Vehículo"), e);
 			throw new DataException("Error en findAll de Vehículo", e);
 		}
 		return lista;
@@ -73,11 +74,11 @@ public class VehiculoDAOImpl implements VehiculoDAO {
 						vehiculo.setId(generatedKeys.getInt(1));
 					}
 				}
-				logger.info("Vehículo creado exitosamente. ID: {}", vehiculo.getId());
+				logger.info(LogUtils.buildMessage(VehiculoDAOImpl.class, "Vehículo creado exitosamente. ID: {}"), vehiculo.getId());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error al crear Vehículo", e);
+			logger.error(LogUtils.buildMessage(VehiculoDAOImpl.class, "Error al crear Vehículo"), e);
 			throw new DataException("Error al crear Vehículo", e);
 		} finally {
 			JDBCUtils.close(ps, null);
@@ -97,11 +98,11 @@ public class VehiculoDAOImpl implements VehiculoDAO {
 			ps.setInt(11, vehiculo.getId());
 			int rows = ps.executeUpdate();
 			if (rows > 0) {
-				logger.info("Vehículo actualizado exitosamente. ID: {}", vehiculo.getId());
+				logger.info(LogUtils.buildMessage(VehiculoDAOImpl.class, "Vehículo actualizado exitosamente. ID: {}"), vehiculo.getId());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error al actualizar Vehículo", e);
+			logger.error(LogUtils.buildMessage(VehiculoDAOImpl.class, "Error al actualizar Vehículo"), e);
 			throw new DataException("Error al actualizar Vehículo", e);
 		} finally {
 			JDBCUtils.close(ps, null);
@@ -116,7 +117,7 @@ public class VehiculoDAOImpl implements VehiculoDAO {
 			ps.setInt(1, id);
 			return ps.executeUpdate() > 0;
 		} catch (SQLException e) {
-			logger.error("Error al eliminar Vehículo", e);
+			logger.error(LogUtils.buildMessage(VehiculoDAOImpl.class, "Error al eliminar Vehículo"), e);
 			throw new DataException("Error al eliminar Vehículo", e);
 		}
 	}
@@ -214,10 +215,10 @@ public class VehiculoDAOImpl implements VehiculoDAO {
 			results.setPageSize(pageSize);
 			results.setTotalRecords(totalRecords);
 
-			logger.info("findByCriteria de Vehículo completado: Página {} (Tamaño: {}), Total registros: {}",
+			logger.info(LogUtils.buildMessage(VehiculoDAOImpl.class, "findByCriteria de Vehículo completado: Página {} (Tamaño: {}), Total registros: {}"),
 					pageNumber, pageSize, totalRecords);
 		} catch (SQLException e) {
-			logger.error("Error en findByCriteria de Vehículo", e);
+			logger.error(LogUtils.buildMessage(VehiculoDAOImpl.class, "Error en findByCriteria de Vehículo"), e);
 			throw new DataException("Error en findByCriteria de Vehículo", e);
 		} finally {
 			JDBCUtils.close(ps, rs);

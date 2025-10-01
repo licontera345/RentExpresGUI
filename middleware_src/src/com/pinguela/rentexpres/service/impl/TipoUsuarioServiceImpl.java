@@ -12,6 +12,7 @@ import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.TipoUsuarioDTO;
 import com.pinguela.rentexpres.service.TipoUsuarioService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class TipoUsuarioServiceImpl implements TipoUsuarioService {
 
@@ -35,10 +36,10 @@ public class TipoUsuarioServiceImpl implements TipoUsuarioService {
 				e.printStackTrace();
 			}
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findById de TipoUsuario completado. ID: " + id);
+			logger.info(LogUtils.buildMessage(TipoUsuarioServiceImpl.class, "findById de TipoUsuario completado. ID: " + id));
 		} catch (SQLException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findById de TipoUsuario: ", e);
+			logger.error(LogUtils.buildMessage(TipoUsuarioServiceImpl.class, "Error en findById de TipoUsuario: "), e);
 			throw new RentexpresException("Error en findById de TipoUsuario", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -59,10 +60,10 @@ public class TipoUsuarioServiceImpl implements TipoUsuarioService {
 				e.printStackTrace();
 			}
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findAll de TipoUsuario completado. Cantidad: " + (lista != null ? lista.size() : 0));
+			logger.info(LogUtils.buildMessage(TipoUsuarioServiceImpl.class, "findAll de TipoUsuario completado. Cantidad: " + (lista != null ? lista.size() : 0)));
 		} catch (SQLException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findAll de TipoUsuario: ", e);
+			logger.error(LogUtils.buildMessage(TipoUsuarioServiceImpl.class, "Error en findAll de TipoUsuario: "), e);
 			throw new RentexpresException("Error en findAll de TipoUsuario", e);
 		} finally {
 			JDBCUtils.close(connection);

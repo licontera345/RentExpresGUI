@@ -14,6 +14,7 @@ import com.pinguela.rentexpres.dao.AlquilerStatsDAO;
 import com.pinguela.rentexpres.exception.DataException;
 import com.pinguela.rentexpres.model.AlquilerStatsDTO;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class AlquilerStatsDAOImpl implements AlquilerStatsDAO {
 
@@ -36,9 +37,9 @@ public class AlquilerStatsDAOImpl implements AlquilerStatsDAO {
                 dto.setTotalIngresos(rs.getDouble("ingresos"));
                 lista.add(dto);
             }
-            logger.info("Estadísticas de alquiler cargadas: {}", lista.size());
+            logger.info(LogUtils.buildMessage(AlquilerStatsDAOImpl.class, "Estadísticas de alquiler cargadas: {}"), lista.size());
         } catch (SQLException e) {
-            logger.error("Error obteniendo estadísticas de alquiler", e);
+            logger.error(LogUtils.buildMessage(AlquilerStatsDAOImpl.class, "Error obteniendo estadísticas de alquiler"), e);
             throw new DataException("Error obteniendo estadísticas de alquiler", e);
         }
         return lista;

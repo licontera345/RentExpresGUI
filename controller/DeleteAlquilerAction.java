@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.pinguela.rentexpres.desktop.util.LogUtils;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.service.AlquilerService;
@@ -58,8 +59,9 @@ public class DeleteAlquilerAction extends AbstractAction {
 			} else {
 				SwingUtils.showError(parent, "No se pudo eliminar la alquiler.");
 			}
-		} catch (Exception ex) {
-			logger.error("Error eliminando alquiler id {}", id, ex);
+                } catch (Exception ex) {
+                        logger.error(LogUtils.buildMessage(DeleteAlquilerAction.class,
+                                        "Error eliminando alquiler id {}"), id, ex);
 			SwingUtils.showError(parent, "Error al eliminar la alquiler: " + ex.getMessage());
 		}
 	}

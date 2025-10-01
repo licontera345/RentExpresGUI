@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import com.pinguela.rentexpres.dao.ReservaStatsDAO;
 import com.pinguela.rentexpres.exception.DataException;
 import com.pinguela.rentexpres.model.ReservaStatsDTO;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class ReservaStatsDAOImpl implements ReservaStatsDAO {
 
@@ -33,9 +34,9 @@ public class ReservaStatsDAOImpl implements ReservaStatsDAO {
                 dto.setTotalReservas(rs.getInt("total"));
                 lista.add(dto);
             }
-            logger.info("Estadísticas de reserva cargadas: {}", lista.size());
+            logger.info(LogUtils.buildMessage(ReservaStatsDAOImpl.class, "Estadísticas de reserva cargadas: {}"), lista.size());
         } catch (SQLException e) {
-            logger.error("Error obteniendo estadísticas de reserva", e);
+            logger.error(LogUtils.buildMessage(ReservaStatsDAOImpl.class, "Error obteniendo estadísticas de reserva"), e);
             throw new DataException("Error obteniendo estadísticas de reserva", e);
         }
         return lista;

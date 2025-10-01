@@ -12,6 +12,7 @@ import com.pinguela.rentexpres.dao.EstadoReservaDAO;
 import com.pinguela.rentexpres.exception.DataException;
 import com.pinguela.rentexpres.model.EstadoReservaDTO;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class EstadoReservaDAOImpl implements EstadoReservaDAO {
     private static final Logger logger = LogManager.getLogger(EstadoReservaDAOImpl.class);
@@ -30,10 +31,10 @@ public class EstadoReservaDAOImpl implements EstadoReservaDAO {
                 er = new EstadoReservaDTO();
                 er.setId(rs.getInt("id_estado_reserva"));
                 er.setNombreEstado(rs.getString("nombre_estado"));
-                logger.info("EstadoReserva encontrado, id: " + id);
+                logger.info(LogUtils.buildMessage(EstadoReservaDAOImpl.class, "EstadoReserva encontrado, id: " + id));
             }
         } catch (SQLException e) {
-            logger.error("Error al buscar EstadoReserva por ID: " + id, e);
+            logger.error(LogUtils.buildMessage(EstadoReservaDAOImpl.class, "Error al buscar EstadoReserva por ID: " + id), e);
             throw new DataException("Error al buscar EstadoReserva por ID: " + id, e);
         } finally {
             JDBCUtils.close(ps, rs);
@@ -56,9 +57,9 @@ public class EstadoReservaDAOImpl implements EstadoReservaDAO {
                 er.setNombreEstado(rs.getString("nombre_estado"));
                 lista.add(er);
             }
-            logger.info("Total de EstadoReserva encontrados: " + lista.size());
+            logger.info(LogUtils.buildMessage(EstadoReservaDAOImpl.class, "Total de EstadoReserva encontrados: " + lista.size()));
         } catch (SQLException e) {
-            logger.error("Error al obtener EstadoReserva", e);
+            logger.error(LogUtils.buildMessage(EstadoReservaDAOImpl.class, "Error al obtener EstadoReserva"), e);
             throw new DataException("Error al obtener EstadoReserva", e);
         } finally {
             JDBCUtils.close(ps, rs);
