@@ -24,7 +24,8 @@ public class JDBCUtils {
 			// Cargar driver de la configuración
 			String driverClass = ConfigManager.getStringValue("db.driver");
 			Class.forName(driverClass);
-			logger.info("Driver JDBC cargado correctamente: " + driverClass);
+                        logger.info(LogUtils.buildMessage(JDBCUtils.class,
+                                        "Driver JDBC cargado correctamente: " + driverClass));
 
 			// Configurar pool de conexiones
 			cpds.setDriverClass(driverClass);
@@ -39,10 +40,12 @@ public class JDBCUtils {
 			cpds.setMaxIdleTime(300);
 			cpds.setTestConnectionOnCheckout(true);
 
-			logger.info("Pool de conexiones C3P0 inicializado correctamente.");
+                        logger.info(LogUtils.buildMessage(JDBCUtils.class,
+                                        "Pool de conexiones C3P0 inicializado correctamente."));
 
-		} catch (Exception e) {
-			logger.fatal("Error al configurar el pool de conexiones C3P0: " + e.getMessage(), e);
+                } catch (Exception e) {
+                        logger.fatal(LogUtils.buildMessage(JDBCUtils.class,
+                                        "Error al configurar el pool de conexiones C3P0: " + e.getMessage()), e);
 			throw new RuntimeException("Error en configuración de C3P0", e);
 		}
 	}
@@ -60,7 +63,7 @@ public class JDBCUtils {
 	public static void beginTransaction(Connection connection) throws SQLException {
 		if (connection != null) {
 			connection.setAutoCommit(false);
-			logger.debug("Transacción iniciada.");
+                        logger.debug(LogUtils.buildMessage(JDBCUtils.class, "Transacción iniciada."));
 		}
 	}
 
@@ -71,9 +74,11 @@ public class JDBCUtils {
 		if (connection != null) {
 			try {
 				connection.commit();
-				logger.debug("Transacción confirmada (commit).");
-			} catch (SQLException e) {
-				logger.error("Error al confirmar la transacción.", e);
+                                logger.debug(LogUtils.buildMessage(JDBCUtils.class,
+                                                "Transacción confirmada (commit)."));
+                        } catch (SQLException e) {
+                                logger.error(LogUtils.buildMessage(JDBCUtils.class,
+                                                "Error al confirmar la transacción."), e);
 			}
 		}
 	}
@@ -87,12 +92,15 @@ public class JDBCUtils {
 				// Verifica si la conexión no está cerrada antes de hacer rollback
 				if (!connection.isClosed()) {
 					connection.rollback();
-					logger.debug("Transacción revertida.");
-				} else {
-					logger.warn("No se pudo revertir la transacción porque la conexión ya está cerrada.");
+                                        logger.debug(LogUtils.buildMessage(JDBCUtils.class,
+                                                        "Transacción revertida."));
+                                } else {
+                                        logger.warn(LogUtils.buildMessage(JDBCUtils.class,
+                                                        "No se pudo revertir la transacción porque la conexión ya está cerrada."));
 				}
-			} catch (SQLException e) {
-				logger.error("Error al revertir la transacción.", e);
+                        } catch (SQLException e) {
+                                logger.error(LogUtils.buildMessage(JDBCUtils.class,
+                                                "Error al revertir la transacción."), e);
 			}
 		}
 	}
@@ -108,8 +116,9 @@ public class JDBCUtils {
 			if (ps != null) {
 				ps.close();
 			}
-		} catch (SQLException e) {
-			logger.error("Error cerrando ResultSet o PreparedStatement.", e);
+                } catch (SQLException e) {
+                        logger.error(LogUtils.buildMessage(JDBCUtils.class,
+                                        "Error cerrando ResultSet o PreparedStatement."), e);
 		}
 	}
 
@@ -120,10 +129,12 @@ public class JDBCUtils {
 		try {
 			if (connection != null) {
 				connection.close();
-				logger.debug("Conexión cerrada (devuelta al pool).");
+                                logger.debug(LogUtils.buildMessage(JDBCUtils.class,
+                                                "Conexión cerrada (devuelta al pool)."));
 			}
-		} catch (SQLException e) {
-			logger.error("Error cerrando la conexión.", e);
+                } catch (SQLException e) {
+                        logger.error(LogUtils.buildMessage(JDBCUtils.class,
+                                        "Error cerrando la conexión."), e);
 		}
 	}
 }

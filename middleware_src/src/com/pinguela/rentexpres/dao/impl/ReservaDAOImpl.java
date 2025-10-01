@@ -12,6 +12,7 @@ import com.pinguela.rentexpres.model.ReservaDTO;
 import com.pinguela.rentexpres.model.ReservaCriteria;
 import com.pinguela.rentexpres.model.Results;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class ReservaDAOImpl implements ReservaDAO {
 
@@ -27,7 +28,7 @@ public class ReservaDAOImpl implements ReservaDAO {
 	@Override
 	public ReservaDTO findById(Connection connection, Integer id) throws DataException {
 		if (id == null) {
-			logger.warn("findById null id.");
+			logger.warn(LogUtils.buildMessage(ReservaDAOImpl.class, "findById null id."));
 			return null;
 		}
 		String sql = RESERVA_SELECT_BASE + " WHERE r.id_reserva = ?";
@@ -38,13 +39,13 @@ public class ReservaDAOImpl implements ReservaDAO {
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				logger.info("Reserva id: {}", id);
+				logger.info(LogUtils.buildMessage(ReservaDAOImpl.class, "Reserva id: {}"), id);
 				return loadReservaDTO(rs);
 			} else {
-				logger.warn("No se encontró Reserva con id: {}", id);
+				logger.warn(LogUtils.buildMessage(ReservaDAOImpl.class, "No se encontró Reserva con id: {}"), id);
 			}
 		} catch (SQLException e) {
-			logger.error("Error en findById for id: {}", id, e);
+			logger.error(LogUtils.buildMessage(ReservaDAOImpl.class, "Error en findById for id: {}"), id, e);
 			throw new DataException("Error en findById Reserva", e);
 		} finally {
 			JDBCUtils.close(ps, rs);
@@ -64,9 +65,9 @@ public class ReservaDAOImpl implements ReservaDAO {
 			while (rs.next()) {
 				lista.add(loadReservaDTO(rs));
 			}
-			logger.info("Total Reservas found: {}", lista.size());
+			logger.info(LogUtils.buildMessage(ReservaDAOImpl.class, "Total Reservas found: {}"), lista.size());
 		} catch (SQLException e) {
-			logger.error("Error en findAll Reserva", e);
+			logger.error(LogUtils.buildMessage(ReservaDAOImpl.class, "Error en findAll Reserva"), e);
 			throw new DataException("Error en findAll Reserva", e);
 		} finally {
 			JDBCUtils.close(ps, rs);
@@ -77,7 +78,7 @@ public class ReservaDAOImpl implements ReservaDAO {
 	@Override
 	public boolean create(Connection connection, ReservaDTO reserva) throws DataException {
 		if (reserva == null) {
-			logger.warn("create null Reserva.");
+			logger.warn(LogUtils.buildMessage(ReservaDAOImpl.class, "create null Reserva."));
 			return false;
 		}
 
@@ -92,11 +93,11 @@ public class ReservaDAOImpl implements ReservaDAO {
 				if (generatedKeys.next()) {
 					reserva.setId(generatedKeys.getInt(1));
 				}
-				logger.info("Reserva creada exitosamente, id: {}", reserva.getId());
+				logger.info(LogUtils.buildMessage(ReservaDAOImpl.class, "Reserva creada exitosamente, id: {}"), reserva.getId());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error en create Reserva", e);
+			logger.error(LogUtils.buildMessage(ReservaDAOImpl.class, "Error en create Reserva"), e);
 			throw new DataException("Error en create Reserva", e);
 		} finally {
 			JDBCUtils.close(ps, generatedKeys);
@@ -107,7 +108,7 @@ public class ReservaDAOImpl implements ReservaDAO {
 	@Override
 	public boolean update(Connection connection, ReservaDTO reserva) throws DataException {
 		if (reserva == null || reserva.getId() == null) {
-			logger.warn("update null Reserva or id.");
+			logger.warn(LogUtils.buildMessage(ReservaDAOImpl.class, "update null Reserva or id."));
 			return false;
 		}
 		String sql = "UPDATE reserva SET id_vehiculo = ?, id_cliente = ?, fecha_inicio = ?, fecha_fin = ?, id_usuario = ?, id_estado_reserva = ? WHERE id_reserva = ?";
@@ -116,11 +117,11 @@ public class ReservaDAOImpl implements ReservaDAO {
 			ps = connection.prepareStatement(sql);
 			setReservaParameters(ps, reserva, true);
 			if (ps.executeUpdate() > 0) {
-				logger.info("Reserva updated, id: {}", reserva.getId());
+				logger.info(LogUtils.buildMessage(ReservaDAOImpl.class, "Reserva updated, id: {}"), reserva.getId());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error en update Reserva", e);
+			logger.error(LogUtils.buildMessage(ReservaDAOImpl.class, "Error en update Reserva"), e);
 			throw new DataException("Error en update Reserva", e);
 		} finally {
 			JDBCUtils.close(ps, null);
@@ -131,7 +132,7 @@ public class ReservaDAOImpl implements ReservaDAO {
 	@Override
 	public boolean delete(Connection connection, Integer id) throws DataException {
 		if (id == null) {
-			logger.warn("delete null id.");
+			logger.warn(LogUtils.buildMessage(ReservaDAOImpl.class, "delete null id."));
 			return false;
 		}
 		String sql = "DELETE FROM reserva WHERE id_reserva = ?";
@@ -140,11 +141,11 @@ public class ReservaDAOImpl implements ReservaDAO {
 			ps = connection.prepareStatement(sql);
 			ps.setInt(1, id);
 			if (ps.executeUpdate() > 0) {
-				logger.info("Reserva deleted, id: {}", id);
+				logger.info(LogUtils.buildMessage(ReservaDAOImpl.class, "Reserva deleted, id: {}"), id);
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error en delete Reserva", e);
+			logger.error(LogUtils.buildMessage(ReservaDAOImpl.class, "Error en delete Reserva"), e);
 			throw new DataException("Error en delete Reserva", e);
 		} finally {
 			JDBCUtils.close(ps, null);
@@ -261,10 +262,10 @@ public class ReservaDAOImpl implements ReservaDAO {
 			results.setPageSize(pageSize);
 			results.setTotalRecords(totalRecords);
 
-			logger.info("findByCriteria de Reserva completado: Página {} (Tamaño: {}), Total registros: {}",
+			logger.info(LogUtils.buildMessage(ReservaDAOImpl.class, "findByCriteria de Reserva completado: Página {} (Tamaño: {}), Total registros: {}"),
 					pageNumber, pageSize, totalRecords);
 		} catch (SQLException e) {
-			logger.error("Error en findByCriteria de Reserva", e);
+			logger.error(LogUtils.buildMessage(ReservaDAOImpl.class, "Error en findByCriteria de Reserva"), e);
 			throw new DataException("Error en findByCriteria de Reserva", e);
 		} finally {
 			JDBCUtils.close(ps, rs);

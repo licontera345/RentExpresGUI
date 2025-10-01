@@ -14,6 +14,7 @@ import com.pinguela.rentexpres.model.ReservaDTO;
 import com.pinguela.rentexpres.model.Results;
 import com.pinguela.rentexpres.service.ReservaService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class ReservaServiceImpl implements ReservaService {
 
@@ -33,10 +34,10 @@ public class ReservaServiceImpl implements ReservaService {
 			JDBCUtils.beginTransaction(connection);
 			reserva = reservaDAO.findById(connection, id);
 			JDBCUtils.commitTransaction(connection);
-			logger.info("Transacción findById de Reserva completada. ID: {}", id);
+			logger.info(LogUtils.buildMessage(ReservaServiceImpl.class, "Transacción findById de Reserva completada. ID: {}"), id);
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findById de Reserva: ", e);
+			logger.error(LogUtils.buildMessage(ReservaServiceImpl.class, "Error en findById de Reserva: "), e);
 			throw new RentexpresException("Error en findById de Reserva", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -53,11 +54,11 @@ public class ReservaServiceImpl implements ReservaService {
 			JDBCUtils.beginTransaction(connection);
 			reservas = reservaDAO.findAll(connection);
 			JDBCUtils.commitTransaction(connection);
-			logger.info("Transacción findAll de Reserva completada. Cantidad: {}",
+			logger.info(LogUtils.buildMessage(ReservaServiceImpl.class, "Transacción findAll de Reserva completada. Cantidad: {}"),
 					reservas != null ? reservas.size() : 0);
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findAll de Reserva: ", e);
+			logger.error(LogUtils.buildMessage(ReservaServiceImpl.class, "Error en findAll de Reserva: "), e);
 			throw new RentexpresException("Error en findAll de Reserva", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -75,14 +76,14 @@ public class ReservaServiceImpl implements ReservaService {
 			creado = reservaDAO.create(connection, reserva);
 			if (creado) {
 				JDBCUtils.commitTransaction(connection);
-				logger.info("Reserva creada exitosamente. ID: {}", reserva.getId());
+				logger.info(LogUtils.buildMessage(ReservaServiceImpl.class, "Reserva creada exitosamente. ID: {}"), reserva.getId());
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo crear la Reserva.");
+				logger.warn(LogUtils.buildMessage(ReservaServiceImpl.class, "No se pudo crear la Reserva."));
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en create Reserva: ", e);
+			logger.error(LogUtils.buildMessage(ReservaServiceImpl.class, "Error en create Reserva: "), e);
 			throw new RentexpresException("Error en create Reserva", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -100,14 +101,14 @@ public class ReservaServiceImpl implements ReservaService {
 			actualizado = reservaDAO.update(connection, reserva);
 			if (actualizado) {
 				JDBCUtils.commitTransaction(connection);
-				logger.info("Reserva actualizada exitosamente. ID: {}", reserva.getId());
+				logger.info(LogUtils.buildMessage(ReservaServiceImpl.class, "Reserva actualizada exitosamente. ID: {}"), reserva.getId());
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo actualizar la Reserva. ID: {}", reserva.getId());
+				logger.warn(LogUtils.buildMessage(ReservaServiceImpl.class, "No se pudo actualizar la Reserva. ID: {}"), reserva.getId());
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en update Reserva: ", e);
+			logger.error(LogUtils.buildMessage(ReservaServiceImpl.class, "Error en update Reserva: "), e);
 			throw new RentexpresException("Error en update Reserva", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -125,14 +126,14 @@ public class ReservaServiceImpl implements ReservaService {
 			eliminado = reservaDAO.delete(connection, id);
 			if (eliminado) {
 				JDBCUtils.commitTransaction(connection);
-				logger.info("Reserva eliminada exitosamente. ID: {}", id);
+				logger.info(LogUtils.buildMessage(ReservaServiceImpl.class, "Reserva eliminada exitosamente. ID: {}"), id);
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo eliminar la Reserva. ID: {}", id);
+				logger.warn(LogUtils.buildMessage(ReservaServiceImpl.class, "No se pudo eliminar la Reserva. ID: {}"), id);
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en delete Reserva: ", e);
+			logger.error(LogUtils.buildMessage(ReservaServiceImpl.class, "Error en delete Reserva: "), e);
 			throw new RentexpresException("Error en delete Reserva", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -149,11 +150,11 @@ public class ReservaServiceImpl implements ReservaService {
 			JDBCUtils.beginTransaction(connection);
 			results = reservaDAO.findByCriteria(connection, criteria);
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findByCriteria de Reserva completado: Página {} (Tamaño: {}), Total registros: {}",
+			logger.info(LogUtils.buildMessage(ReservaServiceImpl.class, "findByCriteria de Reserva completado: Página {} (Tamaño: {}), Total registros: {}"),
 					criteria.getPageNumber(), criteria.getPageSize(), results.getTotalRecords());
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findByCriteria de Reserva: ", e);
+			logger.error(LogUtils.buildMessage(ReservaServiceImpl.class, "Error en findByCriteria de Reserva: "), e);
 			throw new RentexpresException("Error en findByCriteria de Reserva", e);
 		} finally {
 			JDBCUtils.close(connection);

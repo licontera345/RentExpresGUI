@@ -12,6 +12,7 @@ import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.ProvinciaDTO;
 import com.pinguela.rentexpres.service.ProvinciaService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class ProvinciaServiceImpl implements ProvinciaService {
 
@@ -31,10 +32,10 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 			JDBCUtils.beginTransaction(connection);
 			provincia = provinciaDAO.findById(connection, id);
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findById de Provincia completado. ID: {}", id);
+			logger.info(LogUtils.buildMessage(ProvinciaServiceImpl.class, "findById de Provincia completado. ID: {}"), id);
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findById de Provincia: ", e);
+			logger.error(LogUtils.buildMessage(ProvinciaServiceImpl.class, "Error en findById de Provincia: "), e);
 			throw new RentexpresException("Error en findById de Provincia", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -51,10 +52,10 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 			JDBCUtils.beginTransaction(connection);
 			lista = provinciaDAO.findAll(connection);
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findAll de Provincia completado. Cantidad: {}", (lista != null ? lista.size() : 0));
+			logger.info(LogUtils.buildMessage(ProvinciaServiceImpl.class, "findAll de Provincia completado. Cantidad: {}"), (lista != null ? lista.size() : 0));
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findAll de Provincia: ", e);
+			logger.error(LogUtils.buildMessage(ProvinciaServiceImpl.class, "Error en findAll de Provincia: "), e);
 			throw new RentexpresException("Error en findAll de Provincia", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -72,14 +73,14 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 			creado = provinciaDAO.create(connection, provincia);
 			if (creado) {
 				JDBCUtils.commitTransaction(connection);
-				logger.info("Provincia creada exitosamente. ID: {}", provincia.getId());
+				logger.info(LogUtils.buildMessage(ProvinciaServiceImpl.class, "Provincia creada exitosamente. ID: {}"), provincia.getId());
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo crear la Provincia.");
+				logger.warn(LogUtils.buildMessage(ProvinciaServiceImpl.class, "No se pudo crear la Provincia."));
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en create de Provincia: ", e);
+			logger.error(LogUtils.buildMessage(ProvinciaServiceImpl.class, "Error en create de Provincia: "), e);
 			throw new RentexpresException("Error en create de Provincia", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -97,14 +98,14 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 			actualizado = provinciaDAO.update(connection, provincia);
 			if (actualizado) {
 				JDBCUtils.commitTransaction(connection);
-				logger.info("Provincia actualizada exitosamente. ID: {}", provincia.getId());
+				logger.info(LogUtils.buildMessage(ProvinciaServiceImpl.class, "Provincia actualizada exitosamente. ID: {}"), provincia.getId());
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo actualizar la Provincia. ID: {}", provincia.getId());
+				logger.warn(LogUtils.buildMessage(ProvinciaServiceImpl.class, "No se pudo actualizar la Provincia. ID: {}"), provincia.getId());
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en update de Provincia: ", e);
+			logger.error(LogUtils.buildMessage(ProvinciaServiceImpl.class, "Error en update de Provincia: "), e);
 			throw new RentexpresException("Error en update de Provincia", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -122,14 +123,14 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 			eliminado = provinciaDAO.delete(connection, provincia);
 			if (eliminado) {
 				JDBCUtils.commitTransaction(connection);
-				logger.info("Provincia eliminada exitosamente. ID: {}", provincia.getId());
+				logger.info(LogUtils.buildMessage(ProvinciaServiceImpl.class, "Provincia eliminada exitosamente. ID: {}"), provincia.getId());
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo eliminar la Provincia. ID: {}", provincia.getId());
+				logger.warn(LogUtils.buildMessage(ProvinciaServiceImpl.class, "No se pudo eliminar la Provincia. ID: {}"), provincia.getId());
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en delete de Provincia: ", e);
+			logger.error(LogUtils.buildMessage(ProvinciaServiceImpl.class, "Error en delete de Provincia: "), e);
 			throw new RentexpresException("Error en delete de Provincia", e);
 		} finally {
 			JDBCUtils.close(connection);

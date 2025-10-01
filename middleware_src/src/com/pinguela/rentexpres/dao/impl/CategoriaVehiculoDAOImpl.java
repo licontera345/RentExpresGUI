@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import com.pinguela.rentexpres.dao.CategoriaVehiculoDAO;
 import com.pinguela.rentexpres.model.CategoriaVehiculoDTO;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class CategoriaVehiculoDAOImpl implements CategoriaVehiculoDAO {
 
@@ -32,10 +33,10 @@ public class CategoriaVehiculoDAOImpl implements CategoriaVehiculoDAO {
 
             if (rs.next()) {
                 cv = loadCategoriaVehiculo(rs);
-                logger.info("CategoriaVehiculo encontrada con ID: {}", id);
+                logger.info(LogUtils.buildMessage(CategoriaVehiculoDAOImpl.class, "CategoriaVehiculo encontrada con ID: {}"), id);
             }
         } catch (SQLException e) {
-            logger.error("Error al buscar CategoriaVehiculo por ID: {}", e.getMessage(), e);
+            logger.error(LogUtils.buildMessage(CategoriaVehiculoDAOImpl.class, "Error al buscar CategoriaVehiculo por ID: {}"), e.getMessage(), e);
         } finally {
 			JDBCUtils.close(ps, rs);
         }
@@ -56,9 +57,9 @@ public class CategoriaVehiculoDAOImpl implements CategoriaVehiculoDAO {
             while (rs.next()) {
                 lista.add(loadCategoriaVehiculo(rs));
             }
-            logger.info("Total categorias de vehiculo: {}", lista.size());
+            logger.info(LogUtils.buildMessage(CategoriaVehiculoDAOImpl.class, "Total categorias de vehiculo: {}"), lista.size());
         } catch (SQLException e) {
-            logger.error("Error al obtener todas las CategoriaVehiculo: {}", e.getMessage(), e);
+            logger.error(LogUtils.buildMessage(CategoriaVehiculoDAOImpl.class, "Error al obtener todas las CategoriaVehiculo: {}"), e.getMessage(), e);
         } finally {
             JDBCUtils.close(ps, rs);
         }

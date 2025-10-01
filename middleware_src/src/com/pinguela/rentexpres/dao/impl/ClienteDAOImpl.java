@@ -16,6 +16,7 @@ import com.pinguela.rentexpres.model.ClienteCriteria;
 import com.pinguela.rentexpres.model.ClienteDTO;
 import com.pinguela.rentexpres.model.Results;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class ClienteDAOImpl implements ClienteDAO {
 
@@ -30,7 +31,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 	@Override
 	public ClienteDTO findById(Connection connection, Integer id) throws DataException {
 		if (id == null) {
-			logger.warn("findById null id.");
+			logger.warn(LogUtils.buildMessage(ClienteDAOImpl.class, "findById null id."));
 			return null;
 		}
 		String sql = CLIENTE_SELECT_BASE + " WHERE c.id_cliente = ?";
@@ -41,11 +42,11 @@ public class ClienteDAOImpl implements ClienteDAO {
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				logger.info("Cliente found with id: {}", id);
+				logger.info(LogUtils.buildMessage(ClienteDAOImpl.class, "Cliente found with id: {}"), id);
 				return loadCliente(rs);
 			}
 		} catch (SQLException e) {
-			logger.error("Error en findById for id: {}", id, e);
+			logger.error(LogUtils.buildMessage(ClienteDAOImpl.class, "Error en findById for id: {}"), id, e);
 			throw new DataException("Error en findById Cliente", e);
 		} finally {
 			JDBCUtils.close(ps, rs);
@@ -64,9 +65,9 @@ public class ClienteDAOImpl implements ClienteDAO {
 			while (rs.next()) {
 				lista.add(loadCliente(rs));
 			}
-			logger.info("Total Clientes BD: {}", lista.size());
+			logger.info(LogUtils.buildMessage(ClienteDAOImpl.class, "Total Clientes BD: {}"), lista.size());
 		} catch (SQLException e) {
-			logger.error("Error en findAll Cliente", e);
+			logger.error(LogUtils.buildMessage(ClienteDAOImpl.class, "Error en findAll Cliente"), e);
 			throw new DataException("Error en findAll Cliente", e);
 		} finally {
 			JDBCUtils.close(ps, rs);
@@ -77,7 +78,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 	@Override
 	public boolean create(Connection connection, ClienteDTO cliente) throws DataException {
 		if (cliente == null) {
-			logger.warn("create llamada con Cliente nulo.");
+			logger.warn(LogUtils.buildMessage(ClienteDAOImpl.class, "create llamada con Cliente nulo."));
 			return false;
 		}
 		String sql = "INSERT INTO cliente (nombre, apellido1, apellido2, fecha_nacimiento, email, telefono, id_direccion) "
@@ -92,11 +93,11 @@ public class ClienteDAOImpl implements ClienteDAO {
 				if (generatedKeys.next()) {
 					cliente.setId(generatedKeys.getInt(1));
 				}
-				logger.info("Cliente creado con éxito, id: {}", cliente.getId());
+				logger.info(LogUtils.buildMessage(ClienteDAOImpl.class, "Cliente creado con éxito, id: {}"), cliente.getId());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error en create Cliente", e);
+			logger.error(LogUtils.buildMessage(ClienteDAOImpl.class, "Error en create Cliente"), e);
 			throw new DataException("Error en create Cliente", e);
 		} finally {
 			JDBCUtils.close(ps, generatedKeys);
@@ -107,7 +108,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 	@Override
 	public boolean update(Connection connection, ClienteDTO cliente) throws DataException {
 		if (cliente == null || cliente.getId() == null) {
-			logger.warn("update llamado con Cliente o id nulo.");
+			logger.warn(LogUtils.buildMessage(ClienteDAOImpl.class, "update llamado con Cliente o id nulo."));
 			return false;
 		}
 		String sql = "UPDATE cliente SET nombre = ?, apellido1 = ?, apellido2 = ?, fecha_nacimiento = ?, "
@@ -117,11 +118,11 @@ public class ClienteDAOImpl implements ClienteDAO {
 			ps = connection.prepareStatement(sql);
 			setClienteParameters(ps, cliente, true);
 			if (ps.executeUpdate() > 0) {
-				logger.info("Cliente actualizado correctamente, id: {}", cliente.getId());
+				logger.info(LogUtils.buildMessage(ClienteDAOImpl.class, "Cliente actualizado correctamente, id: {}"), cliente.getId());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error en update Cliente", e);
+			logger.error(LogUtils.buildMessage(ClienteDAOImpl.class, "Error en update Cliente"), e);
 			throw new DataException("Error en update Cliente", e);
 		} finally {
 			JDBCUtils.close(ps, null);
@@ -132,7 +133,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 	@Override
 	public boolean delete(Connection connection, Integer id) throws DataException {
 		if (id == null) {
-			logger.warn("delete llamado con null id.");
+			logger.warn(LogUtils.buildMessage(ClienteDAOImpl.class, "delete llamado con null id."));
 			return false;
 		}
 		String sql = "DELETE FROM cliente WHERE id_cliente = ?";
@@ -141,11 +142,11 @@ public class ClienteDAOImpl implements ClienteDAO {
 			ps = connection.prepareStatement(sql);
 			ps.setInt(1, id);
 			if (ps.executeUpdate() > 0) {
-				logger.info("Cliente eliminado, id: {}", id);
+				logger.info(LogUtils.buildMessage(ClienteDAOImpl.class, "Cliente eliminado, id: {}"), id);
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error en eliminar Cliente", e);
+			logger.error(LogUtils.buildMessage(ClienteDAOImpl.class, "Error en eliminar Cliente"), e);
 			throw new DataException("Error en eliminar Cliente", e);
 		} finally {
 			JDBCUtils.close(ps, null);
@@ -264,10 +265,10 @@ public class ClienteDAOImpl implements ClienteDAO {
 			results.setPageSize(pageSize);
 			results.setTotalRecords(totalRecords);
 
-			logger.info("findByCriteria de Cliente completado: Página {} (Tamaño: {}), Total registros: {}", pageNumber,
+			logger.info(LogUtils.buildMessage(ClienteDAOImpl.class, "findByCriteria de Cliente completado: Página {} (Tamaño: {}), Total registros: {}"), pageNumber,
 					pageSize, totalRecords);
 		} catch (SQLException e) {
-			logger.error("Error en findByCriteria de Cliente", e);
+			logger.error(LogUtils.buildMessage(ClienteDAOImpl.class, "Error en findByCriteria de Cliente"), e);
 			throw new DataException("Error en findByCriteria de Cliente", e);
 		} finally {
 			JDBCUtils.close(ps, rs);

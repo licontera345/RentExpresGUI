@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import com.pinguela.rentexpres.dao.TipoUsuarioDAO;
 import com.pinguela.rentexpres.model.TipoUsuarioDTO;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class TipoUsuarioDAOImpl implements TipoUsuarioDAO {
 
@@ -31,10 +32,10 @@ public class TipoUsuarioDAOImpl implements TipoUsuarioDAO {
 
             if (rs.next()) {
                 tu = loadTipoUsuario(rs);
-                logger.info("TipoUsuario encontrado con ID: " + id);
+                logger.info(LogUtils.buildMessage(TipoUsuarioDAOImpl.class, "TipoUsuario encontrado con ID: " + id));
             }
         } catch (SQLException e) {
-            logger.error("Error al buscar TipoUsuario por ID: " + e.getMessage(), e);
+            logger.error(LogUtils.buildMessage(TipoUsuarioDAOImpl.class, "Error al buscar TipoUsuario por ID: " + e.getMessage()), e);
         } finally {
             JDBCUtils.close(ps, rs);
         }
@@ -51,10 +52,10 @@ public class TipoUsuarioDAOImpl implements TipoUsuarioDAO {
 				while (rs.next()) {
 					lista.add(loadTipoUsuario(rs));
 				}
-				logger.info("Total TipoUsuarios found: " + lista.size());
+				logger.info(LogUtils.buildMessage(TipoUsuarioDAOImpl.class, "Total TipoUsuarios found: " + lista.size()));
 			}
 		} catch (SQLException e) {
-			logger.error("Error retrieving all TipoUsuarios: " + e.getMessage(), e);
+			logger.error(LogUtils.buildMessage(TipoUsuarioDAOImpl.class, "Error retrieving all TipoUsuarios: " + e.getMessage()), e);
 		} 
 
 		return lista;

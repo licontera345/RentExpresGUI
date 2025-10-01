@@ -12,6 +12,7 @@ import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.EstadoReservaDTO;
 import com.pinguela.rentexpres.service.EstadoReservaService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class EstadoReservaServiceImpl implements EstadoReservaService {
     private static final Logger logger = LogManager.getLogger(EstadoReservaServiceImpl.class);
@@ -30,10 +31,10 @@ public class EstadoReservaServiceImpl implements EstadoReservaService {
             JDBCUtils.beginTransaction(connection);
             er = estadoReservaDAO.findById(connection, id);
             JDBCUtils.commitTransaction(connection);
-            logger.info("findById de EstadoReserva completado. ID: " + id);
+            logger.info(LogUtils.buildMessage(EstadoReservaServiceImpl.class, "findById de EstadoReserva completado. ID: " + id));
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en findById de EstadoReserva: ", e);
+            logger.error(LogUtils.buildMessage(EstadoReservaServiceImpl.class, "Error en findById de EstadoReserva: "), e);
             throw new RentexpresException("Error en findById de EstadoReserva", e);
         } finally {
             JDBCUtils.close(connection);
@@ -50,10 +51,10 @@ public class EstadoReservaServiceImpl implements EstadoReservaService {
             JDBCUtils.beginTransaction(connection);
             lista = estadoReservaDAO.findAll(connection);
             JDBCUtils.commitTransaction(connection);
-            logger.info("findAll de EstadoReserva completado. Cantidad: " + (lista != null ? lista.size() : 0));
+            logger.info(LogUtils.buildMessage(EstadoReservaServiceImpl.class, "findAll de EstadoReserva completado. Cantidad: " + (lista != null ? lista.size() : 0)));
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en findAll de EstadoReserva: ", e);
+            logger.error(LogUtils.buildMessage(EstadoReservaServiceImpl.class, "Error en findAll de EstadoReserva: "), e);
             throw new RentexpresException("Error en findAll de EstadoReserva", e);
         } finally {
             JDBCUtils.close(connection);

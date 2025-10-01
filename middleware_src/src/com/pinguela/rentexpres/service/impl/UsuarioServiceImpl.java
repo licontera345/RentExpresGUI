@@ -17,6 +17,7 @@ import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.service.FileService;
 import com.pinguela.rentexpres.service.UsuarioService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class UsuarioServiceImpl implements UsuarioService {
 
@@ -42,10 +43,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 			}
 
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findById de Usuario completado. ID: {}", id);
+			logger.info(LogUtils.buildMessage(UsuarioServiceImpl.class, "findById de Usuario completado. ID: {}"), id);
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findById de Usuario: ", e);
+			logger.error(LogUtils.buildMessage(UsuarioServiceImpl.class, "Error en findById de Usuario: "), e);
 			throw new RentexpresException("Error en findById de Usuario", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -70,10 +71,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 			}
 
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findAll de Usuario completado. Cantidad: {}", (lista != null ? lista.size() : 0));
+			logger.info(LogUtils.buildMessage(UsuarioServiceImpl.class, "findAll de Usuario completado. Cantidad: {}"), (lista != null ? lista.size() : 0));
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findAll de Usuario: ", e);
+			logger.error(LogUtils.buildMessage(UsuarioServiceImpl.class, "Error en findAll de Usuario: "), e);
 			throw new RentexpresException("Error en findAll de Usuario", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -92,7 +93,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 			creado = usuarioDAO.create(connection, usuario);
 			if (creado) {
 				JDBCUtils.commitTransaction(connection);
-				logger.info("Usuario creado exitosamente. ID: {}", usuario.getId());
+				logger.info(LogUtils.buildMessage(UsuarioServiceImpl.class, "Usuario creado exitosamente. ID: {}"), usuario.getId());
 
 				MailServiceImpl mailService = new MailServiceImpl();
 				String asunto = "Bienvenido a RentExpress";
@@ -108,11 +109,11 @@ public class UsuarioServiceImpl implements UsuarioService {
                                 }
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo crear el Usuario.");
+				logger.warn(LogUtils.buildMessage(UsuarioServiceImpl.class, "No se pudo crear el Usuario."));
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en create de Usuario: ", e);
+			logger.error(LogUtils.buildMessage(UsuarioServiceImpl.class, "Error en create de Usuario: "), e);
 			throw new RentexpresException("Error en create de Usuario", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -131,7 +132,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 			actualizado = usuarioDAO.update(connection, usuario);
 			if (actualizado) {
 				JDBCUtils.commitTransaction(connection);
-				logger.info("Usuario actualizado exitosamente. ID: {}", usuario.getId());
+				logger.info(LogUtils.buildMessage(UsuarioServiceImpl.class, "Usuario actualizado exitosamente. ID: {}"), usuario.getId());
 
 				usuario.setContrasena(null);
                                 if (usuario.getImagenes() != null && !usuario.getImagenes().isEmpty()) {
@@ -140,11 +141,11 @@ public class UsuarioServiceImpl implements UsuarioService {
                                 }
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo actualizar el Usuario. ID: {}", usuario.getId());
+				logger.warn(LogUtils.buildMessage(UsuarioServiceImpl.class, "No se pudo actualizar el Usuario. ID: {}"), usuario.getId());
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en update de Usuario: ", e);
+			logger.error(LogUtils.buildMessage(UsuarioServiceImpl.class, "Error en update de Usuario: "), e);
 			throw new RentexpresException("Error en update de Usuario", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -163,14 +164,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 			eliminado = usuarioDAO.delete(connection, usuario, id);
 			if (eliminado) {
 				JDBCUtils.commitTransaction(connection);
-				logger.info("Usuario eliminado exitosamente. ID: {}", id);
+				logger.info(LogUtils.buildMessage(UsuarioServiceImpl.class, "Usuario eliminado exitosamente. ID: {}"), id);
 			} else {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo eliminar el Usuario. ID: {}", id);
+				logger.warn(LogUtils.buildMessage(UsuarioServiceImpl.class, "No se pudo eliminar el Usuario. ID: {}"), id);
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en delete de Usuario: ", e);
+			logger.error(LogUtils.buildMessage(UsuarioServiceImpl.class, "Error en delete de Usuario: "), e);
 			throw new RentexpresException("Error en delete de Usuario", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -189,14 +190,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 			usuario = usuarioDAO.autenticar(connection, nombreUsuario, contrasenaEnClaro);
 
 			JDBCUtils.commitTransaction(connection);
-			logger.info("Autenticación de Usuario completada. Usuario: {}", nombreUsuario);
+			logger.info(LogUtils.buildMessage(UsuarioServiceImpl.class, "Autenticación de Usuario completada. Usuario: {}"), nombreUsuario);
 
 			if (usuario != null) {
 				usuario.setContrasena(null);
 			}
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en autenticación de Usuario: ", e);
+			logger.error(LogUtils.buildMessage(UsuarioServiceImpl.class, "Error en autenticación de Usuario: "), e);
 			throw new RentexpresException("Error en autenticación de Usuario", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -221,11 +222,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 			}
 
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findByCriteria de Usuario completado. Página {} (Tamaño: {}), Total registros: {}",
+			logger.info(LogUtils.buildMessage(UsuarioServiceImpl.class, "findByCriteria de Usuario completado. Página {} (Tamaño: {}), Total registros: {}"),
 					criteria.getPageNumber(), criteria.getPageSize(), results != null ? results.getTotalRecords() : 0);
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findByCriteria de Usuario: ", e);
+			logger.error(LogUtils.buildMessage(UsuarioServiceImpl.class, "Error en findByCriteria de Usuario: "), e);
 			throw new RentexpresException("Error en findByCriteria de Usuario", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -239,7 +240,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 try {
                         return fileService.getUsuarioImagePaths(idUsuario);
                 } catch (Exception e) {
-                        logger.error("Error al obtener imágenes del usuario {}", idUsuario, e);
+                        logger.error(LogUtils.buildMessage(UsuarioServiceImpl.class, "Error al obtener imágenes del usuario {}"), idUsuario, e);
                         throw new RentexpresException("Error al obtener imágenes del usuario", e);
                 }
         }

@@ -14,6 +14,7 @@ import com.pinguela.rentexpres.model.ClienteCriteria;
 import com.pinguela.rentexpres.model.Results;
 import com.pinguela.rentexpres.service.ClienteService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class ClienteServiceImpl implements ClienteService {
 
@@ -33,10 +34,10 @@ public class ClienteServiceImpl implements ClienteService {
             JDBCUtils.beginTransaction(connection);
             cliente = clienteDAO.findById(connection, id);
             JDBCUtils.commitTransaction(connection);
-            logger.info("findById de Cliente completado. ID: {}", id);
+            logger.info(LogUtils.buildMessage(ClienteServiceImpl.class, "findById de Cliente completado. ID: {}"), id);
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en findById de Cliente: ", e);
+            logger.error(LogUtils.buildMessage(ClienteServiceImpl.class, "Error en findById de Cliente: "), e);
             throw new RentexpresException("Error en findById de Cliente", e);
         } finally {
             JDBCUtils.close(connection);
@@ -53,10 +54,10 @@ public class ClienteServiceImpl implements ClienteService {
             JDBCUtils.beginTransaction(connection);
             lista = clienteDAO.findAll(connection);
             JDBCUtils.commitTransaction(connection);
-            logger.info("findAll de Cliente completado. Cantidad: {}", (lista != null ? lista.size() : 0));
+            logger.info(LogUtils.buildMessage(ClienteServiceImpl.class, "findAll de Cliente completado. Cantidad: {}"), (lista != null ? lista.size() : 0));
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en findAll de Cliente: ", e);
+            logger.error(LogUtils.buildMessage(ClienteServiceImpl.class, "Error en findAll de Cliente: "), e);
             throw new RentexpresException("Error en findAll de Cliente", e);
         } finally {
             JDBCUtils.close(connection);
@@ -74,14 +75,14 @@ public class ClienteServiceImpl implements ClienteService {
             creado = clienteDAO.create(connection, cliente);
             if (creado) {
                 JDBCUtils.commitTransaction(connection);
-                logger.info("Cliente creado exitosamente. ID: {}", cliente.getId());
+                logger.info(LogUtils.buildMessage(ClienteServiceImpl.class, "Cliente creado exitosamente. ID: {}"), cliente.getId());
             } else {
                 JDBCUtils.rollbackTransaction(connection);
-                logger.warn("No se pudo crear el Cliente.");
+                logger.warn(LogUtils.buildMessage(ClienteServiceImpl.class, "No se pudo crear el Cliente."));
             }
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en create de Cliente: ", e);
+            logger.error(LogUtils.buildMessage(ClienteServiceImpl.class, "Error en create de Cliente: "), e);
             throw new RentexpresException("Error en create de Cliente", e);
         } finally {
             JDBCUtils.close(connection);
@@ -99,14 +100,14 @@ public class ClienteServiceImpl implements ClienteService {
             actualizado = clienteDAO.update(connection, cliente);
             if (actualizado) {
                 JDBCUtils.commitTransaction(connection);
-                logger.info("Cliente actualizado exitosamente. ID: {}", cliente.getId());
+                logger.info(LogUtils.buildMessage(ClienteServiceImpl.class, "Cliente actualizado exitosamente. ID: {}"), cliente.getId());
             } else {
                 JDBCUtils.rollbackTransaction(connection);
-                logger.warn("No se pudo actualizar el Cliente. ID: {}", cliente.getId());
+                logger.warn(LogUtils.buildMessage(ClienteServiceImpl.class, "No se pudo actualizar el Cliente. ID: {}"), cliente.getId());
             }
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en update de Cliente: ", e);
+            logger.error(LogUtils.buildMessage(ClienteServiceImpl.class, "Error en update de Cliente: "), e);
             throw new RentexpresException("Error en update de Cliente", e);
         } finally {
             JDBCUtils.close(connection);
@@ -124,14 +125,14 @@ public class ClienteServiceImpl implements ClienteService {
             eliminado = clienteDAO.delete(connection, id);
             if (eliminado) {
                 JDBCUtils.commitTransaction(connection);
-                logger.info("Cliente eliminado exitosamente. ID: {}", id);
+                logger.info(LogUtils.buildMessage(ClienteServiceImpl.class, "Cliente eliminado exitosamente. ID: {}"), id);
             } else {
                 JDBCUtils.rollbackTransaction(connection);
-                logger.warn("No se pudo eliminar el Cliente. ID: {}", id);
+                logger.warn(LogUtils.buildMessage(ClienteServiceImpl.class, "No se pudo eliminar el Cliente. ID: {}"), id);
             }
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en delete de Cliente: ", e);
+            logger.error(LogUtils.buildMessage(ClienteServiceImpl.class, "Error en delete de Cliente: "), e);
             throw new RentexpresException("Error en delete de Cliente", e);
         } finally {
             JDBCUtils.close(connection);
@@ -148,11 +149,11 @@ public class ClienteServiceImpl implements ClienteService {
             JDBCUtils.beginTransaction(connection);
             results = clienteDAO.findByCriteria(connection, criteria);
             JDBCUtils.commitTransaction(connection);
-            logger.info("findByCriteria de Cliente completado: Página {} (Tamaño: {}), Total registros: {}",
+            logger.info(LogUtils.buildMessage(ClienteServiceImpl.class, "findByCriteria de Cliente completado: Página {} (Tamaño: {}), Total registros: {}"),
                     criteria.getPageNumber(), criteria.getPageSize(), results.getTotalRecords());
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(connection);
-            logger.error("Error en findByCriteria de Cliente: ", e);
+            logger.error(LogUtils.buildMessage(ClienteServiceImpl.class, "Error en findByCriteria de Cliente: "), e);
             throw new RentexpresException("Error en findByCriteria de Cliente", e);
         } finally {
             JDBCUtils.close(connection);

@@ -12,6 +12,7 @@ import com.pinguela.rentexpres.exception.RentexpresException;
 import com.pinguela.rentexpres.model.CategoriaVehiculoDTO;
 import com.pinguela.rentexpres.service.CategoriaVehiculoService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class CategoriaVehiculoServiceImpl implements CategoriaVehiculoService {
 
@@ -35,10 +36,10 @@ public class CategoriaVehiculoServiceImpl implements CategoriaVehiculoService {
 				e.printStackTrace();
 			}
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findById de CategoriaVehiculo completado. ID: " + id);
+			logger.info(LogUtils.buildMessage(CategoriaVehiculoServiceImpl.class, "findById de CategoriaVehiculo completado. ID: " + id));
 		} catch (SQLException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findById de CategoriaVehiculo: ", e);
+			logger.error(LogUtils.buildMessage(CategoriaVehiculoServiceImpl.class, "Error en findById de CategoriaVehiculo: "), e);
 			throw new RentexpresException("Error en findById de CategoriaVehiculo", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -59,10 +60,10 @@ public class CategoriaVehiculoServiceImpl implements CategoriaVehiculoService {
 				e.printStackTrace();
 			}
 			JDBCUtils.commitTransaction(connection);
-			logger.info("findAll de CategoriaVehiculo completado. Cantidad: " + (lista != null ? lista.size() : 0));
+			logger.info(LogUtils.buildMessage(CategoriaVehiculoServiceImpl.class, "findAll de CategoriaVehiculo completado. Cantidad: " + (lista != null ? lista.size() : 0)));
 		} catch (SQLException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en findAll de CategoriaVehiculo: ", e);
+			logger.error(LogUtils.buildMessage(CategoriaVehiculoServiceImpl.class, "Error en findAll de CategoriaVehiculo: "), e);
 			throw new RentexpresException("Error en findAll de CategoriaVehiculo", e);
 		} finally {
 			JDBCUtils.close(connection);

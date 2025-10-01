@@ -19,6 +19,7 @@ import com.pinguela.rentexpres.model.VehiculoDTO;
 import com.pinguela.rentexpres.service.FileService;
 import com.pinguela.rentexpres.service.VehiculoService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class VehiculoServiceImpl implements VehiculoService {
 
@@ -47,11 +48,11 @@ public class VehiculoServiceImpl implements VehiculoService {
 			}
 
 			JDBCUtils.commitTransaction(connection);
-			logger.info("Vehículo encontrado con ID: {}", id);
+			logger.info(LogUtils.buildMessage(VehiculoServiceImpl.class, "Vehículo encontrado con ID: {}"), id);
 			return vehiculo;
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error al buscar vehículo por ID: {}", id, e);
+			logger.error(LogUtils.buildMessage(VehiculoServiceImpl.class, "Error al buscar vehículo por ID: {}"), id, e);
 			throw new RentexpresException("Error al buscar vehículo por ID: " + id, e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -94,7 +95,7 @@ public class VehiculoServiceImpl implements VehiculoService {
 			boolean creado = vehiculoDAO.create(connection, vehiculo);
 			if (!creado) {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo crear el vehículo en la base de datos");
+				logger.warn(LogUtils.buildMessage(VehiculoServiceImpl.class, "No se pudo crear el vehículo en la base de datos"));
 				return false;
 			}
 
@@ -108,22 +109,22 @@ public class VehiculoServiceImpl implements VehiculoService {
 						boolean actualizado = vehiculoDAO.update(connection, vehiculo);
 						if (!actualizado) {
 							JDBCUtils.rollbackTransaction(connection);
-							logger.warn("Vehículo creado pero no se pudo actualizar con la imagen");
+							logger.warn(LogUtils.buildMessage(VehiculoServiceImpl.class, "Vehículo creado pero no se pudo actualizar con la imagen"));
 							return false;
 						}
 					}
 				} catch (IOException e) {
-					logger.error("Error al guardar la imagen del vehículo, pero se creó el vehículo", e);
+					logger.error(LogUtils.buildMessage(VehiculoServiceImpl.class, "Error al guardar la imagen del vehículo, pero se creó el vehículo"), e);
 					// Continuamos sin hacer rollback porque el vehículo sí se creó
 				}
 			}
 
 			JDBCUtils.commitTransaction(connection);
-			logger.info("Vehículo creado exitosamente con ID: {}", vehiculo.getId());
+			logger.info(LogUtils.buildMessage(VehiculoServiceImpl.class, "Vehículo creado exitosamente con ID: {}"), vehiculo.getId());
 			return true;
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error al crear vehículo", e);
+			logger.error(LogUtils.buildMessage(VehiculoServiceImpl.class, "Error al crear vehículo"), e);
 			throw new RentexpresException("Error al crear vehículo", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -149,7 +150,7 @@ public class VehiculoServiceImpl implements VehiculoService {
 					String imagePath = fileService.uploadImage(nuevaImagen, vehiculo.getId());
 					vehiculo.setImagenPath(imagePath);
 				} catch (IOException e) {
-					logger.error("Error al actualizar la imagen del vehículo", e);
+					logger.error(LogUtils.buildMessage(VehiculoServiceImpl.class, "Error al actualizar la imagen del vehículo"), e);
 					// Continuamos con la actualización sin la imagen
 				}
 			}
@@ -158,16 +159,16 @@ public class VehiculoServiceImpl implements VehiculoService {
 			boolean actualizado = vehiculoDAO.update(connection, vehiculo);
 			if (!actualizado) {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo actualizar el vehículo con ID: {}", vehiculo.getId());
+				logger.warn(LogUtils.buildMessage(VehiculoServiceImpl.class, "No se pudo actualizar el vehículo con ID: {}"), vehiculo.getId());
 				return false;
 			}
 
 			JDBCUtils.commitTransaction(connection);
-			logger.info("Vehículo actualizado exitosamente. ID: {}", vehiculo.getId());
+			logger.info(LogUtils.buildMessage(VehiculoServiceImpl.class, "Vehículo actualizado exitosamente. ID: {}"), vehiculo.getId());
 			return true;
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error al actualizar vehículo ID: {}", vehiculo.getId(), e);
+			logger.error(LogUtils.buildMessage(VehiculoServiceImpl.class, "Error al actualizar vehículo ID: {}"), vehiculo.getId(), e);
 			throw new RentexpresException("Error al actualizar vehículo", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -185,7 +186,7 @@ public class VehiculoServiceImpl implements VehiculoService {
 			VehiculoDTO vehiculo = vehiculoDAO.findById(connection, id);
 			if (vehiculo == null) {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se encontró el vehículo con ID: {} para eliminar", id);
+				logger.warn(LogUtils.buildMessage(VehiculoServiceImpl.class, "No se encontró el vehículo con ID: {} para eliminar"), id);
 				return false;
 			}
 
@@ -198,16 +199,16 @@ public class VehiculoServiceImpl implements VehiculoService {
 			boolean eliminado = vehiculoDAO.delete(connection, id);
 			if (!eliminado) {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se pudo eliminar el vehículo con ID: {}", id);
+				logger.warn(LogUtils.buildMessage(VehiculoServiceImpl.class, "No se pudo eliminar el vehículo con ID: {}"), id);
 				return false;
 			}
 
 			JDBCUtils.commitTransaction(connection);
-			logger.info("Vehículo eliminado exitosamente. ID: {}", id);
+			logger.info(LogUtils.buildMessage(VehiculoServiceImpl.class, "Vehículo eliminado exitosamente. ID: {}"), id);
 			return true;
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error al eliminar vehículo ID: {}", id, e);
+			logger.error(LogUtils.buildMessage(VehiculoServiceImpl.class, "Error al eliminar vehículo ID: {}"), id, e);
 			throw new RentexpresException("Error al eliminar vehículo", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -246,12 +247,12 @@ public class VehiculoServiceImpl implements VehiculoService {
 			}
 
 			JDBCUtils.commitTransaction(connection);
-			logger.info("Búsqueda por criterios completada. Encontrados {} vehículos",
+			logger.info(LogUtils.buildMessage(VehiculoServiceImpl.class, "Búsqueda por criterios completada. Encontrados {} vehículos"),
 					(results != null && results.getResults() != null) ? results.getResults().size() : 0);
 			return results;
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error en búsqueda por criterios", e);
+			logger.error(LogUtils.buildMessage(VehiculoServiceImpl.class, "Error en búsqueda por criterios"), e);
 			throw new RentexpresException("Error en búsqueda por criterios", e);
 		} finally {
 			JDBCUtils.close(connection);
@@ -263,7 +264,7 @@ public class VehiculoServiceImpl implements VehiculoService {
 		try {
 			return fileService.getImagePaths(idVehiculo);
 		} catch (Exception e) {
-			logger.error("Error al obtener imágenes del vehículo ID: {}", idVehiculo, e);
+			logger.error(LogUtils.buildMessage(VehiculoServiceImpl.class, "Error al obtener imágenes del vehículo ID: {}"), idVehiculo, e);
 			throw new RentexpresException("Error al obtener imágenes del vehículo", e);
 		}
 	}
@@ -279,7 +280,7 @@ public class VehiculoServiceImpl implements VehiculoService {
 			VehiculoDTO vehiculo = vehiculoDAO.findById(connection, idVehiculo);
 			if (vehiculo == null) {
 				JDBCUtils.rollbackTransaction(connection);
-				logger.warn("No se encontró el vehículo con ID: {} para actualizar imagen", idVehiculo);
+				logger.warn(LogUtils.buildMessage(VehiculoServiceImpl.class, "No se encontró el vehículo con ID: {} para actualizar imagen"), idVehiculo);
 				return false;
 			}
 
@@ -299,22 +300,22 @@ public class VehiculoServiceImpl implements VehiculoService {
 					boolean actualizado = vehiculoDAO.update(connection, vehiculo);
 					if (!actualizado) {
 						JDBCUtils.rollbackTransaction(connection);
-						logger.warn("No se pudo actualizar la imagen del vehículo ID: {}", idVehiculo);
+						logger.warn(LogUtils.buildMessage(VehiculoServiceImpl.class, "No se pudo actualizar la imagen del vehículo ID: {}"), idVehiculo);
 						return false;
 					}
 				} catch (IOException e) {
 					JDBCUtils.rollbackTransaction(connection);
-					logger.error("Error al actualizar la imagen del vehículo ID: {}", idVehiculo, e);
+					logger.error(LogUtils.buildMessage(VehiculoServiceImpl.class, "Error al actualizar la imagen del vehículo ID: {}"), idVehiculo, e);
 					throw new RentexpresException("Error al actualizar la imagen del vehículo", e);
 				}
 			}
 
 			JDBCUtils.commitTransaction(connection);
-			logger.info("Imagen del vehículo actualizada exitosamente. ID: {}", idVehiculo);
+			logger.info(LogUtils.buildMessage(VehiculoServiceImpl.class, "Imagen del vehículo actualizada exitosamente. ID: {}"), idVehiculo);
 			return true;
 		} catch (SQLException | DataException e) {
 			JDBCUtils.rollbackTransaction(connection);
-			logger.error("Error al actualizar imagen del vehículo ID: {}", idVehiculo, e);
+			logger.error(LogUtils.buildMessage(VehiculoServiceImpl.class, "Error al actualizar imagen del vehículo ID: {}"), idVehiculo, e);
 			throw new RentexpresException("Error al actualizar imagen del vehículo", e);
 		} finally {
 			JDBCUtils.close(connection);

@@ -5,6 +5,8 @@ import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.pinguela.rentexpres.util.LogUtils;
+
 /**
  * Clase para cargar y gestionar la configuración desde el archivo config.properties.
  */
@@ -21,15 +23,18 @@ public class ConfigManager {
                     .getResourceAsStream("config.properties");
 
             if (inputStream == null) {
-                logger.fatal("El archivo de configuración no se encontró.");
+                logger.fatal(LogUtils.buildMessage(ConfigManager.class,
+                        "El archivo de configuración no se encontró."));
                 throw new RuntimeException("El archivo de configuración no se encontró.");
             }
 
             propertiesCfg.load(inputStream);
-            logger.info("Configuración cargada correctamente.");
+            logger.info(LogUtils.buildMessage(ConfigManager.class,
+                    "Configuración cargada correctamente."));
 
         } catch (Exception e) {
-            logger.fatal("No se pudo cargar el archivo de configuración: " + e.getMessage(), e);
+            logger.fatal(LogUtils.buildMessage(ConfigManager.class,
+                    "No se pudo cargar el archivo de configuración: " + e.getMessage()), e);
             throw new RuntimeException("Error al cargar configuración", e);
         }
     }
@@ -48,7 +53,8 @@ public class ConfigManager {
     public static String getStringValue(String key) {
         String value = propertiesCfg.getProperty(key);
         if (value == null) {
-            logger.error("La clave '" + key + "' no existe en config.properties");
+            logger.error(LogUtils.buildMessage(ConfigManager.class,
+                    "La clave '" + key + "' no existe en config.properties"));
             return "";
         }
         return value;

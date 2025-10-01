@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.pinguela.rentexpres.config.ConfigManager;
 import com.pinguela.rentexpres.service.MailService;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class MailServiceImpl implements MailService {
 
@@ -32,11 +33,11 @@ public class MailServiceImpl implements MailService {
             email.addTo(destinatario);
             email.send();
 
-            logger.info("Correo enviado a: " + destinatario + " | Asunto: " + asunto);
+            logger.info(LogUtils.buildMessage(MailServiceImpl.class, "Correo enviado a: " + destinatario + " | Asunto: " + asunto));
             return true;
 
         } catch (EmailException e) {
-            logger.error("Error al enviar el correo a " + destinatario + ": " + e.getMessage(), e);
+            logger.error(LogUtils.buildMessage(MailServiceImpl.class, "Error al enviar el correo a " + destinatario + ": " + e.getMessage()), e);
             return false;
         }
     }

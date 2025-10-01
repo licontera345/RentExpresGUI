@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import com.pinguela.rentexpres.dao.LocalidadDAO;
 import com.pinguela.rentexpres.exception.DataException;
 import com.pinguela.rentexpres.model.LocalidadDTO;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class LocalidadDAOImpl implements LocalidadDAO {
 
@@ -30,7 +31,7 @@ public class LocalidadDAOImpl implements LocalidadDAO {
 				return rs.next() ? load(rs) : null;
 			}
 		} catch (SQLException ex) {
-			logger.error("findById {}", id, ex);
+			logger.error(LogUtils.buildMessage(LocalidadDAOImpl.class, "findById {}"), id, ex);
 			throw new DataException("Error buscando localidad", ex);
 		}
 	}
@@ -45,7 +46,7 @@ public class LocalidadDAOImpl implements LocalidadDAO {
 			return out;
 
 		} catch (SQLException ex) {
-			logger.error("findAll", ex);
+			logger.error(LogUtils.buildMessage(LocalidadDAOImpl.class, "findAll"), ex);
 			throw new DataException("Error listando localidades", ex);
 		}
 	}
@@ -62,7 +63,7 @@ public class LocalidadDAOImpl implements LocalidadDAO {
 				return out;
 			}
 		} catch (SQLException ex) {
-			logger.error("findByProvinciaId {}", idProvincia, ex);
+			logger.error(LogUtils.buildMessage(LocalidadDAOImpl.class, "findByProvinciaId {}"), idProvincia, ex);
 			throw new DataException("Error buscando localidades por provincia", ex);
 		}
 	}

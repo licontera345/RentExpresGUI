@@ -17,6 +17,7 @@ import com.pinguela.rentexpres.model.AlquilerStatsDTO;
 import com.pinguela.rentexpres.model.ReservaStatsDTO;
 import com.pinguela.rentexpres.service.EstadisticaService;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class EstadisticaServiceImpl implements EstadisticaService {
 
@@ -34,10 +35,10 @@ public class EstadisticaServiceImpl implements EstadisticaService {
             JDBCUtils.beginTransaction(conn);
             list = alquilerDAO.getAlquilerStats(conn);
             JDBCUtils.commitTransaction(conn);
-            logger.info("Estadísticas de alquiler obtenidas: {}", list != null ? list.size() : 0);
+            logger.info(LogUtils.buildMessage(EstadisticaServiceImpl.class, "Estadísticas de alquiler obtenidas: {}"), list != null ? list.size() : 0);
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(conn);
-            logger.error("Error en getAlquileresMensuales", e);
+            logger.error(LogUtils.buildMessage(EstadisticaServiceImpl.class, "Error en getAlquileresMensuales"), e);
             throw new RentexpresException("Error obteniendo estadísticas de alquiler", e);
         } finally {
             JDBCUtils.close(conn);
@@ -54,10 +55,10 @@ public class EstadisticaServiceImpl implements EstadisticaService {
             JDBCUtils.beginTransaction(conn);
             list = reservaDAO.getReservaStats(conn);
             JDBCUtils.commitTransaction(conn);
-            logger.info("Estadísticas de reserva obtenidas: {}", list != null ? list.size() : 0);
+            logger.info(LogUtils.buildMessage(EstadisticaServiceImpl.class, "Estadísticas de reserva obtenidas: {}"), list != null ? list.size() : 0);
         } catch (SQLException | DataException e) {
             JDBCUtils.rollbackTransaction(conn);
-            logger.error("Error en getReservasMensuales", e);
+            logger.error(LogUtils.buildMessage(EstadisticaServiceImpl.class, "Error en getReservasMensuales"), e);
             throw new RentexpresException("Error obteniendo estadísticas de reserva", e);
         } finally {
             JDBCUtils.close(conn);

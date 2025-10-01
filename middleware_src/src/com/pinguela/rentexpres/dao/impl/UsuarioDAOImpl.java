@@ -16,6 +16,7 @@ import com.pinguela.rentexpres.model.Results;
 import com.pinguela.rentexpres.model.UsuarioDTO;
 import com.pinguela.rentexpres.model.UsuarioCriteria;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class UsuarioDAOImpl implements UsuarioDAO {
 
@@ -27,7 +28,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@Override
 	public UsuarioDTO findById(Connection connection, Integer id) throws DataException {
 		if (id == null) {
-			logger.warn("findById called with null id.");
+			logger.warn(LogUtils.buildMessage(UsuarioDAOImpl.class, "findById called with null id."));
 			return null;
 		}
 		String sql = USUARIO_SELECT_BASE + " WHERE id_usuario = ?";
@@ -38,11 +39,11 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				logger.info("Usuario encontrado con id: {}", id);
+				logger.info(LogUtils.buildMessage(UsuarioDAOImpl.class, "Usuario encontrado con id: {}"), id);
 				return loadUsuario(rs, false);
 			}
 		} catch (SQLException e) {
-			logger.error("Error al buscar Usuario por ID: {}", id, e);
+			logger.error(LogUtils.buildMessage(UsuarioDAOImpl.class, "Error al buscar Usuario por ID: {}"), id, e);
 			throw new DataException("Error al buscar Usuario por ID: " + id, e);
 		} finally {
 			JDBCUtils.close(ps, rs);
@@ -53,7 +54,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@Override
 	public boolean create(Connection connection, UsuarioDTO usuario) throws DataException {
 		if (usuario == null) {
-			logger.warn("create called with null Usuario.");
+			logger.warn(LogUtils.buildMessage(UsuarioDAOImpl.class, "create called with null Usuario."));
 			return false;
 		}
 		String sql = "INSERT INTO usuario (nombre_usuario, contrasena, id_tipo_usuario, nombre, apellido1, apellido2, telefono, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -68,11 +69,11 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 						usuario.setId(generatedKeys.getInt(1));
 					}
 				}
-				logger.info("Usuario creado exitosamente, nombre_usuario: {}", usuario.getNombreUsuario());
+				logger.info(LogUtils.buildMessage(UsuarioDAOImpl.class, "Usuario creado exitosamente, nombre_usuario: {}"), usuario.getNombreUsuario());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error al crear Usuario: {}", usuario.getNombreUsuario(), e);
+			logger.error(LogUtils.buildMessage(UsuarioDAOImpl.class, "Error al crear Usuario: {}"), usuario.getNombreUsuario(), e);
 			throw new DataException("Error al crear Usuario: " + usuario.getNombreUsuario(), e);
 		} finally {
 			JDBCUtils.close(ps, null);
@@ -83,7 +84,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@Override
 	public boolean update(Connection connection, UsuarioDTO usuario) throws DataException {
 		if (usuario == null || usuario.getId() == null) {
-			logger.warn("update called with null Usuario or id.");
+			logger.warn(LogUtils.buildMessage(UsuarioDAOImpl.class, "update called with null Usuario or id."));
 			return false;
 		}
                 StringBuilder sql = new StringBuilder("UPDATE usuario SET nombre_usuario = ?,");
@@ -108,11 +109,11 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                         ps.setString(idx++, usuario.getEmail());
                         ps.setInt(idx++, usuario.getId());
 			if (ps.executeUpdate() > 0) {
-				logger.info("Usuario actualizado exitosamente, id: {}", usuario.getId());
+				logger.info(LogUtils.buildMessage(UsuarioDAOImpl.class, "Usuario actualizado exitosamente, id: {}"), usuario.getId());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error al actualizar Usuario: {}", usuario.getId(), e);
+			logger.error(LogUtils.buildMessage(UsuarioDAOImpl.class, "Error al actualizar Usuario: {}"), usuario.getId(), e);
 			throw new DataException("Error al actualizar Usuario: " + usuario.getId(), e);
 		} finally {
 			JDBCUtils.close(ps, null);
@@ -123,7 +124,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@Override
 	public boolean delete(Connection connection, UsuarioDTO usuario, Integer id) throws DataException {
 		if (usuario == null || usuario.getId() == null) {
-			logger.warn("delete called with null Usuario or id.");
+			logger.warn(LogUtils.buildMessage(UsuarioDAOImpl.class, "delete called with null Usuario or id."));
 			return false;
 		}
 		String sql = "DELETE FROM usuario WHERE id_usuario = ?";
@@ -132,11 +133,11 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			ps = connection.prepareStatement(sql);
 			ps.setInt(1, usuario.getId());
 			if (ps.executeUpdate() > 0) {
-				logger.info("Usuario eliminado, id: {}", usuario.getId());
+				logger.info(LogUtils.buildMessage(UsuarioDAOImpl.class, "Usuario eliminado, id: {}"), usuario.getId());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error al eliminar Usuario: {}", usuario.getId(), e);
+			logger.error(LogUtils.buildMessage(UsuarioDAOImpl.class, "Error al eliminar Usuario: {}"), usuario.getId(), e);
 			throw new DataException("Error al eliminar Usuario: " + usuario.getId(), e);
 		} finally {
 			JDBCUtils.close(ps, null);
@@ -148,7 +149,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	public UsuarioDTO autenticar(Connection connection, String nombreUsuario, String contrasenaEnClaro)
 			throws DataException {
 		if (nombreUsuario == null || contrasenaEnClaro == null) {
-			logger.warn("autenticar called with null parameters.");
+			logger.warn(LogUtils.buildMessage(UsuarioDAOImpl.class, "autenticar called with null parameters."));
 			return null;
 		}
 		String sql = USUARIO_SELECT_BASE + " WHERE nombre_usuario = ?";
@@ -159,11 +160,11 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			ps.setString(1, nombreUsuario);
 			rs = ps.executeQuery();
 			if (rs.next() && passwordEncryptor.checkPassword(contrasenaEnClaro, rs.getString("contrasena"))) {
-				logger.info("Usuario autenticado: {}", nombreUsuario);
+				logger.info(LogUtils.buildMessage(UsuarioDAOImpl.class, "Usuario autenticado: {}"), nombreUsuario);
 				return loadUsuario(rs, true);
 			}
 		} catch (SQLException e) {
-			logger.error("Error al autenticar Usuario: {}", nombreUsuario, e);
+			logger.error(LogUtils.buildMessage(UsuarioDAOImpl.class, "Error al autenticar Usuario: {}"), nombreUsuario, e);
 			throw new DataException("Error al autenticar Usuario: " + nombreUsuario, e);
 		} finally {
 			JDBCUtils.close(ps, rs);
@@ -183,7 +184,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 				usuarios.add(loadUsuario(rs, false));
 			}
 		} catch (SQLException e) {
-			logger.error("Error al obtener todos los Usuarios", e);
+			logger.error(LogUtils.buildMessage(UsuarioDAOImpl.class, "Error al obtener todos los Usuarios"), e);
 			throw new DataException("Error al obtener todos los Usuarios", e);
 		} finally {
 			JDBCUtils.close(ps, rs);
@@ -263,11 +264,11 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			results.setPageSize(size);
 			results.setTotalRecords(totalRecords);
 
-			logger.info("findByCriteria de Usuario completado: Página {} (Tamaño: {}), Total registros: {}", page, size,
+			logger.info(LogUtils.buildMessage(UsuarioDAOImpl.class, "findByCriteria de Usuario completado: Página {} (Tamaño: {}), Total registros: {}"), page, size,
 					totalRecords);
 
 		} catch (SQLException e) {
-			logger.error("Error en findByCriteria de Usuario", e);
+			logger.error(LogUtils.buildMessage(UsuarioDAOImpl.class, "Error en findByCriteria de Usuario"), e);
 			throw new DataException("Error en findByCriteria de Usuario", e);
 		} finally {
 			JDBCUtils.close(ps, rs);

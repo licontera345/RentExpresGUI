@@ -12,6 +12,7 @@ import com.pinguela.rentexpres.model.AlquilerDTO;
 import com.pinguela.rentexpres.model.AlquilerCriteria;
 import com.pinguela.rentexpres.model.Results;
 import com.pinguela.rentexpres.util.JDBCUtils;
+import com.pinguela.rentexpres.util.LogUtils;
 
 public class AlquilerDAOImpl implements AlquilerDAO {
 
@@ -29,7 +30,7 @@ public class AlquilerDAOImpl implements AlquilerDAO {
 	@Override
 	public AlquilerDTO findById(Connection connection, Integer id) throws DataException {
 		if (id == null) {
-			logger.warn("findById de Alquiler llamado con id nulo.");
+			logger.warn(LogUtils.buildMessage(AlquilerDAOImpl.class, "findById de Alquiler llamado con id nulo."));
 			return null;
 		}
 		String sql = SELECT_BASE + " WHERE a.id_alquiler = ?";
@@ -37,14 +38,14 @@ public class AlquilerDAOImpl implements AlquilerDAO {
 			ps.setInt(1, id);
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
-					logger.info("Alquiler encontrado, id: {}", id);
+					logger.info(LogUtils.buildMessage(AlquilerDAOImpl.class, "Alquiler encontrado, id: {}"), id);
 					return loadAlquiler(rs);
 				} else {
-					logger.warn("No se encontró Alquiler con id: {}", id);
+					logger.warn(LogUtils.buildMessage(AlquilerDAOImpl.class, "No se encontró Alquiler con id: {}"), id);
 				}
 			}
 		} catch (SQLException e) {
-			logger.error("Error en findById de Alquiler para id: {}", id, e);
+			logger.error(LogUtils.buildMessage(AlquilerDAOImpl.class, "Error en findById de Alquiler para id: {}"), id, e);
 			throw new DataException("Error en findById de Alquiler", e);
 		}
 		return null;
@@ -58,9 +59,9 @@ public class AlquilerDAOImpl implements AlquilerDAO {
 			while (rs.next()) {
 				lista.add(loadAlquiler(rs));
 			}
-			logger.info("Total de Alquileres encontrados: {}", lista.size());
+			logger.info(LogUtils.buildMessage(AlquilerDAOImpl.class, "Total de Alquileres encontrados: {}"), lista.size());
 		} catch (SQLException e) {
-			logger.error("Error en findAll de Alquiler", e);
+			logger.error(LogUtils.buildMessage(AlquilerDAOImpl.class, "Error en findAll de Alquiler"), e);
 			throw new DataException("Error en findAll de Alquiler", e);
 		}
 		return lista;
@@ -69,7 +70,7 @@ public class AlquilerDAOImpl implements AlquilerDAO {
 	@Override
 	public boolean create(Connection connection, AlquilerDTO alquiler) throws DataException {
 		if (alquiler == null) {
-			logger.warn("create null Alquiler.");
+			logger.warn(LogUtils.buildMessage(AlquilerDAOImpl.class, "create null Alquiler."));
 			return false;
 		}
 		String sql = "INSERT INTO alquiler (id_reserva, fecha_inicio_efectivo, fecha_fin_efectivo, km_inicial, km_final, id_estado_alquiler, coste_total) "
@@ -82,11 +83,11 @@ public class AlquilerDAOImpl implements AlquilerDAO {
 						alquiler.setId(gen.getInt(1));
 					}
 				}
-				logger.info("Alquiler creado exitosamente. Nuevo ID: {}", alquiler.getId());
+				logger.info(LogUtils.buildMessage(AlquilerDAOImpl.class, "Alquiler creado exitosamente. Nuevo ID: {}"), alquiler.getId());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error al crear Alquiler", e);
+			logger.error(LogUtils.buildMessage(AlquilerDAOImpl.class, "Error al crear Alquiler"), e);
 			throw new DataException("Error al crear Alquiler", e);
 		}
 		return false;
@@ -95,7 +96,7 @@ public class AlquilerDAOImpl implements AlquilerDAO {
 	@Override
 	public boolean update(Connection connection, AlquilerDTO alquiler) throws DataException {
 		if (alquiler == null || alquiler.getId() == null) {
-			logger.warn("update null Alquiler o id nulo.");
+			logger.warn(LogUtils.buildMessage(AlquilerDAOImpl.class, "update null Alquiler o id nulo."));
 			return false;
 		}
 		String sql = "UPDATE alquiler SET fecha_inicio_efectivo = ?, fecha_fin_efectivo = ?, km_inicial = ?, km_final = ?, id_estado_alquiler = ?, coste_total = ? "
@@ -103,11 +104,11 @@ public class AlquilerDAOImpl implements AlquilerDAO {
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			setAlquilerParameters(ps, alquiler, true);
 			if (ps.executeUpdate() > 0) {
-				logger.info("Alquiler actualizado exitosamente. ID: {}", alquiler.getId());
+				logger.info(LogUtils.buildMessage(AlquilerDAOImpl.class, "Alquiler actualizado exitosamente. ID: {}"), alquiler.getId());
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error al actualizar Alquiler", e);
+			logger.error(LogUtils.buildMessage(AlquilerDAOImpl.class, "Error al actualizar Alquiler"), e);
 			throw new DataException("Error al actualizar Alquiler", e);
 		}
 		return false;
@@ -116,18 +117,18 @@ public class AlquilerDAOImpl implements AlquilerDAO {
 	@Override
 	public boolean delete(Connection connection, Integer id) throws DataException {
 		if (id == null) {
-			logger.warn("delete null id de Alquiler.");
+			logger.warn(LogUtils.buildMessage(AlquilerDAOImpl.class, "delete null id de Alquiler."));
 			return false;
 		}
 		String sql = "DELETE FROM alquiler WHERE id_alquiler = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setInt(1, id);
 			if (ps.executeUpdate() > 0) {
-				logger.info("Alquiler eliminado. ID: {}", id);
+				logger.info(LogUtils.buildMessage(AlquilerDAOImpl.class, "Alquiler eliminado. ID: {}"), id);
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error al eliminar Alquiler con ID: {}", id, e);
+			logger.error(LogUtils.buildMessage(AlquilerDAOImpl.class, "Error al eliminar Alquiler con ID: {}"), id, e);
 			throw new DataException("Error al eliminar Alquiler con ID: " + id, e);
 		}
 		return false;
@@ -229,7 +230,7 @@ public class AlquilerDAOImpl implements AlquilerDAO {
 				}
 			}
 		} catch (SQLException e) {
-			logger.error("Error ejecutando búsqueda paginada de alquileres", e);
+			logger.error(LogUtils.buildMessage(AlquilerDAOImpl.class, "Error ejecutando búsqueda paginada de alquileres"), e);
 			throw new DataException("Error ejecutando búsqueda", e);
 		}
 
@@ -322,7 +323,7 @@ public class AlquilerDAOImpl implements AlquilerDAO {
 				}
 			}
 		} catch (SQLException e) {
-			logger.error("Error ejecutando conteo total de alquileres", e);
+			logger.error(LogUtils.buildMessage(AlquilerDAOImpl.class, "Error ejecutando conteo total de alquileres"), e);
 			throw new DataException("Error ejecutando conteo total", e);
 		}
 
@@ -389,7 +390,7 @@ public class AlquilerDAOImpl implements AlquilerDAO {
 				return false;
 			}
 		} catch (SQLException e) {
-			logger.error("Error comprobando existencia de alquiler por reserva", e);
+			logger.error(LogUtils.buildMessage(AlquilerDAOImpl.class, "Error comprobando existencia de alquiler por reserva"), e);
 			throw new DataException(e);
 		}
 	}
