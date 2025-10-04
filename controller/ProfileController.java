@@ -3,34 +3,34 @@ package com.pinguela.rentexpres.desktop.controller;
 import java.util.List;
 
 import com.pinguela.rentexpres.desktop.util.AppContext;
-import com.pinguela.rentexpres.model.UsuarioDTO;
-import com.pinguela.rentexpres.service.UsuarioService;
+import com.pinguela.rentexpres.model.UserDTO;
+import com.pinguela.rentexpres.service.UserService;
 
 /** Controller for user profile operations. */
 public class ProfileController {
-    private final UsuarioService usuarioService;
+    private final UserService userService;
 
-    public ProfileController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
+    public ProfileController(UserService userService) {
+        this.userService = userService;
     }
 
     /** Returns the current user refreshed from persistence. */
-    public UsuarioDTO getCurrentUser() throws Exception {
-        UsuarioDTO current = AppContext.getCurrentUser();
+    public UserDTO getCurrentUser() throws Exception {
+        UserDTO current = AppContext.getCurrentUser();
         if (current == null) return null;
-        UsuarioDTO refreshed = usuarioService.findById(current.getId());
+        UserDTO refreshed = userService.findById(current.getId());
         AppContext.setCurrentUser(refreshed);
         return refreshed;
     }
 
-    public List<String> getUsuarioImages(int userId) throws Exception {
-        return usuarioService.getUsuarioImages(userId);
+    public List<String> getUserImages(int userId) throws Exception {
+        return userService.getUserImages(userId);
     }
 
     /** Updates the user and refreshes the current user context. */
-    public UsuarioDTO updateUsuario(UsuarioDTO updated) throws Exception {
-        usuarioService.update(updated);
-        UsuarioDTO refreshed = usuarioService.findById(updated.getId());
+    public UserDTO updateUser(UserDTO updated) throws Exception {
+        userService.update(updated);
+        UserDTO refreshed = userService.findById(updated.getId());
         AppContext.setCurrentUser(refreshed);
         return refreshed;
     }

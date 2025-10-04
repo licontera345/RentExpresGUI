@@ -25,7 +25,7 @@ public class LoginFormPanel extends JPanel {
                 gbc.insets = new Insets(8, 8, 8, 8);
                 gbc.fill = GridBagConstraints.HORIZONTAL;
 
-                JLabel lblUser = new JLabel("Usuario");
+                JLabel lblUser = new JLabel("User");
                 lblUser.setFont(lblUser.getFont().deriveFont(Font.PLAIN, 14f));
                 gbc.gridx = 0;
                 gbc.gridy = 0;
@@ -33,8 +33,8 @@ public class LoginFormPanel extends JPanel {
                 add(lblUser, gbc);
 
                 txtUsername.setFont(txtUsername.getFont().deriveFont(14f));
-                txtUsername.putClientProperty("JTextField.placeholderText", "Nombre de usuario");
-                txtUsername.putClientProperty("JTextField.leadingIcon", AppIcons.USUARIO);
+                txtUsername.putClientProperty("JTextField.placeholderText", "Name de user");
+                txtUsername.putClientProperty("JTextField.leadingIcon", AppIcons.USER);
                 gbc.gridx = 1;
                 gbc.gridy = 0;
                 gbc.anchor = GridBagConstraints.WEST;

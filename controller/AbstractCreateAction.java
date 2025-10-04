@@ -53,7 +53,7 @@ public abstract class AbstractCreateAction<T, D extends JDialog & ConfirmDialog<
     }
 
     /**
-     * For callers that used the old execute() method on concrete classes.
+     * For streetrs that used the old execute() method on concrete classes.
      */
     public void execute() throws RentexpresException {
         actionPerformed(null);

@@ -7,6 +7,6 @@ public class RoleController {
 
     public static boolean isAdmin() {
         return AppContext.getCurrentUser() != null &&
-               AppContext.getCurrentUser().getIdTipoUsuario() == 1;
+               AppContext.getCurrentUser().getUserIdType() == 1;
     }
 }

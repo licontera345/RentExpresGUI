@@ -14,27 +14,27 @@ import javax.swing.SwingUtilities;
 
 import com.pinguela.rentexpres.desktop.calendar.CalendarEvent;
 import com.pinguela.rentexpres.desktop.calendar.WeekCalendar;
-import com.pinguela.rentexpres.desktop.dialog.AlquilerDetailDialog;
-import com.pinguela.rentexpres.desktop.dialog.ReservaDetailDialog;
-import com.pinguela.rentexpres.model.AlquilerDTO;
-import com.pinguela.rentexpres.model.ReservaDTO;
-import com.pinguela.rentexpres.service.AlquilerService;
-import com.pinguela.rentexpres.service.ReservaService;
-import com.pinguela.rentexpres.service.impl.AlquilerServiceImpl;
-import com.pinguela.rentexpres.service.impl.ReservaServiceImpl;
+import com.pinguela.rentexpres.desktop.dialog.RentalDetailDialog;
+import com.pinguela.rentexpres.desktop.dialog.ReservationDetailDialog;
+import com.pinguela.rentexpres.model.RentalDTO;
+import com.pinguela.rentexpres.model.ReservationDTO;
+import com.pinguela.rentexpres.service.RentalService;
+import com.pinguela.rentexpres.service.ReservationService;
+import com.pinguela.rentexpres.service.impl.RentalServiceImpl;
+import com.pinguela.rentexpres.service.impl.ReservationServiceImpl;
 
 /**
- * Weekly calendar view showing reservas and alquileres using the SwingCalendar
+ * Weekly calendar view showing reservations and rentals using the SwingCalendar
  * component provided by the professor.
  */
 public class CalendarView extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private final WeekCalendar calendar;
-    private final ReservaService reservaService = new ReservaServiceImpl();
-    private final AlquilerService alquilerService = new AlquilerServiceImpl();
-    private final Map<CalendarEvent, ReservaDTO> reservaMap = new HashMap<>();
-    private final Map<CalendarEvent, AlquilerDTO> alquilerMap = new HashMap<>();
+    private final ReservationService reservationService = new ReservationServiceImpl();
+    private final RentalService rentalService = new RentalServiceImpl();
+    private final Map<CalendarEvent, ReservationDTO> reservationMap = new HashMap<>();
+    private final Map<CalendarEvent, RentalDTO> rentalMap = new HashMap<>();
 
     public CalendarView() {
         setLayout(new BorderLayout());
@@ -43,14 +43,14 @@ public class CalendarView extends JPanel {
 
         calendar.addCalendarEventClickListener(e -> {
             CalendarEvent evt = e.getCalendarEvent();
-            if (reservaMap.containsKey(evt)) {
-                new ReservaDetailDialog(
+            if (reservationMap.containsKey(evt)) {
+                new ReservationDetailDialog(
                         (java.awt.Frame) SwingUtilities.getWindowAncestor(CalendarView.this),
-                        reservaMap.get(evt)).setVisible(true);
-            } else if (alquilerMap.containsKey(evt)) {
-                new AlquilerDetailDialog(
+                        reservationMap.get(evt)).setVisible(true);
+            } else if (rentalMap.containsKey(evt)) {
+                new RentalDetailDialog(
                         (java.awt.Frame) SwingUtilities.getWindowAncestor(CalendarView.this),
-                        alquilerMap.get(evt)).setVisible(true);
+                        rentalMap.get(evt)).setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(
                         CalendarView.this,
@@ -64,31 +64,31 @@ public class CalendarView extends JPanel {
     private ArrayList<CalendarEvent> loadEvents() {
         ArrayList<CalendarEvent> events = new ArrayList<>();
         try {
-            List<ReservaDTO> reservas = reservaService.findAll();
-            for (ReservaDTO r : reservas) {
-                LocalDate start = LocalDate.parse(r.getFechaInicio());
-                LocalDate end = LocalDate.parse(r.getFechaFin());
+            List<ReservationDTO> reservations = reservationService.findAll();
+            for (ReservationDTO r : reservations) {
+                LocalDate start = LocalDate.parse(r.getStartDate());
+                LocalDate end = LocalDate.parse(r.getEndDate());
                 for (LocalDate d = start; !d.isAfter(end); d = d.plusDays(1)) {
                     CalendarEvent evt = new CalendarEvent(d,
                             LocalTime.of(9, 0),
                             LocalTime.of(10, 0),
-                            "Reserva " + r.getId());
+                            "Reservation " + r.getId());
                     events.add(evt);
-                    reservaMap.put(evt, r);
+                    reservationMap.put(evt, r);
                 }
             }
-            List<AlquilerDTO> alquileres = alquilerService.findAll();
-            for (AlquilerDTO a : alquileres) {
-                LocalDate start = LocalDate.parse(a.getFechaInicioEfectivo());
-                LocalDate end = LocalDate.parse(a.getFechaFinEfectivo());
+            List<RentalDTO> rentals = rentalService.findAll();
+            for (RentalDTO a : rentals) {
+                LocalDate start = LocalDate.parse(a.getActualStartDate());
+                LocalDate end = LocalDate.parse(a.getActualEndDate());
                 for (LocalDate d = start; !d.isAfter(end); d = d.plusDays(1)) {
                     CalendarEvent evt = new CalendarEvent(d,
                             LocalTime.of(10, 0),
                             LocalTime.of(11, 0),
-                            "Alquiler " + a.getId(),
+                            "Rental " + a.getId(),
                             java.awt.Color.CYAN);
                     events.add(evt);
-                    alquilerMap.put(evt, a);
+                    rentalMap.put(evt, a);
                 }
             }
         } catch (Exception ex) {

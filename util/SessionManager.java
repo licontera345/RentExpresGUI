@@ -1,22 +1,22 @@
 package com.pinguela.rentexpres.desktop.util;
 
-import com.pinguela.rentexpres.model.UsuarioDTO;
+import com.pinguela.rentexpres.model.UserDTO;
 
 /**
- * Maneja la sesión del usuario autenticado.
- * Implementación Singleton: un único usuario activo en toda la aplicación.
+ * Maneja la sesión del user autenticado.
+ * Implementación Singleton: un único user activo en toda la aplicación.
  */
 public final class SessionManager {
 
-    private static UsuarioDTO currentUser;
+    private static UserDTO currentUser;
 
     private SessionManager() { /* no instancias */ }
 
-    public static void setCurrentUser(UsuarioDTO user) {
+    public static void setCurrentUser(UserDTO user) {
         currentUser = user;
     }
 
-    public static UsuarioDTO getCurrentUser() {
+    public static UserDTO getCurrentUser() {
         return currentUser;
     }
 

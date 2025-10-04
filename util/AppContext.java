@@ -1,17 +1,17 @@
 package com.pinguela.rentexpres.desktop.util;
 
-import com.pinguela.rentexpres.model.UsuarioDTO;
+import com.pinguela.rentexpres.model.UserDTO;
 
 
 public class AppContext {
-        private static UsuarioDTO currentUser;
+        private static UserDTO currentUser;
        private static String rememberedUser;
 
-        public static UsuarioDTO getCurrentUser() {
+        public static UserDTO getCurrentUser() {
                 return currentUser;
         }
 
-	public static void setCurrentUser(UsuarioDTO user) {
+	public static void setCurrentUser(UserDTO user) {
 		currentUser = user;
 	}
 

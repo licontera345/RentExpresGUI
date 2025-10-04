@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Modelo base para todas las tablas de búsqueda. Añade: • Columna “Seleccionar”
+ * Model base para todas las tablas de búsqueda. Añade: • Columna “Seleccionar”
  * (check-box) • Columna “Acciones” (renderizada con botones)
  */
 public abstract class AbstractSearchTableModel<T> extends AbstractTableModel {

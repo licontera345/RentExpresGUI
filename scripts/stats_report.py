@@ -35,32 +35,42 @@ def main():
     db_config = load_config()
     conn = mysql.connector.connect(**db_config)
 
-    alquiler_query = (
-        "SELECT YEAR(fecha_inicio_efectivo) AS anio, MONTH(fecha_inicio_efectivo) AS mes, "
-        "COUNT(*) AS total, SUM(coste_total) AS ingresos FROM alquiler "
-        "GROUP BY anio, mes ORDER BY anio, mes"
+    rental_query = (
+        "SELECT YEAR(actual_start_date) AS year, MONTH(actual_start_date) AS month, "
+        "COUNT(*) AS total, SUM(total_cost) AS revenue FROM rental "
+        "GROUP BY year, month ORDER BY year, month"
     )
-    reserva_query = (
-        "SELECT YEAR(fecha_inicio) AS anio, MONTH(fecha_inicio) AS mes, COUNT(*) AS total "
-        "FROM reserva GROUP BY anio, mes ORDER BY anio, mes"
+    reservation_query = (
+        "SELECT YEAR(start_date) AS year, MONTH(start_date) AS month, COUNT(*) AS total "
+        "FROM reservation GROUP BY year, month ORDER BY year, month"
     )
 
-    alquiler_stats = fetch_stats(conn, alquiler_query)
-    reserva_stats = fetch_stats(conn, reserva_query)
+    rental_stats = fetch_stats(conn, rental_query)
+    reservation_stats = fetch_stats(conn, reservation_query)
     conn.close()
 
-    df_alquiler = pd.DataFrame(alquiler_stats, columns=["A\u00f1o", "Mes", "Alquileres", "Ingresos"])
-    df_reserva = pd.DataFrame(reserva_stats, columns=["A\u00f1o", "Mes", "Reservas"])
+    df_rental = pd.DataFrame(rental_stats, columns=["Year", "Month", "Rentals", "Revenue"])
+    df_reservation = pd.DataFrame(reservation_stats, columns=["Year", "Month", "Reservations"])
 
-    print("Alquileres por mes:\n", df_alquiler)
-    print("\nReservas por mes:\n", df_reserva)
+    print("Rentals per month:\n", df_rental)
+    print("\nReservations per month:\n", df_reservation)
 
-    fig, ax1 = plt.subplots(figsize=(10,4))
-    ax1.plot(pd.to_datetime(df_alquiler[["A\u00f1o","Mes"]].assign(day=1)), df_alquiler["Alquileres"], marker='o', label='Alquileres')
-    ax1.plot(pd.to_datetime(df_reserva[["A\u00f1o","Mes"]].assign(day=1)), df_reserva["Reservas"], marker='o', label='Reservas')
-    ax1.set_xlabel('Mes')
-    ax1.set_ylabel('Cantidad')
-    ax1.set_title('Evoluci\u00f3n mensual')
+    fig, ax1 = plt.subplots(figsize=(10, 4))
+    ax1.plot(
+        pd.to_datetime(df_rental[["Year", "Month"]].assign(day=1)),
+        df_rental["Rentals"],
+        marker="o",
+        label="Rentals",
+    )
+    ax1.plot(
+        pd.to_datetime(df_reservation[["Year", "Month"]].assign(day=1)),
+        df_reservation["Reservations"],
+        marker="o",
+        label="Reservations",
+    )
+    ax1.set_xlabel("Month")
+    ax1.set_ylabel("Count")
+    ax1.set_title("Monthly evolution")
     ax1.legend()
     plt.tight_layout()
     plt.show()

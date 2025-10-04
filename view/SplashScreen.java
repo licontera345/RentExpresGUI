@@ -24,8 +24,8 @@ public class SplashScreen extends JDialog {
 		container.setBorder(new EmptyBorder(20, 20, 20, 20));
 		getContentPane().add(container);
 
-		if (AppIcons.INICIO != null) {
-			ImageIcon iconoInicio = AppIcons.INICIO;
+		if (AppIcons.HOME != null) {
+			ImageIcon iconoInicio = AppIcons.HOME;
 			Image img = iconoInicio.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
 			JLabel lblIcon = new JLabel(new ImageIcon(img));
 			lblIcon.setHorizontalAlignment(SwingConstants.CENTER);

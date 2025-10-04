@@ -29,6 +29,6 @@ After building, compile and run the GUI as usual with your IDE or `javac`.
 
 The main window now includes a weekly calendar powered by the
 SwingCalendar component provided in the project. Open it using the
-"Calendario" button in the side navigation to see all `Reserva` and
-`Alquiler` entries plotted on their corresponding days. Clicking an event
+"Calendar" button in the side navigation to see all `Reservation` and
+`Rental` entries plotted on their corresponding days. Clicking an event
 shows a small dialog with its details.

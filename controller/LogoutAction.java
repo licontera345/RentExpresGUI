@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 
 import com.pinguela.rentexpres.desktop.dialog.LoginDialog;
 import com.pinguela.rentexpres.desktop.util.AppContext;
-import com.pinguela.rentexpres.model.UsuarioDTO;
+import com.pinguela.rentexpres.model.UserDTO;
 
 public class LogoutAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
@@ -21,12 +21,12 @@ public class LogoutAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int resp = JOptionPane.showConfirmDialog(owner, "¿Desea cerrar sesión?", "Confirmar Logout",
+		int resp = JOptionPane.showConfirmDialog(owner, "Do you want to log out?", "Confirm logout",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (resp == JOptionPane.YES_OPTION) {
 			AppContext.clearCurrentUser();
 			LoginDialog dlg = new LoginDialog(owner);
-			UsuarioDTO user = dlg.showDialog();
+			UserDTO user = dlg.showDialog();
 			if (user != null) {
 				AppContext.setCurrentUser(user);
 			} else {

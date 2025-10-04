@@ -22,15 +22,15 @@ public class FileService {
         if (i > 0 && i < fileName.length() - 1) {
             extension = fileName.substring(i);
         }
-        String nuevoNombre = UUID.randomUUID().toString() + extension;
-        Path destino = carpetaBase.resolve(nuevoNombre);
+        String nuevoName = UUID.randomUUID().toString() + extension;
+        Path destino = carpetaBase.resolve(nuevoName);
         Files.copy(origen.toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
-        return nuevoNombre;
+        return nuevoName;
     }
 
-    public void delete(String nombreArchivo) throws IOException {
-        if (nombreArchivo == null) return;
-        Path ruta = carpetaBase.resolve(nombreArchivo);
+    public void delete(String nameArchivo) throws IOException {
+        if (nameArchivo == null) return;
+        Path ruta = carpetaBase.resolve(nameArchivo);
         if (Files.exists(ruta)) {
             Files.delete(ruta);
         }

@@ -6,7 +6,7 @@ import javax.swing.AbstractAction;
 
 import com.pinguela.rentexpres.desktop.dialog.LoginDialog;
 import com.pinguela.rentexpres.desktop.util.AppContext;
-import com.pinguela.rentexpres.model.UsuarioDTO;
+import com.pinguela.rentexpres.model.UserDTO;
 
 public class LoginAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
@@ -21,7 +21,7 @@ public class LoginAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		LoginDialog dlg = new LoginDialog(owner);
-		UsuarioDTO user = dlg.showDialog();
+		UserDTO user = dlg.showDialog();
 		if (user != null) {
 			AppContext.setCurrentUser(user);
 			
