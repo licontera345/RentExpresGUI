@@ -4,10 +4,10 @@ import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
-import com.pinguela.rentexpres.model.LocalidadDTO;
-import com.pinguela.rentexpres.model.ProvinciaDTO;
+import com.pinguela.rentexpres.model.CityDTO;
+import com.pinguela.rentexpres.model.ProvinceDTO;
 
-/** Muestra sólo el nombre (ProvinciaDTO / LocalidadDTO) en un JComboBox */
+/** Muestra sólo el name (ProvinceDTO / CityDTO) en un JComboBox */
 public class ProvLocRenderer<E> extends DefaultListCellRenderer {
 
 	private static final long serialVersionUID = 1L;
@@ -18,10 +18,10 @@ public class ProvLocRenderer<E> extends DefaultListCellRenderer {
 
 		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-		if (value instanceof ProvinciaDTO p)
-			setText(p.getNombre());
-		if (value instanceof LocalidadDTO l)
-			setText(l.getNombre());
+		if (value instanceof ProvinceDTO p)
+			setText(p.getName());
+		if (value instanceof CityDTO l)
+			setText(l.getName());
 
 		return this;
 	}

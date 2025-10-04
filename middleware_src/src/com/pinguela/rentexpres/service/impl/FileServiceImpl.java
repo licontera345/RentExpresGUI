@@ -23,38 +23,38 @@ public class FileServiceImpl implements FileService {
 	private static final String BASE_IMAGE_PATH = ConfigManager.getStringValue("base.image.path");
 
 	@Override
-	public String uploadImage(File imagen, Integer idVehiculo) throws IOException {
+	public String uploadImage(File imagen, Integer vehicleId) throws IOException {
 		if (imagen == null || !imagen.exists()) {
 			logger.warn(LogUtils.buildMessage(FileServiceImpl.class, "El archivo de imagen es nulo o no existe"));
 			return null;
 		}
 
-		String carpetaImagenes = BASE_IMAGE_PATH + File.separator + "vehiculos" + File.separator + idVehiculo;
+		String carpetaImagenes = BASE_IMAGE_PATH + File.separator + "vehicles" + File.separator + vehicleId;
 		Path directorioDestino = Paths.get(carpetaImagenes);
 
 		if (!Files.exists(directorioDestino)) {
 			Files.createDirectories(directorioDestino);
 		}
 
-		String nombreArchivo = imagen.getName();
-		if (!validarNombreArchivo(nombreArchivo)) {
-			logger.warn(LogUtils.buildMessage(FileServiceImpl.class, "El archivo no cumple con el formato requerido: {}"), nombreArchivo);
+		String nameArchivo = imagen.getName();
+		if (!validarNameArchivo(nameArchivo)) {
+			logger.warn(LogUtils.buildMessage(FileServiceImpl.class, "El archivo no cumple con el formato requerido: {}"), nameArchivo);
 			return null;
 		}
 
-		String nombreUnico = generarNombreUnico(nombreArchivo);
-		Path destino = directorioDestino.resolve(nombreUnico);
+		String nameUnico = generarNameUnico(nameArchivo);
+		Path destino = directorioDestino.resolve(nameUnico);
 		Files.copy(imagen.toPath(), destino);
 
-		String relativePath = "vehiculos" + File.separator + idVehiculo + File.separator + nombreUnico;
+		String relativePath = "vehicles" + File.separator + vehicleId + File.separator + nameUnico;
 		logger.info(LogUtils.buildMessage(FileServiceImpl.class, "Imagen guardada en: {}"), destino.toString());
 
 		return relativePath;
 	}
 
     @Override
-    public List<String> getImagePaths(Integer idVehiculo) {
-		String carpetaImagenes = BASE_IMAGE_PATH + File.separator + "vehiculos" + File.separator + idVehiculo;
+    public List<String> getImagePaths(Integer vehicleId) {
+		String carpetaImagenes = BASE_IMAGE_PATH + File.separator + "vehicles" + File.separator + vehicleId;
 		File directorioImagenes = new File(carpetaImagenes);
 		List<String> imagePaths = new ArrayList<>();
 
@@ -63,9 +63,9 @@ public class FileServiceImpl implements FileService {
 			if (archivos != null) {
 				for (File archivo : archivos) {
 					if (archivo.isFile()) {
-						String nombre = archivo.getName().toLowerCase();
-						if (nombre.endsWith(".jpg") || nombre.endsWith(".png") || nombre.endsWith(".jpeg")) {
-							String relativePath = "vehiculos" + File.separator + idVehiculo + File.separator
+						String name = archivo.getName().toLowerCase();
+						if (name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".jpeg")) {
+							String relativePath = "vehicles" + File.separator + vehicleId + File.separator
 									+ archivo.getName();
 							imagePaths.add(relativePath);
 						}
@@ -73,15 +73,15 @@ public class FileServiceImpl implements FileService {
 				}
 			}
 		} else {
-			logger.info(LogUtils.buildMessage(FileServiceImpl.class, "No se encontraron imágenes para el vehículo ID: {}"), idVehiculo);
+			logger.info(LogUtils.buildMessage(FileServiceImpl.class, "No se encontraron imágenes para el vehicle ID: {}"), vehicleId);
 		}
 
                 return imagePaths;
         }
 
         @Override
-        public List<String> getUsuarioImagePaths(Integer idUsuario) {
-                String carpetaImagenes = BASE_IMAGE_PATH + File.separator + "usuarios" + File.separator + idUsuario;
+        public List<String> getUserImagePaths(Integer userId) {
+                String carpetaImagenes = BASE_IMAGE_PATH + File.separator + "users" + File.separator + userId;
                 File directorioImagenes = new File(carpetaImagenes);
                 List<String> imagePaths = new ArrayList<>();
 
@@ -90,16 +90,16 @@ public class FileServiceImpl implements FileService {
                         if (archivos != null) {
                                 for (File archivo : archivos) {
                                         if (archivo.isFile()) {
-                                                String nombre = archivo.getName().toLowerCase();
-                                                if (nombre.endsWith(".jpg") || nombre.endsWith(".png") || nombre.endsWith(".jpeg")) {
-                                                        String relativePath = "usuarios" + File.separator + idUsuario + File.separator + archivo.getName();
+                                                String name = archivo.getName().toLowerCase();
+                                                if (name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".jpeg")) {
+                                                        String relativePath = "users" + File.separator + userId + File.separator + archivo.getName();
                                                         imagePaths.add(relativePath);
                                                 }
                                         }
                                 }
                         }
                 } else {
-                        logger.info(LogUtils.buildMessage(FileServiceImpl.class, "No se encontraron imágenes para el usuario ID: {}"), idUsuario);
+                        logger.info(LogUtils.buildMessage(FileServiceImpl.class, "No se encontraron imágenes para el user ID: {}"), userId);
                 }
 
                 return imagePaths;
@@ -119,29 +119,29 @@ public class FileServiceImpl implements FileService {
 		return imageFile.delete();
 	}
 
-	private boolean validarNombreArchivo(String nombreArchivo) {
+	private boolean validarNameArchivo(String nameArchivo) {
 		String regex = "^[a-zA-Z][a-zA-Z0-9_-]*\\.(jpg|png|jpeg)$";
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-		Matcher matcher = pattern.matcher(nombreArchivo);
+		Matcher matcher = pattern.matcher(nameArchivo);
 		return matcher.matches();
 	}
 
-	private String generarNombreUnico(String nombreArchivo) {
+	private String generarNameUnico(String nameArchivo) {
 		String timestamp = String.valueOf(System.currentTimeMillis());
-		int dotIndex = nombreArchivo.lastIndexOf('.');
+		int dotIndex = nameArchivo.lastIndexOf('.');
 		if (dotIndex > 0) {
-			return nombreArchivo.substring(0, dotIndex) + "_" + timestamp + nombreArchivo.substring(dotIndex);
+			return nameArchivo.substring(0, dotIndex) + "_" + timestamp + nameArchivo.substring(dotIndex);
 		}
-		return nombreArchivo + "_" + timestamp;
+		return nameArchivo + "_" + timestamp;
 	}
 
     @Override
-    public void uploadUsuarioImages(List<File> imagenes, Integer idUsuario) {
+    public void uploadUserImages(List<File> imagenes, Integer userId) {
         if (imagenes == null || imagenes.isEmpty()) {
             return;
         }
 
-        String carpetaImagenes = BASE_IMAGE_PATH + File.separator + "usuarios" + File.separator + idUsuario;
+        String carpetaImagenes = BASE_IMAGE_PATH + File.separator + "users" + File.separator + userId;
         Path directorioDestino = Paths.get(carpetaImagenes);
         try {
             if (!Files.exists(directorioDestino)) {
@@ -154,20 +154,20 @@ public class FileServiceImpl implements FileService {
                     continue;
                 }
 
-                String nombreArchivo = imagen.getName();
-                if (!validarNombreArchivo(nombreArchivo)) {
-                    logger.warn(LogUtils.buildMessage(FileServiceImpl.class, "Nombre de archivo inválido: {}"), nombreArchivo);
+                String nameArchivo = imagen.getName();
+                if (!validarNameArchivo(nameArchivo)) {
+                    logger.warn(LogUtils.buildMessage(FileServiceImpl.class, "Name de archivo inválido: {}"), nameArchivo);
                     continue;
                 }
 
-                String nombreUnico = generarNombreUnico(nombreArchivo);
-                Path destino = directorioDestino.resolve(nombreUnico);
+                String nameUnico = generarNameUnico(nameArchivo);
+                Path destino = directorioDestino.resolve(nameUnico);
                 Files.copy(imagen.toPath(), destino);
-                logger.info(LogUtils.buildMessage(FileServiceImpl.class, "Imagen de usuario guardada en {}"), destino.toString());
+                logger.info(LogUtils.buildMessage(FileServiceImpl.class, "Imagen de user guardada en {}"), destino.toString());
             }
 
         } catch (IOException e) {
-            logger.error(LogUtils.buildMessage(FileServiceImpl.class, "Error subiendo imágenes para el usuario {}"), idUsuario, e);
+            logger.error(LogUtils.buildMessage(FileServiceImpl.class, "Error subiendo imágenes para el user {}"), userId, e);
         }
 
     }

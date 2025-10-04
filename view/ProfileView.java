@@ -24,38 +24,38 @@ import com.pinguela.rentexpres.desktop.util.AppContext;
 import com.pinguela.rentexpres.desktop.util.AppIcons;
 import com.pinguela.rentexpres.desktop.util.SwingUtils;
 import com.pinguela.rentexpres.desktop.util.AppConfig;
-import com.pinguela.rentexpres.desktop.dialog.UsuarioEditDialog;
+import com.pinguela.rentexpres.desktop.dialog.UserEditDialog;
 import com.pinguela.rentexpres.desktop.controller.ProfileController;
-import com.pinguela.rentexpres.service.impl.UsuarioServiceImpl;
+import com.pinguela.rentexpres.service.impl.UserServiceImpl;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import com.pinguela.rentexpres.model.UsuarioDTO;
+import com.pinguela.rentexpres.model.UserDTO;
 
 import net.miginfocom.swing.MigLayout;
 
 /**
- * Diálogo de Perfil de Usuario, con diseño estilizado. El botón "Cerrar Sesión"
+ * Diálogo de Perfil de User, con diseño estilizado. El botón "Cerrar Sesión"
  * aquí solo cierra el diálogo; el logout real se hace desde la barra principal.
  */
 public class ProfileView extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private final JLabel lblAvatar = new JLabel();
-	private final JLabel lblNombre = new JLabel();
+	private final JLabel lblName = new JLabel();
         private final JLabel lblEmail = new JLabel();
-        private final JLabel lblUsuario = new JLabel();
-        private final JLabel lblTelefono = new JLabel();
+        private final JLabel lblUser = new JLabel();
+        private final JLabel lblPhone = new JLabel();
         private final JLabel lblTipo = new JLabel();
         private final JButton btnEdit = new JButton("Editar", AppIcons.EDIT);
         private final JButton btnClose = new JButton("Cerrar", AppIcons.CLEAR);
 
         private final Frame parent;
-        private final ProfileController controller = new ProfileController(new UsuarioServiceImpl());
+        private final ProfileController controller = new ProfileController(new UserServiceImpl());
 
         public ProfileView(Frame parent) {
-                super(parent, "Perfil de Usuario", true);
+                super(parent, "Perfil de User", true);
                 this.parent = parent;
                 initComponents();
 		loadUserData();
@@ -74,28 +74,28 @@ public class ProfileView extends JDialog {
 		// Panel superior: avatar y título
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		topPanel.setBackground(Color.WHITE);
-		if (AppIcons.USUARIO != null) {
-			ImageIcon avatarIcon = AppIcons.USUARIO;
+		if (AppIcons.USER != null) {
+			ImageIcon avatarIcon = AppIcons.USER;
 			lblAvatar.setIcon(new ImageIcon(avatarIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH)));
 		}
 		topPanel.add(lblAvatar);
-		JLabel lblTitle = new JLabel("Perfil de Usuario");
+		JLabel lblTitle = new JLabel("Perfil de User");
 		lblTitle.setFont(lblTitle.getFont().deriveFont(Font.BOLD, 20f));
 		lblTitle.setForeground(new Color(45, 45, 45));
 		topPanel.add(lblTitle);
 		container.add(topPanel, BorderLayout.NORTH);
 
-		// Panel central: información de usuario en líneas
+		// Panel central: información de user en líneas
                 JPanel infoPanel = new JPanel();
                 infoPanel.setBackground(Color.WHITE);
                 infoPanel.setLayout(new MigLayout("wrap 2", "[right]10[grow,fill]", "[]10[]10[]10[]10[]10[]"));
                 infoPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-                lblNombre.setFont(lblNombre.getFont().deriveFont(Font.PLAIN, 16f));
-                lblNombre.setForeground(new Color(30, 30, 30));
-                lblNombre.setBorder(new EmptyBorder(0, 0, 0, 0));
-                infoPanel.add(new JLabel("Nombre:"));
-                infoPanel.add(lblNombre);
+                lblName.setFont(lblName.getFont().deriveFont(Font.PLAIN, 16f));
+                lblName.setForeground(new Color(30, 30, 30));
+                lblName.setBorder(new EmptyBorder(0, 0, 0, 0));
+                infoPanel.add(new JLabel("Name:"));
+                infoPanel.add(lblName);
 
                 lblEmail.setFont(lblEmail.getFont().deriveFont(Font.PLAIN, 16f));
                 lblEmail.setForeground(new Color(30, 30, 30));
@@ -103,17 +103,17 @@ public class ProfileView extends JDialog {
                 infoPanel.add(new JLabel("Email:"));
                 infoPanel.add(lblEmail);
 
-                lblUsuario.setFont(lblUsuario.getFont().deriveFont(Font.PLAIN, 16f));
-                lblUsuario.setForeground(new Color(30, 30, 30));
-                lblUsuario.setBorder(new EmptyBorder(0, 0, 0, 0));
-                infoPanel.add(new JLabel("Usuario:"));
-                infoPanel.add(lblUsuario);
+                lblUser.setFont(lblUser.getFont().deriveFont(Font.PLAIN, 16f));
+                lblUser.setForeground(new Color(30, 30, 30));
+                lblUser.setBorder(new EmptyBorder(0, 0, 0, 0));
+                infoPanel.add(new JLabel("User:"));
+                infoPanel.add(lblUser);
 
-                lblTelefono.setFont(lblTelefono.getFont().deriveFont(Font.PLAIN, 16f));
-                lblTelefono.setForeground(new Color(30, 30, 30));
-                lblTelefono.setBorder(new EmptyBorder(0, 0, 0, 0));
+                lblPhone.setFont(lblPhone.getFont().deriveFont(Font.PLAIN, 16f));
+                lblPhone.setForeground(new Color(30, 30, 30));
+                lblPhone.setBorder(new EmptyBorder(0, 0, 0, 0));
                 infoPanel.add(new JLabel("Teléfono:"));
-                infoPanel.add(lblTelefono);
+                infoPanel.add(lblPhone);
 
                 lblTipo.setFont(lblTipo.getFont().deriveFont(Font.PLAIN, 16f));
                 lblTipo.setForeground(new Color(30, 30, 30));
@@ -170,15 +170,15 @@ public class ProfileView extends JDialog {
 
         private void loadUserData() {
                 try {
-                        UsuarioDTO u = controller.getCurrentUser();
+                        UserDTO u = controller.getCurrentUser();
                         if (u != null) {
-                                lblNombre.setText(u.getNombre() + " " + u.getApellido1() + " " + u.getApellido2());
+                                lblName.setText(u.getName() + " " + u.getLastName() + " " + u.getSecondLastName());
                                 lblEmail.setText(u.getEmail());
-                                lblUsuario.setText(u.getNombreUsuario());
-                                lblTelefono.setText(u.getTelefono());
-                                lblTipo.setText(String.valueOf(u.getIdTipoUsuario()));
+                                lblUser.setText(u.getUsername());
+                                lblPhone.setText(u.getPhone());
+                                lblTipo.setText(String.valueOf(u.getUserIdType()));
 
-                                List<String> imgs = controller.getUsuarioImages(u.getId());
+                                List<String> imgs = controller.getUserImages(u.getId());
                                 if (imgs != null && !imgs.isEmpty()) {
                                         Path imgFile = AppConfig.getImageDir().resolve(imgs.get(0));
                                         if (Files.exists(imgFile)) {
@@ -187,14 +187,14 @@ public class ProfileView extends JDialog {
                                         }
                                 }
                         } else {
-                                lblNombre.setText("-");
+                                lblName.setText("-");
                                 lblEmail.setText("-");
-                                lblUsuario.setText("-");
-                                lblTelefono.setText("-");
+                                lblUser.setText("-");
+                                lblPhone.setText("-");
                                 lblTipo.setText("-");
                         }
                 } catch (Exception ex) {
-                        SwingUtils.showError(this, "Error cargando usuario: " + ex.getMessage());
+                        SwingUtils.showError(this, "Error cargando user: " + ex.getMessage());
                 }
         }
 
@@ -203,19 +203,19 @@ public class ProfileView extends JDialog {
         }
 
         private void onEdit() {
-                UsuarioDTO current = AppContext.getCurrentUser();
+                UserDTO current = AppContext.getCurrentUser();
                 if (current == null) {
                         return;
                 }
-                UsuarioEditDialog dlg = new UsuarioEditDialog(parent, current.getId());
+                UserEditDialog dlg = new UserEditDialog(parent, current.getId());
                 dlg.setVisible(true);
                 if (dlg.isConfirmed()) {
                         try {
-                                UsuarioDTO updated = dlg.getUsuario();
-                                controller.updateUsuario(updated);
+                                UserDTO updated = dlg.getUser();
+                                controller.updateUser(updated);
                                 loadUserData();
                         } catch (Exception ex) {
-                                SwingUtils.showError(this, "No se pudo actualizar el usuario.");
+                                SwingUtils.showError(this, "No se pudo actualizar el user.");
                         }
                 }
         }

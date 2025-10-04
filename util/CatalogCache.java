@@ -8,64 +8,64 @@ import com.pinguela.rentexpres.service.*;
 
 public final class CatalogCache {
 
-	private static List<EstadoReservaDTO> estadosReserva;
-	private static List<EstadoAlquilerDTO> estadosAlquiler;
-	private static List<EstadoVehiculoDTO> estadosVehiculo;
-	private static List<CategoriaVehiculoDTO> categoriasVehiculo;
-	private static List<VehiculoDTO> vehiculos;
-	private static List<ProvinciaDTO> provincias;
-	private static List<LocalidadDTO> localidades;
+	private static List<ReservationStatusDTO> estadosReservation;
+	private static List<RentalStatusDTO> estadosRental;
+	private static List<VehicleStatusDTO> estadosVehicle;
+	private static List<VehicleCategoryDTO> categorysVehicle;
+	private static List<VehicleDTO> vehicles;
+	private static List<ProvinceDTO> provinces;
+	private static List<CityDTO> cities;
 
 	private CatalogCache() {
 	}
 
-	public static List<EstadoReservaDTO> getEstadosReserva(EstadoReservaService s) throws RentexpresException {
-		if (estadosReserva == null) {
-			estadosReserva = s.findAll();
+	public static List<ReservationStatusDTO> getEstadosReservation(ReservationStatusService s) throws RentexpresException {
+		if (estadosReservation == null) {
+			estadosReservation = s.findAll();
 		}
-		return estadosReserva;
+		return estadosReservation;
 	}
 
-	public static List<EstadoAlquilerDTO> getEstadosAlquiler(EstadoAlquilerService s) throws RentexpresException {
-		if (estadosAlquiler == null) {
-			estadosAlquiler = s.findAll();
+	public static List<RentalStatusDTO> getEstadosRental(RentalStatusService s) throws RentexpresException {
+		if (estadosRental == null) {
+			estadosRental = s.findAll();
 		}
-		return estadosAlquiler;
+		return estadosRental;
 	}
 
-	public static List<EstadoVehiculoDTO> getEstadosVehiculo(EstadoVehiculoService s) throws RentexpresException {
-		if (estadosVehiculo == null) {
-			estadosVehiculo = s.findAll();
+	public static List<VehicleStatusDTO> getEstadosVehicle(VehicleStatusService s) throws RentexpresException {
+		if (estadosVehicle == null) {
+			estadosVehicle = s.findAll();
 		}
-		return estadosVehiculo;
+		return estadosVehicle;
 	}
 
-	public static List<CategoriaVehiculoDTO> getCategoriasVehiculo(CategoriaVehiculoService s)
+	public static List<VehicleCategoryDTO> getCategorysVehicle(VehicleCategoryService s)
 			throws RentexpresException {
-		if (categoriasVehiculo == null) {
-			categoriasVehiculo = s.findAll();
+		if (categorysVehicle == null) {
+			categorysVehicle = s.findAll();
 		}
-		return categoriasVehiculo;
+		return categorysVehicle;
 	}
 
-	public static List<VehiculoDTO> getVehiculos(VehiculoService s) throws RentexpresException {
-		if (vehiculos == null) {
-			vehiculos = s.findAll();
+	public static List<VehicleDTO> getVehicles(VehicleService s) throws RentexpresException {
+		if (vehicles == null) {
+			vehicles = s.findAll();
 		}
-		return vehiculos;
+		return vehicles;
 	}
 
-	public static List<ProvinciaDTO> getProvincias(ProvinciaService s) throws RentexpresException {
-		if (provincias == null) {
-			provincias = s.findAll();
+	public static List<ProvinceDTO> getProvinces(ProvinceService s) throws RentexpresException {
+		if (provinces == null) {
+			provinces = s.findAll();
 		}
-		return provincias;
+		return provinces;
 	}
 
-	public static List<LocalidadDTO> getLocalidades(LocalidadService s) throws RentexpresException {
-		if (localidades == null) {
-			localidades = s.findAll();
+	public static List<CityDTO> getCities(CityService s) throws RentexpresException {
+		if (cities == null) {
+			cities = s.findAll();
 		}
-		return localidades;
+		return cities;
 	}
 }

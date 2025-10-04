@@ -28,7 +28,7 @@ import com.pinguela.rentexpres.desktop.util.GradientPanel;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.desktop.view.LoginFormPanel;
 import com.pinguela.rentexpres.desktop.util.AppContext;
-import com.pinguela.rentexpres.model.UsuarioDTO;
+import com.pinguela.rentexpres.model.UserDTO;
 import net.miginfocom.swing.MigLayout;
 
 public class LoginDialog extends JDialog {
@@ -38,7 +38,7 @@ public class LoginDialog extends JDialog {
 	private final JButton btnIngresar = new JButton("Ingresar");
 	private final JButton btnCancelar = new JButton("Cancelar");
 
-        private UsuarioDTO authenticatedUser = null;
+        private UserDTO authenticatedUser = null;
         private boolean rememberUser = false;
         private final AuthController authController = new AuthController();
 
@@ -62,8 +62,8 @@ public class LoginDialog extends JDialog {
                 container.add(lblTitle, "span 2, center, wrap");
 
                 JLabel lblIcon = null;
-                if (AppIcons.ALQUILER != null) {
-                        ImageIcon vehicleIcon = AppIcons.ALQUILER;
+                if (AppIcons.RENTAL != null) {
+                        ImageIcon vehicleIcon = AppIcons.RENTAL;
                         Image scaled = vehicleIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
                         lblIcon = new JLabel(new ImageIcon(scaled));
                 } else {
@@ -129,13 +129,13 @@ public class LoginDialog extends JDialog {
                String password = formPanel.getPassword();
 
                if (username.trim().isEmpty() || password.trim().isEmpty()) {
-                       SwingUtils.showWarning(this, "Debe ingresar usuario y contraseña.");
+                       SwingUtils.showWarning(this, "Debe ingresar user y contraseña.");
                        return;
                }
 
                try {
                        rememberUser = formPanel.isRememberSelected();
-                       UsuarioDTO user = authController.login(username, password, rememberUser);
+                       UserDTO user = authController.login(username, password, rememberUser);
                        if (user == null) {
                                SwingUtils.showError(this, "Credenciales incorrectas.");
                                formPanel.clearPassword();
@@ -148,7 +148,7 @@ public class LoginDialog extends JDialog {
                }
        }
 
-       public UsuarioDTO showDialog() {
+       public UserDTO showDialog() {
                formPanel.clear();
                formPanel.setUsername(AppContext.getRememberedUser());
                setVisible(true);

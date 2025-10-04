@@ -18,7 +18,7 @@ public abstract class AbstractSearchActionsView extends JPanel {
         protected final JButton btnNuevo;
         protected final JButton btnBuscar;
         protected final JButton btnLimpiarFiltros;
-        protected final JButton btnEliminar;
+        protected final JButton btnDelete;
 
 	public AbstractSearchActionsView() {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -26,14 +26,14 @@ public abstract class AbstractSearchActionsView extends JPanel {
                 btnNuevo = new JButton("Nuevo", NEW);
                 btnBuscar = new JButton("Buscar", SEARCH);
                 btnLimpiarFiltros = new JButton("Limpiar Filtros", CLEAR);
-                btnEliminar = new JButton("Eliminar seleccionados", DELETE);
+                btnDelete = new JButton("Delete selected", DELETE);
 
-                makeFlat(btnNuevo, btnBuscar, btnLimpiarFiltros, btnEliminar);
+                makeFlat(btnNuevo, btnBuscar, btnLimpiarFiltros, btnDelete);
 
                 add(btnNuevo);
                 add(btnBuscar);
                 add(btnLimpiarFiltros);
-                add(btnEliminar);
+                add(btnDelete);
         }
 
 	private void makeFlat(JButton... bs) {
@@ -67,7 +67,7 @@ public abstract class AbstractSearchActionsView extends JPanel {
        }
 
        public void onBorrarSeleccionados(ActionCallback r) {
-               btnEliminar.addActionListener(new ActionListener() {
+               btnDelete.addActionListener(new ActionListener() {
                        @Override
                        public void actionPerformed(ActionEvent e) {
                                Objects.requireNonNull(r).execute();
@@ -96,7 +96,7 @@ public abstract class AbstractSearchActionsView extends JPanel {
 		return btnLimpiarFiltros;
 	}
 
-	public JButton getBtnEliminar() {
-		return btnEliminar;
+	public JButton getBtnDelete() {
+		return btnDelete;
 	}
 }

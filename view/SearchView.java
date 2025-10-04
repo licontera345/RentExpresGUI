@@ -92,8 +92,8 @@ public abstract class SearchView<T> extends JPanel {
 	/**
 	 * Actualiza los resultados en la tabla y paginador.
 	 */
-	protected final void setResultados(Results<T> resultados, AbstractTableModel modelo) {
-		table.setModel(modelo);
+	protected final void setResultados(Results<T> resultados, AbstractTableModel model) {
+		table.setModel(model);
 		lblPagina.setText("Página " + paginaActual + " de " + resultados.getTotalPages());
 		btnAnterior.setEnabled(paginaActual > 1);
 		btnSiguiente.setEnabled(paginaActual < resultados.getTotalPages());

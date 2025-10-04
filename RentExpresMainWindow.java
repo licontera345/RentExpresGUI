@@ -32,48 +32,48 @@ import com.pinguela.rentexpres.desktop.util.AppContext;
 import com.pinguela.rentexpres.desktop.util.AppIcons;
 import com.pinguela.rentexpres.desktop.util.AppTheme;
 import com.pinguela.rentexpres.desktop.util.ActionCallback;
-import com.pinguela.rentexpres.desktop.view.AlquilerSearchView;
-import com.pinguela.rentexpres.desktop.view.ClienteSearchView;
+import com.pinguela.rentexpres.desktop.view.RentalSearchView;
+import com.pinguela.rentexpres.desktop.view.CustomerSearchView;
 import com.pinguela.rentexpres.desktop.view.ProfileView;
-import com.pinguela.rentexpres.desktop.view.ReservaSearchView;
-import com.pinguela.rentexpres.desktop.view.VehiculoSearchView;
+import com.pinguela.rentexpres.desktop.view.ReservationSearchView;
+import com.pinguela.rentexpres.desktop.view.VehicleSearchView;
 import com.pinguela.rentexpres.desktop.view.CalendarView;
-import com.pinguela.rentexpres.desktop.view.UsuarioSearchView;
-import com.pinguela.rentexpres.desktop.view.EstadisticasView;
-import com.pinguela.rentexpres.model.UsuarioDTO;
-import com.pinguela.rentexpres.service.AlquilerService;
-import com.pinguela.rentexpres.service.EstadisticaService;
-import com.pinguela.rentexpres.service.CategoriaVehiculoService;
-import com.pinguela.rentexpres.service.ClienteService;
-import com.pinguela.rentexpres.service.EstadoAlquilerService;
-import com.pinguela.rentexpres.service.EstadoVehiculoService;
-import com.pinguela.rentexpres.service.LocalidadService;
-import com.pinguela.rentexpres.service.ProvinciaService;
-import com.pinguela.rentexpres.service.UsuarioService;
-import com.pinguela.rentexpres.service.VehiculoService;
-import com.pinguela.rentexpres.service.impl.AlquilerServiceImpl;
-import com.pinguela.rentexpres.service.impl.CategoriaVehiculoServiceImpl;
-import com.pinguela.rentexpres.service.impl.ClienteServiceImpl;
-import com.pinguela.rentexpres.service.impl.EstadoAlquilerServiceImpl;
-import com.pinguela.rentexpres.service.impl.EstadoReservaServiceImpl;
-import com.pinguela.rentexpres.service.impl.EstadoVehiculoServiceImpl;
-import com.pinguela.rentexpres.service.impl.LocalidadServiceImpl;
-import com.pinguela.rentexpres.service.impl.ProvinciaServiceImpl;
-import com.pinguela.rentexpres.service.impl.ReservaServiceImpl;
-import com.pinguela.rentexpres.service.impl.UsuarioServiceImpl;
-import com.pinguela.rentexpres.service.impl.VehiculoServiceImpl;
-import com.pinguela.rentexpres.service.impl.EstadisticaServiceImpl;
+import com.pinguela.rentexpres.desktop.view.UserSearchView;
+import com.pinguela.rentexpres.desktop.view.StatisticsView;
+import com.pinguela.rentexpres.model.UserDTO;
+import com.pinguela.rentexpres.service.RentalService;
+import com.pinguela.rentexpres.service.StatisticsService;
+import com.pinguela.rentexpres.service.VehicleCategoryService;
+import com.pinguela.rentexpres.service.CustomerService;
+import com.pinguela.rentexpres.service.RentalStatusService;
+import com.pinguela.rentexpres.service.VehicleStatusService;
+import com.pinguela.rentexpres.service.CityService;
+import com.pinguela.rentexpres.service.ProvinceService;
+import com.pinguela.rentexpres.service.UserService;
+import com.pinguela.rentexpres.service.VehicleService;
+import com.pinguela.rentexpres.service.impl.RentalServiceImpl;
+import com.pinguela.rentexpres.service.impl.VehicleCategoryServiceImpl;
+import com.pinguela.rentexpres.service.impl.CustomerServiceImpl;
+import com.pinguela.rentexpres.service.impl.RentalStatusServiceImpl;
+import com.pinguela.rentexpres.service.impl.ReservationStatusServiceImpl;
+import com.pinguela.rentexpres.service.impl.VehicleStatusServiceImpl;
+import com.pinguela.rentexpres.service.impl.CityServiceImpl;
+import com.pinguela.rentexpres.service.impl.ProvinceServiceImpl;
+import com.pinguela.rentexpres.service.impl.ReservationServiceImpl;
+import com.pinguela.rentexpres.service.impl.UserServiceImpl;
+import com.pinguela.rentexpres.service.impl.VehicleServiceImpl;
+import com.pinguela.rentexpres.service.impl.StatisticsServiceImpl;
 
 public class RentExpresMainWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	private final AlquilerService alquilerService = new AlquilerServiceImpl();
-        private final VehiculoService vehiculoService = new VehiculoServiceImpl();
-        private final ClienteService clienteService = new ClienteServiceImpl();
-        private final LocalidadService localidadService = new LocalidadServiceImpl();
-        private final ProvinciaService provinciaService = new ProvinciaServiceImpl();
-        private final UsuarioService usuarioService = new UsuarioServiceImpl();
-        private final EstadisticaService estadisticaService = new EstadisticaServiceImpl();
+	private final RentalService rentalService = new RentalServiceImpl();
+        private final VehicleService vehicleService = new VehicleServiceImpl();
+        private final CustomerService customerService = new CustomerServiceImpl();
+        private final CityService cityService = new CityServiceImpl();
+        private final ProvinceService provinceService = new ProvinceServiceImpl();
+        private final UserService userService = new UserServiceImpl();
+        private final StatisticsService statisticsService = new StatisticsServiceImpl();
 
 	private final JPanel navPanel = new JPanel();
 	private final JPanel contentPanel = new JPanel(new CardLayout());
@@ -83,13 +83,13 @@ public class RentExpresMainWindow extends JFrame {
 		super("RentExpres");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		if (AppIcons.USUARIO != null) {
-			setIconImage(AppIcons.USUARIO.getImage());
+		if (AppIcons.USER != null) {
+			setIconImage(AppIcons.USER.getImage());
 		}
 
                AppTheme.setup();
 
-		UsuarioDTO user = showLoginDialog();
+		UserDTO user = showLoginDialog();
 		if (user == null) {
 			dispose();
 			return;
@@ -111,7 +111,7 @@ public class RentExpresMainWindow extends JFrame {
 		setVisible(true);
 	}
 
-	private UsuarioDTO showLoginDialog() {
+	private UserDTO showLoginDialog() {
 		LoginDialog dlg = new LoginDialog(this);
 		return dlg.showDialog();
 	}
@@ -121,11 +121,11 @@ public class RentExpresMainWindow extends JFrame {
         topBar.setLayout(new FlowLayout(FlowLayout.RIGHT, 20, 5));
         topBar.setBackground(AppTheme.TOPBAR_BG);
 
-		JLabel lblUser = new JLabel("Usuario: " + AppContext.getCurrentUser().getNombreUsuario(), AppIcons.USUARIO,
+		JLabel lblUser = new JLabel("User: " + AppContext.getCurrentUser().getUsername(), AppIcons.USER,
 				JLabel.LEFT);
 		lblUser.setFont(lblUser.getFont().deriveFont(Font.PLAIN, 14f));
 
-                JButton btnProfile = new JButton("Perfil", AppIcons.VIEW);
+                JButton btnProfile = new JButton("Profile", AppIcons.VIEW);
                 JButton btnLogout = new JButton("Logout", AppIcons.CLEAR);
                 JButton btnTheme = new JButton(AppTheme.isDark() ? "Modo claro" : "Modo oscuro");
 
@@ -146,7 +146,7 @@ public class RentExpresMainWindow extends JFrame {
                        @Override
                        public void actionPerformed(ActionEvent e) {
                                new LogoutAction(RentExpresMainWindow.this).actionPerformed(null);
-                               UsuarioDTO current = AppContext.getCurrentUser();
+                               UserDTO current = AppContext.getCurrentUser();
                                if (current != null) {
                                        topBar.removeAll();
                                        initTopBar();
@@ -192,23 +192,23 @@ public class RentExpresMainWindow extends JFrame {
                 navPanel.setLayout(new BoxLayout(navPanel, BoxLayout.Y_AXIS));
 
                 navPanel.add(Box.createVerticalStrut(20));
-                navPanel.add(createNavButton("Inicio", AppIcons.INICIO, btnBg, btnHoverBg, btnFg));
+                navPanel.add(createNavButton("Home", AppIcons.HOME, btnBg, btnHoverBg, btnFg));
                 navPanel.add(Box.createVerticalStrut(10));
-                navPanel.add(createNavButton("Reservas", AppIcons.RESERVA, btnBg, btnHoverBg, btnFg));
+                navPanel.add(createNavButton("Reservations", AppIcons.RESERVATION, btnBg, btnHoverBg, btnFg));
                 navPanel.add(Box.createVerticalStrut(10));
-                navPanel.add(createNavButton("Alquileres", AppIcons.ALQUILER, btnBg, btnHoverBg, btnFg));
+                navPanel.add(createNavButton("Rentals", AppIcons.RENTAL, btnBg, btnHoverBg, btnFg));
                 navPanel.add(Box.createVerticalStrut(10));
-                navPanel.add(createNavButton("Calendario", AppIcons.RESERVA, btnBg, btnHoverBg, btnFg));
+                navPanel.add(createNavButton("Calendar", AppIcons.RESERVATION, btnBg, btnHoverBg, btnFg));
                 navPanel.add(Box.createVerticalStrut(10));
-                navPanel.add(createNavButton("Estadísticas", AppIcons.SEARCH, btnBg, btnHoverBg, btnFg));
+                navPanel.add(createNavButton("Statistics", AppIcons.SEARCH, btnBg, btnHoverBg, btnFg));
                 navPanel.add(Box.createVerticalStrut(10));
-                navPanel.add(createNavButton("Clientes", AppIcons.CLIENTE, btnBg, btnHoverBg, btnFg));
+                navPanel.add(createNavButton("Customers", AppIcons.CUSTOMER, btnBg, btnHoverBg, btnFg));
                 navPanel.add(Box.createVerticalStrut(10));
 
                 if (RoleController.isAdmin()) {
-                        navPanel.add(createNavButton("Usuarios", AppIcons.USUARIO, btnBg, btnHoverBg, btnFg));
+                        navPanel.add(createNavButton("Users", AppIcons.USER, btnBg, btnHoverBg, btnFg));
                         navPanel.add(Box.createVerticalStrut(10));
-                        navPanel.add(createNavButton("Vehículos", AppIcons.VEHICULO, btnBg, btnHoverBg, btnFg));
+                        navPanel.add(createNavButton("Vehicles", AppIcons.VEHICLE, btnBg, btnHoverBg, btnFg));
                 }
                 navPanel.add(Box.createVerticalGlue());
         }
@@ -258,56 +258,56 @@ public class RentExpresMainWindow extends JFrame {
 		lblWelcome.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 		inicioPanel.add(lblWelcome, BorderLayout.NORTH);
 
-		if (AppIcons.INICIO != null) {
-			ImageIcon ic = AppIcons.INICIO;
+		if (AppIcons.HOME != null) {
+			ImageIcon ic = AppIcons.HOME;
 			Image scaled = ic.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 			JLabel lblIcon = new JLabel(new ImageIcon(scaled), SwingConstants.CENTER);
 			inicioPanel.add(lblIcon, BorderLayout.CENTER);
 		}
 
-		contentPanel.add(inicioPanel, "Inicio");
+		contentPanel.add(inicioPanel, "Home");
 
-		ReservaSearchView rsv = new ReservaSearchView(new ReservaServiceImpl(), new EstadoReservaServiceImpl(),
-				vehiculoService, this);
+		ReservationSearchView rsv = new ReservationSearchView(new ReservationServiceImpl(), new ReservationStatusServiceImpl(),
+				vehicleService, this);
 		rsv.initIfNeeded();
-		contentPanel.add(rsv, "Reservas");
+		contentPanel.add(rsv, "Reservations");
 
-                AlquilerSearchView asv = new AlquilerSearchView(alquilerService, estadoAlqService(), vehiculoService, this);
+                RentalSearchView asv = new RentalSearchView(rentalService, estadoAlqService(), vehicleService, this);
                 asv.initIfNeeded();
-                contentPanel.add(asv, "Alquileres");
+                contentPanel.add(asv, "Rentals");
 
                 CalendarView calView = new CalendarView();
-                contentPanel.add(calView, "Calendario");
+                contentPanel.add(calView, "Calendar");
 
-                EstadisticasView estView = new EstadisticasView(estadisticaService);
-                contentPanel.add(estView, "Estadísticas");
+                StatisticsView estView = new StatisticsView(statisticsService);
+                contentPanel.add(estView, "Statistics");
 
-                ClienteSearchView csv = new ClienteSearchView(clienteService, provinciaService, localidadService, this);
+                CustomerSearchView csv = new CustomerSearchView(customerService, provinceService, cityService, this);
                 csv.initIfNeeded();
-                contentPanel.add(csv, "Clientes");
+                contentPanel.add(csv, "Customers");
 
                 // Solo administradores
                 if (RoleController.isAdmin()) {
-                        UsuarioSearchView usv = new UsuarioSearchView(usuarioService, this);
+                        UserSearchView usv = new UserSearchView(userService, this);
                         usv.initIfNeeded();
-                        contentPanel.add(usv, "Usuarios");
+                        contentPanel.add(usv, "Users");
 
-                        VehiculoSearchView vsv = new VehiculoSearchView(vehiculoService, catVehService(), estadoVehService(), this);
+                        VehicleSearchView vsv = new VehicleSearchView(vehicleService, catVehService(), estadoVehService(), this);
                         vsv.initIfNeeded();
-                        contentPanel.add(vsv, "Vehículos");
+                        contentPanel.add(vsv, "Vehicles");
                 }
         }
 
-	private EstadoAlquilerService estadoAlqService() {
-		return new EstadoAlquilerServiceImpl();
+	private RentalStatusService estadoAlqService() {
+		return new RentalStatusServiceImpl();
 	}
 
-	private CategoriaVehiculoService catVehService() {
-		return new CategoriaVehiculoServiceImpl();
+	private VehicleCategoryService catVehService() {
+		return new VehicleCategoryServiceImpl();
 	}
 
-	private EstadoVehiculoService estadoVehService() {
-		return new EstadoVehiculoServiceImpl();
+	private VehicleStatusService estadoVehService() {
+		return new VehicleStatusServiceImpl();
 	}
 
        public static void main(String[] args) {
